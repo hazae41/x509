@@ -1,5 +1,5 @@
 import { Binary } from "libs/binary/binary.js";
-import { Type } from "mods/asn1/type.js";
+import { Type } from "mods/asn1/type/type.js";
 
 export class PEM {
   readonly class = PEM
@@ -30,6 +30,8 @@ export class PEM {
 export class Certificate {
   readonly class = Certificate
 
+  static type = new Type(0, true, 16)
+
   constructor(
     // readonly tbsCertificate: TBSCertificate,
     // readonly algorithmIdentifier: AlgorithmIdentifier,
@@ -37,7 +39,10 @@ export class Certificate {
   ) { }
 
   static read(binary: Binary) {
-    Type.read(binary)
+    const type = Type.read(binary)
+
+    if (!this.type.equals(type))
+      throw new Error(`Invalid type`)
 
     return new this()
   }

@@ -1,7 +1,7 @@
 'use strict';
 
 var index = require('./mods/index.cjs');
-var type = require('./mods/asn1/type.cjs');
+var type = require('./mods/asn1/type/type.cjs');
 var certificate = require('./mods/certificate.cjs');
 
 

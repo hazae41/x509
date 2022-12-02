@@ -1,6 +1,6 @@
 'use strict';
 
-var type = require('./asn1/type.cjs');
+var type = require('./asn1/type/type.cjs');
 var certificate = require('./certificate.cjs');
 
 

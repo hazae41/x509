@@ -1,4 +1,4 @@
-import { Binary } from '../../libs/binary/binary.js';
+import { Binary } from '../../../libs/binary/binary.js';
 
 declare class Type {
     readonly clazz: number;
@@ -12,7 +12,8 @@ declare class Type {
         private: number;
     };
     constructor(clazz: number, constructed: boolean, tag: number);
-    static read(binary: Binary): void;
+    equals(other: Type): boolean;
+    static read(binary: Binary): Type;
 }
 
 export { Type };

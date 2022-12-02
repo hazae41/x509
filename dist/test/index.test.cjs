@@ -4,7 +4,7 @@ var tslib = require('tslib');
 require('./libs/binary/binary.test.cjs');
 require('./libs/bitset/bitset.test.cjs');
 var promises = require('fs/promises');
-require('./mods/asn1/type.cjs');
+require('./mods/asn1/type/type.cjs');
 var certificate = require('./mods/certificate.cjs');
 var node_path = require('node:path');
 var uvu = require('uvu');
