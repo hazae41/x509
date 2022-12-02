@@ -1,6 +1,7 @@
 'use strict';
 
 var tslib = require('tslib');
+var node_path = require('node:path');
 var uvu = require('uvu');
 var assert = require('uvu/assert');
 var binary = require('./binary.cjs');
@@ -24,6 +25,11 @@ function _interopNamespaceDefault(e) {
 
 var assert__namespace = /*#__PURE__*/_interopNamespaceDefault(assert);
 
+uvu.test.before(() => tslib.__awaiter(void 0, void 0, void 0, function* () {
+    const directory = node_path.resolve("./dist/test/");
+    const { pathname } = new URL((typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('libs/binary/binary.test.cjs', document.baseURI).href)));
+    console.log(node_path.relative(directory, pathname));
+}));
 uvu.test("Allocation", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
     for (let i = 0; i < 32; i++) {
         const binary$1 = binary.Binary.alloc(i);

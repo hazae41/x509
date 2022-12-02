@@ -1,6 +1,13 @@
-import { test } from 'uvu';
-import * as assert from 'uvu/assert';
+import { relative, resolve } from "node:path";
+import { test } from "uvu";
+import * as assert from "uvu/assert";
 import { Binary } from "./binary.js";
+
+test.before(async () => {
+  const directory = resolve("./dist/test/")
+  const { pathname } = new URL(import.meta.url)
+  console.log(relative(directory, pathname))
+})
 
 test("Allocation", async () => {
   for (let i = 0; i < 32; i++) {
