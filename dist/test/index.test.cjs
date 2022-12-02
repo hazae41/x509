@@ -3,9 +3,12 @@
 var tslib = require('tslib');
 require('./libs/binary/binary.test.cjs');
 require('./libs/bitset/bitset.test.cjs');
+require('./mods/asn1/length/length.test.cjs');
+require('./mods/asn1/type/type.test.cjs');
 var promises = require('fs/promises');
-require('./mods/asn1/type/type.cjs');
+var binary = require('./libs/binary/binary.cjs');
 var certificate = require('./mods/certificate.cjs');
+var pem = require('./mods/pem/pem.cjs');
 var node_path = require('node:path');
 var uvu = require('uvu');
 
@@ -16,7 +19,7 @@ uvu.test.before(() => tslib.__awaiter(void 0, void 0, void 0, function* () {
 }));
 uvu.test("The test", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
     const text = yield promises.readFile("./test/cert.pem", "utf8");
-    certificate.PEM.from(text);
+    certificate.Certificate.read(new binary.Binary(pem.PEM.parse(text)));
 }));
 uvu.test.run();
 //# sourceMappingURL=index.test.cjs.map

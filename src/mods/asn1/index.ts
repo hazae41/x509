@@ -1,2 +1,3 @@
-export * from "./length/index.js";
-export * from "./type/index.js";
+export * from "./length/length.js";
+export * from "./type/type.js";
+

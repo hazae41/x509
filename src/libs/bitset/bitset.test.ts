@@ -1,6 +1,6 @@
-import { relative, resolve } from 'node:path';
-import { test } from 'uvu';
-import * as assert from 'uvu/assert';
+import { relative, resolve } from "node:path";
+import { test } from "uvu";
+import * as assert from "uvu/assert";
 import { Bitset } from "./bitset.js";
 
 test.before(async () => {

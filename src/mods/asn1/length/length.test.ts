@@ -1,11 +1,11 @@
 import { Binary } from "libs/binary/binary.js";
-import { Certificate } from "mods/certificate.js";
+import { Type } from "mods/asn1/type/type.js";
 import { PEM } from "mods/pem/pem.js";
 import { readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 import { test } from "uvu";
 import assert from "uvu/assert";
-import { Type } from "./type.js";
+import { Length } from "./length.js";
 
 test.before(async () => {
   const directory = resolve("./dist/test/")
@@ -15,8 +15,11 @@ test.before(async () => {
 
 test("Read", async () => {
   const text = await readFile("./test/cert.pem", "utf8")
-  const type = Type.read(new Binary(PEM.parse(text)))
-  assert.ok(type.equals(Certificate.type))
+  const binary = new Binary(PEM.parse(text))
+
+  const type = Type.read(binary)
+  const length = Length.read(binary)
+  assert.is(length.value, 383)
 })
 
 test.run()
