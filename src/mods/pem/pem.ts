@@ -17,4 +17,17 @@ export class PEM {
 
     return Buffer.from(body, "base64")
   }
+
+  static stringify(buffer: Buffer) {
+    let result = `${this.header}\n`
+    let body = buffer.toString("base64")
+
+    while (body) {
+      result += `${body.slice(0, 64)}\n`
+      body = body.slice(64)
+    }
+
+    result += `${this.footer}\n`
+    return result
+  }
 }

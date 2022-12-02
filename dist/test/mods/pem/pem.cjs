@@ -13,6 +13,16 @@ class PEM {
         const body = text.slice(this.header.length, -this.footer.length);
         return Buffer.from(body, "base64");
     }
+    static stringify(buffer) {
+        let result = `${this.header}\n`;
+        let body = buffer.toString("base64");
+        while (body) {
+            result += `${body.slice(0, 64)}\n`;
+            body = body.slice(64);
+        }
+        result += `${this.footer}\n`;
+        return result;
+    }
 }
 PEM.header = `-----BEGIN CERTIFICATE-----`;
 PEM.footer = `-----END CERTIFICATE-----`;

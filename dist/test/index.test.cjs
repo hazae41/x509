@@ -5,6 +5,7 @@ require('./libs/binary/binary.test.cjs');
 require('./libs/bitset/bitset.test.cjs');
 require('./mods/asn1/length/length.test.cjs');
 require('./mods/asn1/type/type.test.cjs');
+require('./mods/pem/pem.test.cjs');
 var promises = require('fs/promises');
 var binary = require('./libs/binary/binary.cjs');
 var certificate = require('./mods/certificate.cjs');
