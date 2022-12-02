@@ -1,11 +1,11 @@
 import { Binary } from "libs/binary/binary.js";
+import { Type } from "mods/asn1/type/type.js";
 import { Certificate } from "mods/certificate.js";
 import { PEM } from "mods/pem/pem.js";
 import { readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 import { test } from "uvu";
 import assert from "uvu/assert";
-import { Type } from "./type.js";
 
 test.before(async () => {
   const directory = resolve("./dist/test/")

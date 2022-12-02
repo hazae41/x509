@@ -1,7 +1,7 @@
+import { Binary } from "libs/binary/binary.js";
 import { relative, resolve } from "node:path";
 import { test } from "uvu";
 import * as assert from "uvu/assert";
-import { Binary } from "./binary.js";
 
 test.before(async () => {
   const directory = resolve("./dist/test/")

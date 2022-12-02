@@ -2,13 +2,13 @@
 
 var tslib = require('tslib');
 var binary = require('../../../libs/binary/binary.cjs');
+var length = require('./length.cjs');
 var type = require('../type/type.cjs');
 var pem = require('../../pem/pem.cjs');
 var promises = require('node:fs/promises');
 var node_path = require('node:path');
 var uvu = require('uvu');
 var assert = require('uvu/assert');
-var length = require('./length.cjs');
 
 uvu.test.before(() => tslib.__awaiter(void 0, void 0, void 0, function* () {
     const directory = node_path.resolve("./dist/test/");

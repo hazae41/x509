@@ -1,10 +1,10 @@
 'use strict';
 
 var tslib = require('tslib');
+var bitset = require('./bitset.cjs');
 var node_path = require('node:path');
 var uvu = require('uvu');
 var assert = require('uvu/assert');
-var bitset = require('./bitset.cjs');
 
 function _interopNamespaceDefault(e) {
     var n = Object.create(null);

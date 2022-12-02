@@ -1,10 +1,10 @@
 'use strict';
 
 var tslib = require('tslib');
+var binary = require('./binary.cjs');
 var node_path = require('node:path');
 var uvu = require('uvu');
 var assert = require('uvu/assert');
-var binary = require('./binary.cjs');
 
 function _interopNamespaceDefault(e) {
     var n = Object.create(null);
