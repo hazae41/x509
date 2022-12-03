@@ -3,7 +3,7 @@ import { Bitset } from "libs/bitset/bitset.js"
 import { Length } from "mods/asn1/length/length.js"
 import { Type } from "mods/asn1/type/type.js"
 
-function read(value: number, negative: boolean) {
+function sign(value: number, negative: boolean) {
   if (negative)
     return new Bitset(value, 8).not().value
   return value
@@ -29,11 +29,10 @@ export class Integer {
     let value = BigInt(0)
 
     const first = binary.readUint8(true)
-    const bitset = new Bitset(first, 8)
-    const negative = bitset.get(7)
+    const negative = first > 127
 
     for (let i = 0; i < length.value; i++)
-      value += BigInt(read(binary.readUint8(), negative)) * (BigInt(256) ** BigInt(length.value - i - 1))
+      value += BigInt(sign(binary.readUint8(), negative)) * (BigInt(256) ** BigInt(length.value - i - 1))
 
     if (negative) value = ~value
 
