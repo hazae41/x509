@@ -35,6 +35,9 @@ Type.clazzes = {
     context: 2,
     private: 3
 };
+Type.tags = {
+    sequence: 16
+};
 
 exports.Type = Type;
 //# sourceMappingURL=type.cjs.map

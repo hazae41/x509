@@ -11,6 +11,9 @@ declare class Type {
         context: number;
         private: number;
     };
+    static tags: {
+        sequence: number;
+    };
     constructor(clazz: number, constructed: boolean, tag: number);
     equals(other: Type): boolean;
     static read(binary: Binary): Type;

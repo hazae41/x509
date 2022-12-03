@@ -5,7 +5,7 @@ import { Type } from "mods/asn1/type/type.js";
 export class Certificate {
   readonly class = Certificate
 
-  static type = new Type(0, true, 16)
+  static type = new Type(Type.clazzes.universal, true, Type.tags.sequence)
 
   constructor(
     // readonly tbsCertificate: TBSCertificate,

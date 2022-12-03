@@ -4,7 +4,7 @@ export * from "mods/index.test.js";
 
 import { readFile } from "fs/promises";
 import { Binary } from "libs/binary/binary.js";
-import { Certificate } from "mods/certificate.js";
+import { Certificate } from "mods/certificate/certificate.js";
 import { PEM } from "mods/pem/pem.js";
 import { relative, resolve } from "node:path";
 import { test } from "uvu";
@@ -12,7 +12,7 @@ import { test } from "uvu";
 test.before(async () => {
   const directory = resolve("./dist/test/")
   const { pathname } = new URL(import.meta.url)
-  console.log(relative(directory, pathname))
+  console.log(relative(directory, pathname.replace(".cjs", ".ts")))
 })
 
 test("The test", async () => {

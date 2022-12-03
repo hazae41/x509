@@ -11,6 +11,10 @@ export class Type {
     private: 3
   }
 
+  static tags = {
+    sequence: 16
+  }
+
   constructor(
     readonly clazz: number,
     readonly constructed: boolean,

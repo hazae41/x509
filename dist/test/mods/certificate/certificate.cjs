@@ -1,7 +1,7 @@
 'use strict';
 
-var length = require('./asn1/length/length.cjs');
-var type = require('./asn1/type/type.cjs');
+var length = require('../asn1/length/length.cjs');
+var type = require('../asn1/type/type.cjs');
 
 class Certificate {
     constructor(
@@ -19,7 +19,7 @@ class Certificate {
         return new this();
     }
 }
-Certificate.type = new type.Type(0, true, 16);
+Certificate.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.sequence);
 
 exports.Certificate = Certificate;
 //# sourceMappingURL=certificate.cjs.map

@@ -1,13 +1,13 @@
+import { assert } from "libs/assert/assert.js";
 import { PEM } from "mods/pem/pem.js";
 import { readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 import { test } from "uvu";
-import assert from "uvu/assert";
 
 test.before(async () => {
   const directory = resolve("./dist/test/")
   const { pathname } = new URL(import.meta.url)
-  console.log(relative(directory, pathname))
+  console.log(relative(directory, pathname.replace(".cjs", ".ts")))
 })
 
 function ignoreLastNewline(text: string) {
@@ -22,7 +22,7 @@ test("Parse and stringify", async () => {
   const buffer = PEM.parse(text)
   const text2 = PEM.stringify(buffer)
 
-  assert.is(ignoreLastNewline(text), ignoreLastNewline(text2))
+  assert(ignoreLastNewline(text) === ignoreLastNewline(text2))
 })
 
 test.run()
