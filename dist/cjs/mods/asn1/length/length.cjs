@@ -14,7 +14,7 @@ class Length {
         const count = new bitset.Bitset(first, 8).last(7);
         let value = 0;
         for (let i = 0; i < count; i++)
-            value += binary.readUint8() * Math.pow(256, count - i - 1);
+            value += binary.readUint8() * (256 ** (count - i - 1));
         return new this(value);
     }
 }

@@ -50,7 +50,7 @@ uvu.test("writeUint8 then readUint8", () => tslib.__awaiter(void 0, void 0, void
     assert.assert(binary$1.buffer.equals(Buffer.from([n])));
     assert.assert(n === n2);
     binary$1.offset = 0;
-    assert.assert(assert.throws(() => binary$1.writeUint8(Math.pow(2, 8))));
+    assert.assert(assert.throws(() => binary$1.writeUint8(2 ** 8)));
     assert.assert(assert.throws(() => binary$1.writeUint8(-1)));
 }));
 uvu.test("writeUint16 then readUint16", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
@@ -65,7 +65,7 @@ uvu.test("writeUint16 then readUint16", () => tslib.__awaiter(void 0, void 0, vo
     assert.assert(binary$1.buffer.length === 2);
     assert.assert(n === n2);
     binary$1.offset = 0;
-    assert.assert(assert.throws(() => binary$1.writeUint16(Math.pow(2, 16))));
+    assert.assert(assert.throws(() => binary$1.writeUint16(2 ** 16)));
     assert.assert(assert.throws(() => binary$1.writeUint16(-1)));
 }));
 uvu.test("writeUint24 then readUint24", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
@@ -80,7 +80,7 @@ uvu.test("writeUint24 then readUint24", () => tslib.__awaiter(void 0, void 0, vo
     assert.assert(binary$1.buffer.length === 3);
     assert.assert(n === n2);
     binary$1.offset = 0;
-    assert.assert(assert.throws(() => binary$1.writeUint16(Math.pow(2, 24))));
+    assert.assert(assert.throws(() => binary$1.writeUint16(2 ** 24)));
     assert.assert(assert.throws(() => binary$1.writeUint16(-1)));
 }));
 uvu.test("writeUint32 then readUint32", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
@@ -95,7 +95,7 @@ uvu.test("writeUint32 then readUint32", () => tslib.__awaiter(void 0, void 0, vo
     assert.assert(binary$1.buffer.length === 4);
     assert.assert(n === n2);
     binary$1.offset = 0;
-    assert.assert(assert.throws(() => binary$1.writeUint16(Math.pow(2, 32))));
+    assert.assert(assert.throws(() => binary$1.writeUint16(2 ** 32)));
     assert.assert(assert.throws(() => binary$1.writeUint16(-1)));
 }));
 uvu.test.run();

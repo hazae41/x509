@@ -4,8 +4,8 @@ export * from "mods/index.test.js";
 
 import { readFile } from "fs/promises";
 import { Binary } from "libs/binary/binary.js";
-import { Certificate } from "mods/certificate/certificate.js";
-import { PEM } from "mods/pem/pem.js";
+import { Certificate } from "mods/x509/certificate/certificate.js";
+import { PEM } from "mods/x509/pem/pem.js";
 import { relative, resolve } from "node:path";
 import { test } from "uvu";
 

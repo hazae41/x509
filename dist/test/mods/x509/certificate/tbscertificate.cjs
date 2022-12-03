@@ -1,12 +1,15 @@
 'use strict';
 
-var integer = require('../asn1/integer/integer.cjs');
-var length = require('../asn1/length/length.cjs');
-var type = require('../asn1/type/type.cjs');
+var integer = require('../../asn1/integer/integer.cjs');
+var length = require('../../asn1/length/length.cjs');
+var type = require('../../asn1/type/type.cjs');
+var algorithm = require('../algorithm/algorithm.cjs');
 
 class TBSCertificate {
-    constructor(version = new TBSCertificateVersion()) {
+    constructor(version, serialNumber, algorithm) {
         this.version = version;
+        this.serialNumber = serialNumber;
+        this.algorithm = algorithm;
         this.class = TBSCertificate;
     }
     static read(binary) {
@@ -16,12 +19,14 @@ class TBSCertificate {
         length.Length.read(binary);
         binary.offset;
         const version = TBSCertificateVersion.read(binary);
-        return new this(version);
+        const serialNumber = integer.Integer.read(binary);
+        const algorithm$1 = algorithm.AlgorithmIdentifier.read(binary);
+        return new this(version, serialNumber, algorithm$1);
     }
 }
 TBSCertificate.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.sequence);
 class TBSCertificateVersion {
-    constructor(inner = new integer.Integer(1)) {
+    constructor(inner = new integer.Integer(BigInt(1))) {
         this.inner = inner;
         this.class = TBSCertificateVersion;
     }

@@ -16,8 +16,9 @@ function hexToInteger(hex: string) {
 }
 
 test("Read", async () => {
-  assert(hexToInteger("02 01 00") === 0)
-  assert(hexToInteger("02 02 30 39") === 12345)
+  assert(hexToInteger("02 01 00") === BigInt(0))
+  assert(hexToInteger("02 02 30 39") === BigInt(12345))
+  assert(hexToInteger("02 12 03 D4 15 31 8E 2C 57 1D 29  05 FC 3E 05 27 68 9D 0D 09") === BigInt("333504890676592408951587385614406537514249"))
 })
 
 test.run()

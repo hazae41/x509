@@ -1,5 +1,5 @@
 import { assert } from "libs/assert/assert.js";
-import { PEM } from "mods/pem/pem.js";
+import { PEM } from "mods/x509/pem/pem.js";
 import { readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 import { test } from "uvu";
@@ -13,8 +13,7 @@ test.before(async () => {
 function ignoreLastNewline(text: string) {
   if (text.endsWith("\n"))
     return text.slice(0, -1)
-  else
-    return text
+  return text
 }
 
 test("Parse and stringify", async () => {

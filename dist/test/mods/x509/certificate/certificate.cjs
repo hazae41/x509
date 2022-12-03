@@ -1,7 +1,7 @@
 'use strict';
 
-var length = require('../asn1/length/length.cjs');
-var type = require('../asn1/type/type.cjs');
+var length = require('../../asn1/length/length.cjs');
+var type = require('../../asn1/type/type.cjs');
 var tbscertificate = require('./tbscertificate.cjs');
 
 class Certificate {

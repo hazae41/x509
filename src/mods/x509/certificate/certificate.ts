@@ -1,7 +1,7 @@
 import { Binary } from "libs/binary/binary.js";
 import { Length } from "mods/asn1/length/length.js";
 import { Type } from "mods/asn1/type/type.js";
-import { TBSCertificate } from "mods/certificate/tbscertificate.js";
+import { TBSCertificate } from "mods/x509/certificate/tbscertificate.js";
 
 export class Certificate {
   readonly class = Certificate

@@ -1,5 +1,5 @@
-import { Binary } from '../../libs/binary/binary.js';
-import { Type } from '../asn1/type/type.js';
+import { Binary } from '../../../libs/binary/binary.js';
+import { Type } from '../../asn1/type/type.js';
 import { TBSCertificate } from './tbscertificate.js';
 
 declare class Certificate {

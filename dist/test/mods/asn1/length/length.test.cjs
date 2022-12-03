@@ -4,9 +4,6 @@ var tslib = require('tslib');
 var assert = require('../../../libs/assert/assert.cjs');
 var binary = require('../../../libs/binary/binary.cjs');
 var length = require('./length.cjs');
-var type = require('../type/type.cjs');
-var pem = require('../../pem/pem.cjs');
-var promises = require('node:fs/promises');
 var node_path = require('node:path');
 var uvu = require('uvu');
 
@@ -15,12 +12,13 @@ uvu.test.before(() => tslib.__awaiter(void 0, void 0, void 0, function* () {
     const { pathname } = new URL((typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('mods/asn1/length/length.test.cjs', document.baseURI).href)));
     console.log(node_path.relative(directory, pathname.replace(".cjs", ".ts")));
 }));
+function hexToLength(hex) {
+    const buffer = Buffer.from(hex.replaceAll(" ", ""), "hex");
+    return length.Length.read(new binary.Binary(buffer)).value;
+}
 uvu.test("Read", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
-    const text = yield promises.readFile("./test/cert.pem", "utf8");
-    const binary$1 = new binary.Binary(pem.PEM.parse(text));
-    type.Type.read(binary$1);
-    const length$1 = length.Length.read(binary$1);
-    assert.assert(length$1.value === 383);
+    assert.assert(hexToLength("82 01 7F") === 383);
+    assert.assert(hexToLength("82 04 92") === 1170);
 }));
 uvu.test.run();
 //# sourceMappingURL=length.test.cjs.map

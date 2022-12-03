@@ -2,13 +2,13 @@ import { Binary } from "libs/binary/binary.js"
 import { Length } from "mods/asn1/length/length.js"
 import { Type } from "mods/asn1/type/type.js"
 
-export class Integer {
-  readonly class = Integer
+export class AlgorithmIdentifier {
+  readonly class = AlgorithmIdentifier
 
-  static type = new Type(Type.clazzes.universal, false, Type.tags.integer)
+  static type = new Type(Type.clazzes.universal, true, Type.tags.sequence)
 
   constructor(
-    readonly value: bigint
+    readonly algorith: Buffer
   ) { }
 
   static read(binary: Binary) {
@@ -19,11 +19,8 @@ export class Integer {
 
     const length = Length.read(binary)
 
-    let value = BigInt(0)
+    binary.offset += length.value
 
-    for (let i = 0; i < length.value; i++)
-      value += BigInt(binary.readUint8()) * (BigInt(256) ** BigInt(length.value - i - 1))
-
-    return new this(value)
+    return new this(Buffer.from([0]))
   }
 }

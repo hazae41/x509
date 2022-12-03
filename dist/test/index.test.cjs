@@ -6,11 +6,11 @@ require('./libs/bitset/bitset.test.cjs');
 require('./mods/asn1/integer/integer.test.cjs');
 require('./mods/asn1/length/length.test.cjs');
 require('./mods/asn1/type/type.test.cjs');
-require('./mods/pem/pem.test.cjs');
+require('./mods/x509/pem/pem.test.cjs');
 var promises = require('fs/promises');
 var binary = require('./libs/binary/binary.cjs');
-var certificate = require('./mods/certificate/certificate.cjs');
-var pem = require('./mods/pem/pem.cjs');
+var certificate = require('./mods/x509/certificate/certificate.cjs');
+var pem = require('./mods/x509/pem/pem.cjs');
 var node_path = require('node:path');
 var uvu = require('uvu');
 
