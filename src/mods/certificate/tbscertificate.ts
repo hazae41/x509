@@ -9,7 +9,7 @@ export class TBSCertificate {
   static type = new Type(Type.clazzes.universal, true, Type.tags.sequence)
 
   constructor(
-    readonly version: number
+    readonly version = new TBSCertificateVersion()
   ) { }
 
   static read(binary: Binary) {
@@ -19,8 +19,11 @@ export class TBSCertificate {
       throw new Error(`Invalid type`)
 
     const length = Length.read(binary)
+    const content = binary.offset
 
+    const version = TBSCertificateVersion.read(binary)
 
+    return new this(version)
   }
 }
 
@@ -44,5 +47,13 @@ class TBSCertificateVersion {
     }
 
     const length = Length.read(binary)
+    const content = binary.offset
+
+    const inner = Integer.read(binary)
+
+    if (binary.offset - content !== length.value)
+      throw new Error(`Invalid length`)
+
+    return new this(inner)
   }
 }

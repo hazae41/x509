@@ -36,6 +36,7 @@ Type.clazzes = {
     private: 3
 };
 Type.tags = {
+    integer: 2,
     sequence: 16
 };
 

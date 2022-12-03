@@ -17,7 +17,8 @@ test.before(async () => {
 
 test("The test", async () => {
   const text = await readFile("./test/cert.pem", "utf8")
-  const pem = Certificate.read(new Binary(PEM.parse(text)))
+  const cert = Certificate.read(new Binary(PEM.parse(text)))
+  console.log(cert.tbsCertificate.version.inner.value)
 })
 
 test.run()

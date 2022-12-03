@@ -10,10 +10,14 @@ test.before(async () => {
   console.log(relative(directory, pathname.replace(".cjs", ".ts")))
 })
 
+function hexToInteger(hex: string) {
+  const buffer = Buffer.from(hex.replaceAll(" ", ""), "hex")
+  return Integer.read(new Binary(buffer)).value
+}
+
 test("Read", async () => {
-  const buffer = Buffer.from("02 01 00".replaceAll(" ", ""), "hex")
-  const integer = Integer.read(new Binary(buffer))
-  assert(integer.value === 0)
+  assert(hexToInteger("02 01 00") === 0)
+  assert(hexToInteger("02 02 30 39") === 12345)
 })
 
 test.run()

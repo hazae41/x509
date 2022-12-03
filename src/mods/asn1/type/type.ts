@@ -12,6 +12,7 @@ export class Type {
   }
 
   static tags = {
+    integer: 2,
     sequence: 16
   }
 

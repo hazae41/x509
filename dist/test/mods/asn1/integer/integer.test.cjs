@@ -12,10 +12,13 @@ uvu.test.before(() => tslib.__awaiter(void 0, void 0, void 0, function* () {
     const { pathname } = new URL((typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('mods/asn1/integer/integer.test.cjs', document.baseURI).href)));
     console.log(node_path.relative(directory, pathname.replace(".cjs", ".ts")));
 }));
+function hexToInteger(hex) {
+    const buffer = Buffer.from(hex.replaceAll(" ", ""), "hex");
+    return integer.Integer.read(new binary.Binary(buffer)).value;
+}
 uvu.test("Read", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
-    const buffer = Buffer.from("02 01 00".replaceAll(" ", ""), "hex");
-    const integer$1 = integer.Integer.read(new binary.Binary(buffer));
-    assert.assert(integer$1.value === 0);
+    assert.assert(hexToInteger("02 01 00") === 0);
+    assert.assert(hexToInteger("02 02 30 39") === 12345);
 }));
 uvu.test.run();
 //# sourceMappingURL=integer.test.cjs.map

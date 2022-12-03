@@ -2,13 +2,11 @@
 
 var length = require('../asn1/length/length.cjs');
 var type = require('../asn1/type/type.cjs');
+var tbscertificate = require('./tbscertificate.cjs');
 
 class Certificate {
-    constructor(
-    // readonly tbsCertificate: TBSCertificate,
-    // readonly algorithmIdentifier: AlgorithmIdentifier,
-    // readonly signatureValue: Buffer0
-    ) {
+    constructor(tbsCertificate) {
+        this.tbsCertificate = tbsCertificate;
         this.class = Certificate;
     }
     static read(binary) {
@@ -16,7 +14,8 @@ class Certificate {
         if (!this.type.equals(type$1))
             throw new Error(`Invalid type`);
         length.Length.read(binary);
-        return new this();
+        const tbscert = tbscertificate.TBSCertificate.read(binary);
+        return new this(tbscert);
     }
 }
 Certificate.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.sequence);

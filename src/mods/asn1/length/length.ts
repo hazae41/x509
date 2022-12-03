@@ -14,11 +14,11 @@ export class Length {
 
     const count = new Bitset(first, 8).last(7)
 
-    let length = 0
+    let value = 0
 
     for (let i = 0; i < count; i++)
-      length += binary.readUint8() * Math.pow(256, count - i - 1)
+      value += binary.readUint8() * Math.pow(256, count - i - 1)
 
-    return new this(length)
+    return new this(value)
   }
 }

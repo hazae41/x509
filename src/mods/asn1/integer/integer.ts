@@ -5,7 +5,7 @@ import { Type } from "mods/asn1/type/type.js"
 export class Integer {
   readonly class = Integer
 
-  static type = new Type(Type.clazzes.universal, false, 2)
+  static type = new Type(Type.clazzes.universal, false, Type.tags.integer)
 
   constructor(
     readonly value: number
@@ -19,6 +19,11 @@ export class Integer {
 
     const length = Length.read(binary)
 
-    return new this(0)
+    let value = 0
+
+    for (let i = 0; i < length.value; i++)
+      value += binary.readUint8() * Math.pow(256, length.value - i - 1)
+
+    return new this(value)
   }
 }

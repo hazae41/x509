@@ -12,6 +12,7 @@ declare class Type {
         private: number;
     };
     static tags: {
+        integer: number;
         sequence: number;
     };
     constructor(clazz: number, constructed: boolean, tag: number);

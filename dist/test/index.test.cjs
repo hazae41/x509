@@ -21,7 +21,8 @@ uvu.test.before(() => tslib.__awaiter(void 0, void 0, void 0, function* () {
 }));
 uvu.test("The test", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
     const text = yield promises.readFile("./test/cert.pem", "utf8");
-    certificate.Certificate.read(new binary.Binary(pem.PEM.parse(text)));
+    const cert = certificate.Certificate.read(new binary.Binary(pem.PEM.parse(text)));
+    console.log(cert.tbsCertificate.version.inner.value);
 }));
 uvu.test.run();
 //# sourceMappingURL=index.test.cjs.map
