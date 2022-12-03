@@ -19,6 +19,12 @@ export class Bitset {
     return (this.value & (1 << index)) !== 0
   }
 
+  not() {
+    for (let i = 0; i < this.length; i++)
+      this.toggle(i)
+    return this
+  }
+
   toggle(index: number) {
     if (index < 0)
       throw new Error(`Index is negative`)

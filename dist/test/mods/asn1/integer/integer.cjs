@@ -1,8 +1,14 @@
 'use strict';
 
+var bitset = require('../../../libs/bitset/bitset.cjs');
 var length = require('../length/length.cjs');
 var type = require('../type/type.cjs');
 
+function read(value, negative) {
+    if (negative)
+        return new bitset.Bitset(value, 8).not().value;
+    return value;
+}
 class Integer {
     constructor(value) {
         this.value = value;
@@ -14,8 +20,13 @@ class Integer {
             throw new Error(`Invalid type`);
         const length$1 = length.Length.read(binary);
         let value = BigInt(0);
+        const first = binary.readUint8(true);
+        const bitset$1 = new bitset.Bitset(first, 8);
+        const negative = bitset$1.get(7);
         for (let i = 0; i < length$1.value; i++)
-            value += BigInt(binary.readUint8()) * (BigInt(256) ** BigInt(length$1.value - i - 1));
+            value += BigInt(read(binary.readUint8(), negative)) * (BigInt(256) ** BigInt(length$1.value - i - 1));
+        if (negative)
+            value = ~value;
         return new this(value);
     }
 }

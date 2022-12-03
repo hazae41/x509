@@ -16,6 +16,11 @@ class Bitset {
             throw new Error(`Index is too big`);
         return (this.value & (1 << index)) !== 0;
     }
+    not() {
+        for (let i = 0; i < this.length; i++)
+            this.toggle(i);
+        return this;
+    }
     toggle(index) {
         if (index < 0)
             throw new Error(`Index is negative`);
