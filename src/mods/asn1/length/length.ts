@@ -12,7 +12,9 @@ export class Length {
     const first = binary.readUint8()
     if (first < 128) return new this(first)
 
-    const count = new Bitset(first, 8).last(7)
+    const count = new Bitset(first, 8)
+      .disable(7)
+      .value
 
     let value = 0
 
