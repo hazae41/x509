@@ -1,6 +1,4 @@
-
 export namespace PEM {
-
   export const header = `-----BEGIN CERTIFICATE-----`
   export const footer = `-----END CERTIFICATE-----`
 
