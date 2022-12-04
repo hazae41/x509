@@ -1,3 +1,4 @@
+export { BitString } from './asn1/bitstring/bitstring.js';
 export { Constructed } from './asn1/constructed/constructed.js';
 export { DER } from './asn1/der.js';
 export { Integer } from './asn1/integer/integer.js';

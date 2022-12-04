@@ -13,6 +13,7 @@ declare class Type {
     };
     static tags: {
         integer: number;
+        bitstring: number;
         sequence: number;
     };
     constructor(clazz: number, constructed: boolean, tag: number);

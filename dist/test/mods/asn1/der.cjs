@@ -1,5 +1,6 @@
 'use strict';
 
+var bitstring = require('./bitstring/bitstring.cjs');
 var constructed = require('./constructed/constructed.cjs');
 var integer = require('./integer/integer.cjs');
 var sequence = require('./sequence/sequence.cjs');
@@ -16,6 +17,8 @@ exports.DER = void 0;
             return sequence.Sequence.fromDER(binary, parse);
         if (type$1.equals(integer.Integer.type))
             return integer.Integer.fromDER(binary);
+        if (type$1.equals(bitstring.BitString.type))
+            return bitstring.BitString.fromDER(binary);
         if (type$1.clazz === type.Type.clazzes.context) {
             if (type$1.constructed)
                 return constructed.Constructed.fromDER(binary, parse);

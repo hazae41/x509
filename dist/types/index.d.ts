@@ -1,5 +1,6 @@
 import * as index from './mods/index.js';
 export { index as X509 };
+export { BitString } from './mods/asn1/bitstring/bitstring.js';
 export { Constructed } from './mods/asn1/constructed/constructed.js';
 export { DER } from './mods/asn1/der.js';
 export { Integer } from './mods/asn1/integer/integer.js';

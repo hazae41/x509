@@ -13,6 +13,7 @@ export class Type {
 
   static tags = {
     integer: 2,
+    bitstring: 3,
     sequence: 16
   }
 

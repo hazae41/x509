@@ -37,6 +37,7 @@ Type.clazzes = {
 };
 Type.tags = {
     integer: 2,
+    bitstring: 3,
     sequence: 16
 };
 

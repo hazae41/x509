@@ -1,6 +1,7 @@
 'use strict';
 
 var index = require('./mods/index.cjs');
+var bitstring = require('./mods/asn1/bitstring/bitstring.cjs');
 var constructed = require('./mods/asn1/constructed/constructed.cjs');
 var der = require('./mods/asn1/der.cjs');
 var integer = require('./mods/asn1/integer/integer.cjs');
@@ -16,6 +17,7 @@ var pem = require('./mods/x509/pem/pem.cjs');
 
 
 exports.X509 = index;
+exports.BitString = bitstring.BitString;
 exports.Constructed = constructed.Constructed;
 Object.defineProperty(exports, 'DER', {
 	enumerable: true,
