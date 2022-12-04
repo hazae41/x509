@@ -1,7 +1,7 @@
 import { Binary } from "libs/binary/binary.js";
 import { Length } from "mods/asn1/length/length.js";
-import { ToStringable } from "mods/asn1/object.js";
 import { Type } from "mods/asn1/type/type.js";
+import { ToStringable } from "mods/asn1/types.js";
 
 const stringify = (sequence: Sequence) => `SEQUENCE {
   ${sequence.inner.map(it => it.toString()).join(`\n`).replaceAll("\n", "\n" + "  ")}
@@ -10,7 +10,7 @@ const stringify = (sequence: Sequence) => `SEQUENCE {
 export class Sequence {
   readonly class = Sequence
 
-  static type = new Type(Type.clazzes.universal, true, Type.tags.sequence)
+  static type = new Type(Type.clazzes.universal, true, Type.tags.SEQUENCE)
 
   constructor(
     readonly inner: ToStringable[]

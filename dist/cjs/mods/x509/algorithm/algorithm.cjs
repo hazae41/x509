@@ -17,7 +17,7 @@ class AlgorithmIdentifier {
         return new this(Buffer.from([0]));
     }
 }
-AlgorithmIdentifier.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.sequence);
+AlgorithmIdentifier.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.SEQUENCE);
 
 exports.AlgorithmIdentifier = AlgorithmIdentifier;
 //# sourceMappingURL=algorithm.cjs.map

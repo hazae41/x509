@@ -1,6 +1,6 @@
 import { Binary } from '../../../libs/binary/binary.js';
-import { ToStringable } from '../object.js';
 import { Type } from '../type/type.js';
+import { ToStringable } from '../types.js';
 
 declare class Constructed {
     readonly type: Type;

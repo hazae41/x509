@@ -5,7 +5,7 @@ import { Type } from "mods/asn1/type/type.js"
 export class AlgorithmIdentifier {
   readonly class = AlgorithmIdentifier
 
-  static type = new Type(Type.clazzes.universal, true, Type.tags.sequence)
+  static type = new Type(Type.clazzes.universal, true, Type.tags.SEQUENCE)
 
   constructor(
     readonly algorith: Buffer

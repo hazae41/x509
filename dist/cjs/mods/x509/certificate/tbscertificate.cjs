@@ -24,7 +24,7 @@ class TBSCertificate {
         return new this(version, serialNumber, algorithm$1);
     }
 }
-TBSCertificate.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.sequence);
+TBSCertificate.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.SEQUENCE);
 class TBSCertificateVersion {
     constructor(inner = new integer.Integer(BigInt(1))) {
         this.inner = inner;

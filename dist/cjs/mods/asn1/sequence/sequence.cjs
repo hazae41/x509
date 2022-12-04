@@ -30,7 +30,7 @@ class Sequence {
         return new this(inner);
     }
 }
-Sequence.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.sequence);
+Sequence.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.SEQUENCE);
 
 exports.Sequence = Sequence;
 //# sourceMappingURL=sequence.cjs.map

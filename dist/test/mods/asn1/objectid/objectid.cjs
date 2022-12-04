@@ -3,17 +3,16 @@
 var length = require('../length/length.cjs');
 var type = require('../type/type.cjs');
 
-class BitString {
-    constructor(padding, buffer) {
-        this.padding = padding;
+class ObjectID {
+    constructor(buffer) {
         this.buffer = buffer;
-        this.class = BitString;
+        this.class = ObjectID;
     }
     get type() {
         return this.class.type;
     }
     toString() {
-        return `BITSTRING (${this.padding}) ${this.buffer.toString("hex")}`;
+        return `OBJECT IDENTIFIER ${this.buffer.toString("hex")}`;
     }
     static fromDER(binary) {
         const type$1 = type.Type.fromDER(binary);
@@ -21,14 +20,13 @@ class BitString {
             throw new Error(`Invalid type`);
         const length$1 = length.Length.fromDER(binary);
         const content = binary.offset;
-        const padding = binary.readUint8();
-        const buffer = binary.read(length$1.value - 1);
+        const buffer = binary.read(length$1.value);
         if (binary.offset - content !== length$1.value)
             throw new Error(`Invalid length`);
-        return new this(padding, buffer);
+        return new this(buffer);
     }
 }
-BitString.type = new type.Type(type.Type.clazzes.universal, false, type.Type.tags.BIT_STRING);
+ObjectID.type = new type.Type(type.Type.clazzes.universal, false, type.Type.tags.OBJECT_IDENTIFIER);
 
-exports.BitString = BitString;
-//# sourceMappingURL=bitstring.cjs.map
+exports.ObjectID = ObjectID;
+//# sourceMappingURL=objectid.cjs.map

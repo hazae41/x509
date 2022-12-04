@@ -6,6 +6,7 @@ var constructed = require('./mods/asn1/constructed/constructed.cjs');
 var der = require('./mods/asn1/der.cjs');
 var integer = require('./mods/asn1/integer/integer.cjs');
 var length = require('./mods/asn1/length/length.cjs');
+var objectid = require('./mods/asn1/objectid/objectid.cjs');
 var sequence = require('./mods/asn1/sequence/sequence.cjs');
 var type = require('./mods/asn1/type/type.cjs');
 var unknown = require('./mods/asn1/unknown/unknown.cjs');
@@ -25,6 +26,7 @@ Object.defineProperty(exports, 'DER', {
 });
 exports.Integer = integer.Integer;
 exports.Length = length.Length;
+exports.ObjectID = objectid.ObjectID;
 exports.Sequence = sequence.Sequence;
 exports.Type = type.Type;
 exports.Unknown = unknown.Unknown;

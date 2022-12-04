@@ -1,7 +1,7 @@
 import { Binary } from "libs/binary/binary.js";
 import { Length } from "mods/asn1/length/length.js";
-import { ToStringable } from "mods/asn1/object.js";
 import { Type } from "mods/asn1/type/type.js";
+import { ToStringable } from "mods/asn1/types.js";
 
 const stringify = (constructed: Constructed) => `[${constructed.type.tag}] {
   ${constructed.inner.map(it => it.toString()).join(`\n`).replaceAll("\n", "\n" + "  ")}

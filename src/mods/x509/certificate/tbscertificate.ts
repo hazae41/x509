@@ -7,7 +7,7 @@ import { AlgorithmIdentifier } from "mods/x509/algorithm/algorithm.js";
 export class TBSCertificate {
   readonly class = TBSCertificate
 
-  static type = new Type(Type.clazzes.universal, true, Type.tags.sequence)
+  static type = new Type(Type.clazzes.universal, true, Type.tags.SEQUENCE)
 
   constructor(
     readonly version: TBSCertificateVersion,

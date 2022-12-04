@@ -6,7 +6,7 @@ import { TBSCertificate } from "mods/x509/certificate/tbscertificate.js";
 export class Certificate {
   readonly class = Certificate
 
-  static type = new Type(Type.clazzes.universal, true, Type.tags.sequence)
+  static type = new Type(Type.clazzes.universal, true, Type.tags.SEQUENCE)
 
   constructor(
     readonly tbsCertificate: TBSCertificate,

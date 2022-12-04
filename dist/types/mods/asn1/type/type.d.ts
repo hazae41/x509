@@ -12,9 +12,10 @@ declare class Type {
         private: number;
     };
     static tags: {
-        integer: number;
-        bitstring: number;
-        sequence: number;
+        INTEGER: number;
+        BIT_STRING: number;
+        OBJECT_IDENTIFIER: number;
+        SEQUENCE: number;
     };
     constructor(clazz: number, constructed: boolean, tag: number);
     equals(other: Type): boolean;

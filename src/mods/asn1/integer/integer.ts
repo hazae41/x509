@@ -12,7 +12,7 @@ function sign(value: number, negative: boolean) {
 export class Integer {
   readonly class = Integer
 
-  static type = new Type(Type.clazzes.universal, false, Type.tags.integer)
+  static type = new Type(Type.clazzes.universal, false, Type.tags.INTEGER)
 
   constructor(
     readonly value: bigint

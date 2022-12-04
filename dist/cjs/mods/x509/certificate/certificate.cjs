@@ -18,7 +18,7 @@ class Certificate {
         return new this(tbscert);
     }
 }
-Certificate.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.sequence);
+Certificate.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.SEQUENCE);
 
 exports.Certificate = Certificate;
 //# sourceMappingURL=certificate.cjs.map

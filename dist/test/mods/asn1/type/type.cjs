@@ -36,9 +36,10 @@ Type.clazzes = {
     private: 3
 };
 Type.tags = {
-    integer: 2,
-    bitstring: 3,
-    sequence: 16
+    INTEGER: 2,
+    BIT_STRING: 3,
+    OBJECT_IDENTIFIER: 6,
+    SEQUENCE: 16
 };
 
 exports.Type = Type;

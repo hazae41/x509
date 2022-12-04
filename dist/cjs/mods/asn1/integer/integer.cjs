@@ -35,7 +35,7 @@ class Integer {
         return new this(value);
     }
 }
-Integer.type = new type.Type(type.Type.clazzes.universal, false, type.Type.tags.integer);
+Integer.type = new type.Type(type.Type.clazzes.universal, false, type.Type.tags.INTEGER);
 
 exports.Integer = Integer;
 //# sourceMappingURL=integer.cjs.map
