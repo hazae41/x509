@@ -1,7 +1,9 @@
 import { Binary } from "libs/binary/binary.js";
 import { BitString } from "mods/asn1/bit_string/bit_string.js";
+import { Boolean } from "mods/asn1/boolean/boolean.js";
 import { Constructed } from "mods/asn1/constructed/constructed.js";
 import { Integer } from "mods/asn1/integer/integer.js";
+import { Null } from "mods/asn1/null/null.js";
 import { ObjectIdentifier } from "mods/asn1/object_identifier/object_identifier.js";
 import { OctetString } from "mods/asn1/octet_string/octet_string.js";
 import { PrintableString } from "mods/asn1/printable_string/printable_string.js";
@@ -19,12 +21,16 @@ export namespace DER {
     const type = Type.fromDER(binary)
     binary.offset = start
 
+    if (type.equals(Boolean.type))
+      return Boolean.fromDER(binary)
     if (type.equals(Integer.type))
       return Integer.fromDER(binary)
     if (type.equals(BitString.type))
       return BitString.fromDER(binary)
     if (type.equals(OctetString.type))
       return OctetString.fromDER(binary)
+    if (type.equals(Null.type))
+      return Null.fromDER(binary)
     if (type.equals(ObjectIdentifier.type))
       return ObjectIdentifier.fromDER(binary)
     if (type.equals(UTF8String.type))

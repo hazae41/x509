@@ -17,9 +17,11 @@ export class Type {
   } as const
 
   static tags = {
+    BOOLEAN: 1,
     INTEGER: 2,
     BIT_STRING: 3,
     OCTET_STRING: 4,
+    NULL: 5,
     OBJECT_IDENTIFIER: 6,
     UTF8_STRING: 12,
     SEQUENCE: 16,

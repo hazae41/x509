@@ -2,16 +2,16 @@ import { Binary } from "libs/binary/binary.js"
 import { Length } from "mods/asn1/length/length.js"
 import { Type } from "mods/asn1/type/type.js"
 
-export class ObjectIdentifier {
-  readonly class = ObjectIdentifier
+export class Boolean {
+  readonly class = Boolean
 
   static type = new Type(
     Type.clazzes.UNIVERSAL,
     Type.wraps.PRIMITIVE,
-    Type.tags.OBJECT_IDENTIFIER)
+    Type.tags.BOOLEAN)
 
   constructor(
-    readonly value: string
+    readonly value: boolean
   ) { }
 
   get type() {
@@ -19,7 +19,7 @@ export class ObjectIdentifier {
   }
 
   toString() {
-    return `OBJECT IDENTIFIER ${this.value}`
+    return `BOOLEAN ${this.value}`
   }
 
   static fromDER(binary: Binary) {
@@ -31,24 +31,11 @@ export class ObjectIdentifier {
     const length = Length.fromDER(binary)
     const content = binary.offset
 
-    const head = binary.readUint8()
-    const first = Math.floor(head / 40);
-    const second = head % 40;
-
-    const values = [first, second]
-
-    for (let i = 1; i < length.value; i++) {
-      const value = binary.readUint8()
-
-      // if (value > 127) // TODO
-      //   throw new Error(`Unimplemented multi-byte OID value`)
-
-      values.push(value)
-    }
+    const value = binary.readUint8() > 0
 
     if (binary.offset - content !== length.value)
       throw new Error(`Invalid length`)
 
-    return new this(values.join("."))
+    return new this(value)
   }
 }

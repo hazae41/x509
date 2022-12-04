@@ -33,7 +33,7 @@ export class PrintableString {
 
     const value = binary.readString(length.value)
 
-    if (!/^[a-zA-Z '()+,\-.?:\/=]+$/g.test(value))
+    if (!/^[a-zA-Z0-9'()+,\-.\/:=? ]+$/g.test(value))
       throw new Error(`Invalid value`)
 
     if (binary.offset - content !== length.value)

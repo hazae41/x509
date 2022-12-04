@@ -15,8 +15,14 @@ test.before(async () => {
   console.log(relative(directory, pathname.replace(".cjs", ".ts")))
 })
 
-test("The test", async () => {
+test("Cert 1", async () => {
   const text = await readFile("./test/cert.pem", "utf8")
+  const asn1 = DER.parse(new Binary(PEM.parse(text)))
+  console.log(asn1.toString())
+})
+
+test("Cert 2", async () => {
+  const text = await readFile("./test/cert2.pem", "utf8")
   const asn1 = DER.parse(new Binary(PEM.parse(text)))
   console.log(asn1.toString())
 })
