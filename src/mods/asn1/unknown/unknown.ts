@@ -17,7 +17,6 @@ export class Unknown {
   static fromDER(binary: Binary) {
     const type = Type.fromDER(binary)
     const length = Length.fromDER(binary)
-    console.log("UNKNOWN", length.value)
 
     binary.offset += length.value
 

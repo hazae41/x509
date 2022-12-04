@@ -15,7 +15,6 @@ class Unknown {
     static fromDER(binary) {
         const type$1 = type.Type.fromDER(binary);
         const length$1 = length.Length.fromDER(binary);
-        console.log("UNKNOWN", length$1.value);
         binary.offset += length$1.value;
         return new this(type$1, length$1);
     }
