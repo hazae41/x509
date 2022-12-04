@@ -12,6 +12,7 @@ import { Set } from "mods/asn1/set/set.js";
 import { Type } from "mods/asn1/type/type.js";
 import { ToStringable } from "mods/asn1/types.js";
 import { Unknown } from "mods/asn1/unknown/unknown.js";
+import { UTCTime } from "mods/asn1/utc_time/utc_time.js";
 import { UTF8String } from "mods/asn1/utf8_string/utf8_string.js";
 
 export namespace DER {
@@ -41,6 +42,8 @@ export namespace DER {
       return Sequence.fromDER(binary, parse)
     if (type.equals(Set.type))
       return Set.fromDER(binary, parse)
+    if (type.equals(UTCTime.type))
+      return UTCTime.fromDER(binary)
 
     if (type.clazz === Type.clazzes.UNIVERSAL)
       return Unknown.fromDER(binary) // TODO throw

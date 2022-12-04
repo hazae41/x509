@@ -53,19 +53,19 @@ test.before(async () => {
 test("Cert 1", async () => {
   const text = await readFile("./test/cert.pem", "utf8")
   const asn1 = DER.parse(new Binary(PEM.parse(text)))
-  console.log(asn1.toString())
+  console.log("Cert 1", asn1.toString())
 })
 
 test("Cert 2", async () => {
   const text = await readFile("./test/cert2.pem", "utf8")
   const asn1 = DER.parse(new Binary(PEM.parse(text)))
-  console.log("Cert 2", asn1.toString())
+  // console.log("Cert 2", asn1.toString())
 })
 
 test("Cert 3", async () => {
   const text = await readFile("./test/cert3.pem", "utf8")
   const asn1 = DER.parse(new Binary(PKCS7.parse(text)))
-  console.log("Cert 3", asn1.toString())
+  // console.log("Cert 3", asn1.toString())
 })
 
 test.run()

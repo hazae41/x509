@@ -13,4 +13,5 @@ export * from "./set/set.js";
 export * from "./type/type.js";
 export * from "./types.js";
 export * from "./unknown/unknown.js";
+export * from "./utc_time/utc_time.js";
 export * from "./utf8_string/utf8_string.js";

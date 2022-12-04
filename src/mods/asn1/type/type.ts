@@ -26,7 +26,8 @@ export class Type {
     UTF8_STRING: 12,
     SEQUENCE: 16,
     SET: 17,
-    PRINTABLE_STRING: 19
+    PRINTABLE_STRING: 19,
+    UTC_TIME: 23
   } as const
 
   constructor(
