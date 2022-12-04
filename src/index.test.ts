@@ -4,7 +4,7 @@ export * from "mods/index.test.js";
 
 import { readFile } from "fs/promises";
 import { Binary } from "libs/binary/binary.js";
-import { Certificate } from "mods/x509/certificate/certificate.js";
+import { read } from "mods/asn1/read.js";
 import { PEM } from "mods/x509/pem/pem.js";
 import { relative, resolve } from "node:path";
 import { test } from "uvu";
@@ -17,8 +17,8 @@ test.before(async () => {
 
 test("The test", async () => {
   const text = await readFile("./test/cert.pem", "utf8")
-  const cert = Certificate.read(new Binary(PEM.parse(text)))
-  console.log(cert.tbsCertificate.version.inner.value)
+  const asn1 = read(new Binary(PEM.parse(text)))
+  console.log(asn1.toString())
 })
 
 test.run()

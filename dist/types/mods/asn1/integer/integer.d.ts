@@ -6,6 +6,8 @@ declare class Integer {
     readonly class: typeof Integer;
     static type: Type;
     constructor(value: bigint);
+    get type(): Type;
+    toString(): string;
     static read(binary: Binary): Integer;
 }
 

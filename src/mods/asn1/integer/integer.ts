@@ -18,6 +18,14 @@ export class Integer {
     readonly value: bigint
   ) { }
 
+  get type() {
+    return this.class.type
+  }
+
+  toString() {
+    return `INTEGER ${this.value}`
+  }
+
   static read(binary: Binary) {
     const type = Type.read(binary)
 

@@ -1,6 +1,10 @@
 export { Integer } from './asn1/integer/integer.js';
 export { Length } from './asn1/length/length.js';
+export { ASN1 } from './asn1/object.js';
+export { read } from './asn1/read.js';
+export { Sequence } from './asn1/sequence/sequence.js';
 export { Type } from './asn1/type/type.js';
+export { Unknown } from './asn1/unknown/unknown.js';
 export { AlgorithmIdentifier } from './x509/algorithm/algorithm.js';
 export { Certificate } from './x509/certificate/certificate.js';
 export { TBSCertificate } from './x509/certificate/tbscertificate.js';

@@ -14,6 +14,12 @@ class Integer {
         this.value = value;
         this.class = Integer;
     }
+    get type() {
+        return this.class.type;
+    }
+    toString() {
+        return `INTEGER ${this.value}`;
+    }
     static read(binary) {
         const type$1 = type.Type.read(binary);
         if (!this.type.equals(type$1))
