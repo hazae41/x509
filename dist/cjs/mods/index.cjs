@@ -27,5 +27,8 @@ exports.Unknown = unknown.Unknown;
 exports.AlgorithmIdentifier = algorithm.AlgorithmIdentifier;
 exports.Certificate = certificate.Certificate;
 exports.TBSCertificate = tbscertificate.TBSCertificate;
-exports.PEM = pem.PEM;
+Object.defineProperty(exports, 'PEM', {
+	enumerable: true,
+	get: function () { return pem.PEM; }
+});
 //# sourceMappingURL=index.cjs.map

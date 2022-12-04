@@ -1,25 +1,24 @@
 
-export class PEM {
-  readonly class = PEM
+export namespace PEM {
 
-  static header = `-----BEGIN CERTIFICATE-----`
-  static footer = `-----END CERTIFICATE-----`
+  export const header = `-----BEGIN CERTIFICATE-----`
+  export const footer = `-----END CERTIFICATE-----`
 
-  static parse(text: string) {
+  export function parse(text: string) {
     text = text.replaceAll(`\n`, ``)
 
-    if (!text.startsWith(this.header))
+    if (!text.startsWith(header))
       throw new Error(`Missing PEM header`)
-    if (!text.endsWith(this.footer))
+    if (!text.endsWith(footer))
       throw new Error(`Missing PEM footer`)
 
-    const body = text.slice(this.header.length, -this.footer.length)
+    const body = text.slice(header.length, -footer.length)
 
     return Buffer.from(body, "base64")
   }
 
-  static stringify(buffer: Buffer) {
-    let result = `${this.header}\n`
+  export function stringify(buffer: Buffer) {
+    let result = `${header}\n`
     let body = buffer.toString("base64")
 
     while (body) {
@@ -27,7 +26,7 @@ export class PEM {
       body = body.slice(64)
     }
 
-    result += `${this.footer}\n`
+    result += `${footer}\n`
     return result
   }
 }
