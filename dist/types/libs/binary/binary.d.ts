@@ -1,3 +1,6 @@
+/**
+ * Buffer with offset
+ */
 declare class Binary {
     buffer: Buffer;
     readonly class: typeof Binary;
@@ -7,9 +10,9 @@ declare class Binary {
     static allocUnsafe(length: number): Binary;
     get remaining(): number;
     get sliced(): Buffer;
+    fill(end?: number): void;
     read(length: number, shallow?: boolean): Buffer;
     write(array: Buffer, shallow?: boolean): void;
-    fill(end?: number): void;
     readUint8(shallow?: boolean): number;
     writeUint8(x: number, shallow?: boolean): void;
     readUint16(shallow?: boolean): number;

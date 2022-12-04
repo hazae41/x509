@@ -1,3 +1,6 @@
+/**
+ * Buffer with offset
+ */
 export class Binary {
   readonly class = Binary
 
@@ -23,6 +26,10 @@ export class Binary {
     return this.buffer.subarray(0, this.offset)
   }
 
+  fill(end?: number) {
+    this.buffer.fill(0, this.offset, end)
+  }
+
   read(length: number, shallow = false) {
     if (this.offset + length > this.buffer.length)
       throw new Error(`Out of bound read`)
@@ -36,10 +43,6 @@ export class Binary {
       throw new Error(`Out of bound write`)
     this.buffer.set(array, this.offset)
     if (!shallow) this.offset += array.length
-  }
-
-  fill(end?: number) {
-    this.buffer.fill(0, this.offset, end)
   }
 
   readUint8(shallow = false) {

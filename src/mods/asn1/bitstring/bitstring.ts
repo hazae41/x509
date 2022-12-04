@@ -1,4 +1,5 @@
 import { Binary } from "libs/binary/binary.js";
+import { Buffers } from "libs/buffers/buffers.js";
 import { Length } from "mods/asn1/length/length.js";
 import { Type } from "mods/asn1/type/type.js";
 
@@ -17,7 +18,8 @@ export class BitString {
   }
 
   toString() {
-    return `BITSTRING (${this.padding}) ${this.buffer.toString("hex")}`
+    const binary = Buffers.toBinary(this.buffer)
+    return `BITSTRING ${binary.slice(0, binary.length - this.padding)}`
   }
 
   static fromDER(binary: Binary) {

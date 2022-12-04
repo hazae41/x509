@@ -24,7 +24,7 @@ class Type {
         const clazz = bitset$1.first(2);
         const constructed = bitset$1.get(5);
         const tag = bitset$1.last(5);
-        if (tag > 30)
+        if (tag > 30) // TODO
             throw new Error(`Unimplemented tag`);
         return new this(clazz, constructed, tag);
     }

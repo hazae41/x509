@@ -1,5 +1,6 @@
 'use strict';
 
+var buffers = require('../../../libs/buffers/buffers.cjs');
 var length = require('../length/length.cjs');
 var type = require('../type/type.cjs');
 
@@ -13,7 +14,8 @@ class BitString {
         return this.class.type;
     }
     toString() {
-        return `BITSTRING (${this.padding}) ${this.buffer.toString("hex")}`;
+        const binary = buffers.Buffers.toBinary(this.buffer);
+        return `BITSTRING ${binary.slice(0, binary.length - this.padding)}`;
     }
     static fromDER(binary) {
         const type$1 = type.Type.fromDER(binary);

@@ -26,7 +26,7 @@ class ObjectID {
         const values = [first, second];
         for (let i = 1; i < length$1.value; i++) {
             const value = binary.readUint8();
-            if (value > 127)
+            if (value > 127) // TODO
                 throw new Error(`Unimplemented multi-byte OID value`);
             values.push(value);
         }

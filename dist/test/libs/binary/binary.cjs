@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * Buffer with offset
+ */
 class Binary {
     constructor(buffer) {
         this.buffer = buffer;
@@ -18,6 +21,9 @@ class Binary {
     get sliced() {
         return this.buffer.subarray(0, this.offset);
     }
+    fill(end) {
+        this.buffer.fill(0, this.offset, end);
+    }
     read(length, shallow = false) {
         if (this.offset + length > this.buffer.length)
             throw new Error(`Out of bound read`);
@@ -32,9 +38,6 @@ class Binary {
         this.buffer.set(array, this.offset);
         if (!shallow)
             this.offset += array.length;
-    }
-    fill(end) {
-        this.buffer.fill(0, this.offset, end);
     }
     readUint8(shallow = false) {
         const x = this.buffer.readUInt8(this.offset);
