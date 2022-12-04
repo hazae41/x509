@@ -46,11 +46,10 @@ export namespace DER {
       return UTCTime.fromDER(binary)
 
     if (type.clazz === Type.clazzes.UNIVERSAL)
-      return Unknown.fromDER(binary) // TODO throw
+      throw new Error(`Unknown UNIVERSAL type`)
 
-    if (type.wrap)
+    if (type.wrap === Type.wraps.CONSTRUCTED)
       return Constructed.fromDER(binary, parse)
-
     return Unknown.fromDER(binary)
   }
 
