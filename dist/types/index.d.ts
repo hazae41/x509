@@ -6,6 +6,7 @@ export { DER } from './mods/asn1/der.js';
 export { Integer } from './mods/asn1/integer/integer.js';
 export { Length } from './mods/asn1/length/length.js';
 export { ObjectIdentifier } from './mods/asn1/object_identifier/object_identifier.js';
+export { OctetString } from './mods/asn1/octet_string/octet_string.js';
 export { PrintableString } from './mods/asn1/printable_string/printable_string.js';
 export { Sequence } from './mods/asn1/sequence/sequence.js';
 export { Set } from './mods/asn1/set/set.js';

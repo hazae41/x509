@@ -18,6 +18,7 @@ declare class Type {
     static tags: {
         readonly INTEGER: 2;
         readonly BIT_STRING: 3;
+        readonly OCTET_STRING: 4;
         readonly OBJECT_IDENTIFIER: 6;
         readonly UTF8_STRING: 12;
         readonly SEQUENCE: 16;

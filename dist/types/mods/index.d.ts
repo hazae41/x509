@@ -4,6 +4,7 @@ export { DER } from './asn1/der.js';
 export { Integer } from './asn1/integer/integer.js';
 export { Length } from './asn1/length/length.js';
 export { ObjectIdentifier } from './asn1/object_identifier/object_identifier.js';
+export { OctetString } from './asn1/octet_string/octet_string.js';
 export { PrintableString } from './asn1/printable_string/printable_string.js';
 export { Sequence } from './asn1/sequence/sequence.js';
 export { Set } from './asn1/set/set.js';

@@ -19,6 +19,7 @@ export class Type {
   static tags = {
     INTEGER: 2,
     BIT_STRING: 3,
+    OCTET_STRING: 4,
     OBJECT_IDENTIFIER: 6,
     UTF8_STRING: 12,
     SEQUENCE: 16,

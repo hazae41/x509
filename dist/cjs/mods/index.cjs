@@ -6,6 +6,7 @@ var der = require('./asn1/der.cjs');
 var integer = require('./asn1/integer/integer.cjs');
 var length = require('./asn1/length/length.cjs');
 var object_identifier = require('./asn1/object_identifier/object_identifier.cjs');
+var octet_string = require('./asn1/octet_string/octet_string.cjs');
 var printable_string = require('./asn1/printable_string/printable_string.cjs');
 var sequence = require('./asn1/sequence/sequence.cjs');
 var set = require('./asn1/set/set.cjs');
@@ -28,6 +29,7 @@ Object.defineProperty(exports, 'DER', {
 exports.Integer = integer.Integer;
 exports.Length = length.Length;
 exports.ObjectIdentifier = object_identifier.ObjectIdentifier;
+exports.OctetString = octet_string.OctetString;
 exports.PrintableString = printable_string.PrintableString;
 exports.Sequence = sequence.Sequence;
 exports.Set = set.Set;
