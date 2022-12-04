@@ -8,7 +8,7 @@ export class ObjectID {
   static type = new Type(Type.clazzes.universal, false, Type.tags.OBJECT_IDENTIFIER)
 
   constructor(
-    readonly buffer: Buffer
+    readonly value: string
   ) { }
 
   get type() {
@@ -16,7 +16,7 @@ export class ObjectID {
   }
 
   toString() {
-    return `OBJECT IDENTIFIER ${this.buffer.toString("hex")}`
+    return `OBJECT IDENTIFIER ${this.value}`
   }
 
   static fromDER(binary: Binary) {
@@ -28,11 +28,24 @@ export class ObjectID {
     const length = Length.fromDER(binary)
     const content = binary.offset
 
-    const buffer = binary.read(length.value)
+    const head = binary.readUint8()
+    const first = Math.floor(head / 40);
+    const second = head % 40;
+
+    const values = [first, second]
+
+    for (let i = 1; i < length.value; i++) {
+      const value = binary.readUint8()
+
+      if (value > 127) // TODO
+        throw new Error(`Unimplemented multi-byte OID value`)
+
+      values.push(value)
+    }
 
     if (binary.offset - content !== length.value)
       throw new Error(`Invalid length`)
 
-    return new this(buffer)
+    return new this(values.join("."))
   }
 }
