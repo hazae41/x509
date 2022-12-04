@@ -16,6 +16,7 @@ declare class Type {
         BIT_STRING: number;
         OBJECT_IDENTIFIER: number;
         SEQUENCE: number;
+        SET: number;
     };
     constructor(clazz: number, constructed: boolean, tag: number);
     equals(other: Type): boolean;

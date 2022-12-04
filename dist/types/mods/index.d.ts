@@ -5,6 +5,7 @@ export { Integer } from './asn1/integer/integer.js';
 export { Length } from './asn1/length/length.js';
 export { ObjectID } from './asn1/objectid/objectid.js';
 export { Sequence } from './asn1/sequence/sequence.js';
+export { Set } from './asn1/set/set.js';
 export { Type } from './asn1/type/type.js';
 export { ToStringable, Typed } from './asn1/types.js';
 export { Unknown } from './asn1/unknown/unknown.js';

@@ -15,7 +15,8 @@ export class Type {
     INTEGER: 2,
     BIT_STRING: 3,
     OBJECT_IDENTIFIER: 6,
-    SEQUENCE: 16
+    SEQUENCE: 16,
+    SET: 17
   }
 
   constructor(

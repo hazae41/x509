@@ -7,6 +7,7 @@ export { Integer } from './mods/asn1/integer/integer.js';
 export { Length } from './mods/asn1/length/length.js';
 export { ObjectID } from './mods/asn1/objectid/objectid.js';
 export { Sequence } from './mods/asn1/sequence/sequence.js';
+export { Set } from './mods/asn1/set/set.js';
 export { Type } from './mods/asn1/type/type.js';
 export { ToStringable, Typed } from './mods/asn1/types.js';
 export { Unknown } from './mods/asn1/unknown/unknown.js';
