@@ -33,4 +33,4 @@ class BitString {
 BitString.type = new type.Type(type.Type.clazzes.UNIVERSAL, type.Type.wraps.PRIMITIVE, type.Type.tags.BIT_STRING);
 
 exports.BitString = BitString;
-//# sourceMappingURL=bitstring.cjs.map
+//# sourceMappingURL=bit_string.cjs.map

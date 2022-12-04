@@ -29,4 +29,4 @@ class UTF8String {
 UTF8String.type = new type.Type(type.Type.clazzes.UNIVERSAL, type.Type.wraps.PRIMITIVE, type.Type.tags.UTF8_STRING);
 
 exports.UTF8String = UTF8String;
-//# sourceMappingURL=utf8string.cjs.map
+//# sourceMappingURL=utf8_string.cjs.map

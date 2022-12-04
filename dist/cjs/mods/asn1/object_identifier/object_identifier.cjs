@@ -3,10 +3,10 @@
 var length = require('../length/length.cjs');
 var type = require('../type/type.cjs');
 
-class ObjectID {
+class ObjectIdentifier {
     constructor(value) {
         this.value = value;
-        this.class = ObjectID;
+        this.class = ObjectIdentifier;
     }
     get type() {
         return this.class.type;
@@ -35,7 +35,7 @@ class ObjectID {
         return new this(values.join("."));
     }
 }
-ObjectID.type = new type.Type(type.Type.clazzes.UNIVERSAL, type.Type.wraps.PRIMITIVE, type.Type.tags.OBJECT_IDENTIFIER);
+ObjectIdentifier.type = new type.Type(type.Type.clazzes.UNIVERSAL, type.Type.wraps.PRIMITIVE, type.Type.tags.OBJECT_IDENTIFIER);
 
-exports.ObjectID = ObjectID;
-//# sourceMappingURL=objectid.cjs.map
+exports.ObjectIdentifier = ObjectIdentifier;
+//# sourceMappingURL=object_identifier.cjs.map

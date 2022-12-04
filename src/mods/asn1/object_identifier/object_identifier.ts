@@ -2,8 +2,8 @@ import { Binary } from "libs/binary/binary.js"
 import { Length } from "mods/asn1/length/length.js"
 import { Type } from "mods/asn1/type/type.js"
 
-export class ObjectID {
-  readonly class = ObjectID
+export class ObjectIdentifier {
+  readonly class = ObjectIdentifier
 
   static type = new Type(
     Type.clazzes.UNIVERSAL,
