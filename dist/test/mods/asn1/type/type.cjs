@@ -3,16 +3,16 @@
 var bitset = require('../../../libs/bitset/bitset.cjs');
 
 class Type {
-    constructor(clazz, constructed, tag) {
+    constructor(clazz, wrap, tag) {
         this.clazz = clazz;
-        this.constructed = constructed;
+        this.wrap = wrap;
         this.tag = tag;
         this.class = Type;
     }
     equals(other) {
         if (this.clazz !== other.clazz)
             return false;
-        if (this.constructed !== other.constructed)
+        if (this.wrap !== other.wrap)
             return false;
         if (this.tag !== other.tag)
             return false;
@@ -30,17 +30,23 @@ class Type {
     }
 }
 Type.clazzes = {
-    universal: 0,
-    application: 1,
-    context: 2,
-    private: 3
+    UNIVERSAL: 0,
+    APPLICATION: 1,
+    CONTEXT: 2,
+    PRIVATE: 3
+};
+Type.wraps = {
+    PRIMITIVE: false,
+    CONSTRUCTED: true
 };
 Type.tags = {
     INTEGER: 2,
     BIT_STRING: 3,
     OBJECT_IDENTIFIER: 6,
+    UTF8_STRING: 12,
     SEQUENCE: 16,
-    SET: 17
+    SET: 17,
+    PRINTABLE_STRING: 19
 };
 
 exports.Type = Type;

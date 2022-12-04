@@ -35,7 +35,7 @@ class ObjectID {
         return new this(values.join("."));
     }
 }
-ObjectID.type = new type.Type(type.Type.clazzes.universal, false, type.Type.tags.OBJECT_IDENTIFIER);
+ObjectID.type = new type.Type(type.Type.clazzes.UNIVERSAL, type.Type.wraps.PRIMITIVE, type.Type.tags.OBJECT_IDENTIFIER);
 
 exports.ObjectID = ObjectID;
 //# sourceMappingURL=objectid.cjs.map

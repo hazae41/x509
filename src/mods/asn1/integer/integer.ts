@@ -12,7 +12,10 @@ function sign(value: number, negative: boolean) {
 export class Integer {
   readonly class = Integer
 
-  static type = new Type(Type.clazzes.universal, false, Type.tags.INTEGER)
+  static type = new Type(
+    Type.clazzes.UNIVERSAL,
+    Type.wraps.PRIMITIVE,
+    Type.tags.INTEGER)
 
   constructor(
     readonly value: bigint
@@ -33,6 +36,7 @@ export class Integer {
       throw new Error(`Invalid type`)
 
     const length = Length.fromDER(binary)
+    const content = binary.offset
 
     let value = BigInt(0)
 
@@ -43,6 +47,9 @@ export class Integer {
       value += BigInt(sign(binary.readUint8(), negative)) * (BigInt(256) ** BigInt(length.value - i - 1))
 
     if (negative) value = ~value
+
+    if (binary.offset - content !== length.value)
+      throw new Error(`Invalid length`)
 
     return new this(value)
   }

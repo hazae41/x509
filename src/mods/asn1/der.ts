@@ -3,11 +3,13 @@ import { BitString } from "mods/asn1/bitstring/bitstring.js";
 import { Constructed } from "mods/asn1/constructed/constructed.js";
 import { Integer } from "mods/asn1/integer/integer.js";
 import { ObjectID } from "mods/asn1/objectid/objectid.js";
+import { PrintableString } from "mods/asn1/printable_string/printable_string.js";
 import { Sequence } from "mods/asn1/sequence/sequence.js";
 import { Set } from "mods/asn1/set/set.js";
 import { Type } from "mods/asn1/type/type.js";
 import { ToStringable } from "mods/asn1/types.js";
 import { Unknown } from "mods/asn1/unknown/unknown.js";
+import { UTF8String } from "mods/asn1/utf8string/utf8string.js";
 
 export namespace DER {
 
@@ -22,15 +24,19 @@ export namespace DER {
       return BitString.fromDER(binary)
     if (type.equals(ObjectID.type))
       return ObjectID.fromDER(binary)
+    if (type.equals(UTF8String.type))
+      return UTF8String.fromDER(binary)
+    if (type.equals(PrintableString.type))
+      return PrintableString.fromDER(binary)
     if (type.equals(Sequence.type))
       return Sequence.fromDER(binary, parse)
     if (type.equals(Set.type))
       return Set.fromDER(binary, parse)
 
-    if (type.clazz === Type.clazzes.universal)
+    if (type.clazz === Type.clazzes.UNIVERSAL)
       return Unknown.fromDER(binary) // TODO throw
 
-    if (type.constructed)
+    if (type.wrap)
       return Constructed.fromDER(binary, parse)
 
     return Unknown.fromDER(binary)

@@ -7,7 +7,7 @@ import { AlgorithmIdentifier } from "mods/x509/algorithm/algorithm.js";
 export class TBSCertificate {
   readonly class = TBSCertificate
 
-  static type = new Type(Type.clazzes.universal, true, Type.tags.SEQUENCE)
+  static type = new Type(Type.clazzes.UNIVERSAL, true, Type.tags.SEQUENCE)
 
   constructor(
     readonly version: TBSCertificateVersion,
@@ -35,7 +35,7 @@ export class TBSCertificate {
 class TBSCertificateVersion {
   readonly class = TBSCertificateVersion
 
-  static type = new Type(Type.clazzes.context, true, 0)
+  static type = new Type(Type.clazzes.CONTEXT, true, 0)
 
   constructor(
     readonly inner = new Integer(BigInt(1))

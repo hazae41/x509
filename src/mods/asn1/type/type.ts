@@ -5,30 +5,37 @@ export class Type {
   readonly class = Type
 
   static clazzes = {
-    universal: 0,
-    application: 1,
-    context: 2,
-    private: 3
-  }
+    UNIVERSAL: 0,
+    APPLICATION: 1,
+    CONTEXT: 2,
+    PRIVATE: 3
+  } as const
+
+  static wraps = {
+    PRIMITIVE: false,
+    CONSTRUCTED: true
+  } as const
 
   static tags = {
     INTEGER: 2,
     BIT_STRING: 3,
     OBJECT_IDENTIFIER: 6,
+    UTF8_STRING: 12,
     SEQUENCE: 16,
-    SET: 17
-  }
+    SET: 17,
+    PRINTABLE_STRING: 19
+  } as const
 
   constructor(
     readonly clazz: number,
-    readonly constructed: boolean,
+    readonly wrap: boolean,
     readonly tag: number
   ) { }
 
   equals(other: Type) {
     if (this.clazz !== other.clazz)
       return false
-    if (this.constructed !== other.constructed)
+    if (this.wrap !== other.wrap)
       return false
     if (this.tag !== other.tag)
       return false

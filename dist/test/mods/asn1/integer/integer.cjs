@@ -25,6 +25,7 @@ class Integer {
         if (!this.type.equals(type$1))
             throw new Error(`Invalid type`);
         const length$1 = length.Length.fromDER(binary);
+        const content = binary.offset;
         let value = BigInt(0);
         const first = binary.readUint8(true);
         const negative = first > 127;
@@ -32,10 +33,12 @@ class Integer {
             value += BigInt(sign(binary.readUint8(), negative)) * (BigInt(256) ** BigInt(length$1.value - i - 1));
         if (negative)
             value = ~value;
+        if (binary.offset - content !== length$1.value)
+            throw new Error(`Invalid length`);
         return new this(value);
     }
 }
-Integer.type = new type.Type(type.Type.clazzes.universal, false, type.Type.tags.INTEGER);
+Integer.type = new type.Type(type.Type.clazzes.UNIVERSAL, type.Type.wraps.PRIMITIVE, type.Type.tags.INTEGER);
 
 exports.Integer = Integer;
 //# sourceMappingURL=integer.cjs.map

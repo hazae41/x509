@@ -10,7 +10,10 @@ const stringify = (set: Set) => `SET {
 export class Set {
   readonly class = Set
 
-  static type = new Type(Type.clazzes.universal, true, Type.tags.SET)
+  static type = new Type(
+    Type.clazzes.UNIVERSAL,
+    Type.wraps.CONSTRUCTED,
+    Type.tags.SET)
 
   constructor(
     readonly inner: ToStringable[]
@@ -35,9 +38,11 @@ export class Set {
 
     const inner = new Array()
 
-    while (binary.offset - content < length.value) {
+    while (binary.offset - content < length.value)
       inner.push(parse(binary))
-    }
+
+    if (binary.offset - content !== length.value)
+      throw new Error(`Invalid length`)
 
     return new this(inner)
   }

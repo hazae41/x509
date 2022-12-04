@@ -24,7 +24,7 @@ class TBSCertificate {
         return new this(version, serialNumber, algorithm$1);
     }
 }
-TBSCertificate.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.SEQUENCE);
+TBSCertificate.type = new type.Type(type.Type.clazzes.UNIVERSAL, true, type.Type.tags.SEQUENCE);
 class TBSCertificateVersion {
     constructor(inner = new integer.Integer(BigInt(1))) {
         this.inner = inner;
@@ -45,7 +45,7 @@ class TBSCertificateVersion {
         return new this(inner);
     }
 }
-TBSCertificateVersion.type = new type.Type(type.Type.clazzes.context, true, 0);
+TBSCertificateVersion.type = new type.Type(type.Type.clazzes.CONTEXT, true, 0);
 
 exports.TBSCertificate = TBSCertificate;
 //# sourceMappingURL=tbscertificate.cjs.map

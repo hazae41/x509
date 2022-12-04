@@ -2,23 +2,29 @@ import { Binary } from '../../../libs/binary/binary.js';
 
 declare class Type {
     readonly clazz: number;
-    readonly constructed: boolean;
+    readonly wrap: boolean;
     readonly tag: number;
     readonly class: typeof Type;
     static clazzes: {
-        universal: number;
-        application: number;
-        context: number;
-        private: number;
+        readonly UNIVERSAL: 0;
+        readonly APPLICATION: 1;
+        readonly CONTEXT: 2;
+        readonly PRIVATE: 3;
+    };
+    static wraps: {
+        readonly PRIMITIVE: false;
+        readonly CONSTRUCTED: true;
     };
     static tags: {
-        INTEGER: number;
-        BIT_STRING: number;
-        OBJECT_IDENTIFIER: number;
-        SEQUENCE: number;
-        SET: number;
+        readonly INTEGER: 2;
+        readonly BIT_STRING: 3;
+        readonly OBJECT_IDENTIFIER: 6;
+        readonly UTF8_STRING: 12;
+        readonly SEQUENCE: 16;
+        readonly SET: 17;
+        readonly PRINTABLE_STRING: 19;
     };
-    constructor(clazz: number, constructed: boolean, tag: number);
+    constructor(clazz: number, wrap: boolean, tag: number);
     equals(other: Type): boolean;
     static fromDER(binary: Binary): Type;
 }

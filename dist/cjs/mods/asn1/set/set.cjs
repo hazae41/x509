@@ -24,13 +24,14 @@ class Set {
         const length$1 = length.Length.fromDER(binary);
         const content = binary.offset;
         const inner = new Array();
-        while (binary.offset - content < length$1.value) {
+        while (binary.offset - content < length$1.value)
             inner.push(parse(binary));
-        }
+        if (binary.offset - content !== length$1.value)
+            throw new Error(`Invalid length`);
         return new this(inner);
     }
 }
-Set.type = new type.Type(type.Type.clazzes.universal, true, type.Type.tags.SET);
+Set.type = new type.Type(type.Type.clazzes.UNIVERSAL, type.Type.wraps.CONSTRUCTED, type.Type.tags.SET);
 
 exports.Set = Set;
 //# sourceMappingURL=set.cjs.map

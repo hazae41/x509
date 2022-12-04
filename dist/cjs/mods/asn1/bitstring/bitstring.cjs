@@ -30,7 +30,7 @@ class BitString {
         return new this(padding, buffer);
     }
 }
-BitString.type = new type.Type(type.Type.clazzes.universal, false, type.Type.tags.BIT_STRING);
+BitString.type = new type.Type(type.Type.clazzes.UNIVERSAL, type.Type.wraps.PRIMITIVE, type.Type.tags.BIT_STRING);
 
 exports.BitString = BitString;
 //# sourceMappingURL=bitstring.cjs.map

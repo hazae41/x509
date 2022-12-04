@@ -6,7 +6,10 @@ import { Type } from "mods/asn1/type/type.js";
 export class BitString {
   readonly class = BitString
 
-  static type = new Type(Type.clazzes.universal, false, Type.tags.BIT_STRING)
+  static type = new Type(
+    Type.clazzes.UNIVERSAL,
+    Type.wraps.PRIMITIVE,
+    Type.tags.BIT_STRING)
 
   constructor(
     readonly padding: number,

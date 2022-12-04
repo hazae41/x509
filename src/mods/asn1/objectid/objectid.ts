@@ -5,7 +5,10 @@ import { Type } from "mods/asn1/type/type.js"
 export class ObjectID {
   readonly class = ObjectID
 
-  static type = new Type(Type.clazzes.universal, false, Type.tags.OBJECT_IDENTIFIER)
+  static type = new Type(
+    Type.clazzes.UNIVERSAL,
+    Type.wraps.PRIMITIVE,
+    Type.tags.OBJECT_IDENTIFIER)
 
   constructor(
     readonly value: string
