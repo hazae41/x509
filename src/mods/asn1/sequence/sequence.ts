@@ -3,6 +3,10 @@ import { Length } from "mods/asn1/length/length.js";
 import { ASN1 } from "mods/asn1/object.js";
 import { Type } from "mods/asn1/type/type.js";
 
+const stringify = (sequence: Sequence) => `SEQUENCE {
+  ${sequence.inner.map(it => it.toString()).join(`\n`).replaceAll("\n", "\n" + "  ")}
+}`
+
 export class Sequence implements ASN1 {
   readonly class = Sequence
 
@@ -17,9 +21,7 @@ export class Sequence implements ASN1 {
   }
 
   toString() {
-    return `SEQUENCE {
-  ${this.inner.map(it => it.toString()).join(`\n`).replaceAll("\n", "\n" + "  ")}
-}`
+    return stringify(this)
   }
 
   static read(binary: Binary, read: (binary: Binary) => unknown) {

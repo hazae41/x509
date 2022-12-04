@@ -3,6 +3,9 @@
 var length = require('../length/length.cjs');
 var type = require('../type/type.cjs');
 
+const stringify = (sequence) => `SEQUENCE {
+  ${sequence.inner.map(it => it.toString()).join(`\n`).replaceAll("\n", "\n" + "  ")}
+}`;
 class Sequence {
     constructor(inner) {
         this.inner = inner;
@@ -12,9 +15,7 @@ class Sequence {
         return this.class.type;
     }
     toString() {
-        return `SEQUENCE {
-  ${this.inner.map(it => it.toString()).join(`\n`).replaceAll("\n", "\n" + "  ")}
-}`;
+        return stringify(this);
     }
     static read(binary, read) {
         const type$1 = type.Type.read(binary);
