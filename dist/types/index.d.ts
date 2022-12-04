@@ -1,9 +1,10 @@
 import * as index from './mods/index.js';
 export { index as X509 };
+export { Constructed } from './mods/asn1/constructed/constructed.js';
+export { DER } from './mods/asn1/der.js';
 export { Integer } from './mods/asn1/integer/integer.js';
 export { Length } from './mods/asn1/length/length.js';
-export { ASN1 } from './mods/asn1/object.js';
-export { read } from './mods/asn1/read.js';
+export { ToStringable, Typed } from './mods/asn1/object.js';
 export { Sequence } from './mods/asn1/sequence/sequence.js';
 export { Type } from './mods/asn1/type/type.js';
 export { Unknown } from './mods/asn1/unknown/unknown.js';

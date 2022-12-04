@@ -1,9 +1,10 @@
 'use strict';
 
 var index = require('./mods/index.cjs');
+var constructed = require('./mods/asn1/constructed/constructed.cjs');
+var der = require('./mods/asn1/der.cjs');
 var integer = require('./mods/asn1/integer/integer.cjs');
 var length = require('./mods/asn1/length/length.cjs');
-var read = require('./mods/asn1/read.cjs');
 var sequence = require('./mods/asn1/sequence/sequence.cjs');
 var type = require('./mods/asn1/type/type.cjs');
 var unknown = require('./mods/asn1/unknown/unknown.cjs');
@@ -15,9 +16,13 @@ var pem = require('./mods/x509/pem/pem.cjs');
 
 
 exports.X509 = index;
+exports.Constructed = constructed.Constructed;
+Object.defineProperty(exports, 'DER', {
+	enumerable: true,
+	get: function () { return der.DER; }
+});
 exports.Integer = integer.Integer;
 exports.Length = length.Length;
-exports.read = read.read;
 exports.Sequence = sequence.Sequence;
 exports.Type = type.Type;
 exports.Unknown = unknown.Unknown;

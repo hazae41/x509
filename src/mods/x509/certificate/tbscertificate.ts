@@ -16,16 +16,16 @@ export class TBSCertificate {
   ) { }
 
   static read(binary: Binary) {
-    const type = Type.read(binary)
+    const type = Type.fromDER(binary)
 
     if (!this.type.equals(type))
       throw new Error(`Invalid type`)
 
-    const length = Length.read(binary)
+    const length = Length.fromDER(binary)
     const content = binary.offset
 
     const version = TBSCertificateVersion.read(binary)
-    const serialNumber = Integer.read(binary)
+    const serialNumber = Integer.fromDER(binary)
     const algorithm = AlgorithmIdentifier.read(binary)
 
     return new this(version, serialNumber, algorithm)
@@ -44,17 +44,17 @@ class TBSCertificateVersion {
   static read(binary: Binary) {
     const start = binary.offset
 
-    const type = Type.read(binary)
+    const type = Type.fromDER(binary)
 
     if (!this.type.equals(type)) {
       binary.offset = start
       return new this()
     }
 
-    const length = Length.read(binary)
+    const length = Length.fromDER(binary)
     const content = binary.offset
 
-    const inner = Integer.read(binary)
+    const inner = Integer.fromDER(binary)
 
     if (binary.offset - content !== length.value)
       throw new Error(`Invalid length`)

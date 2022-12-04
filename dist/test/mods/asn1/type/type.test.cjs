@@ -15,7 +15,7 @@ uvu.test.before(() => tslib.__awaiter(void 0, void 0, void 0, function* () {
 }));
 function hexToType(hex) {
     const buffer = Buffer.from(hex.replaceAll(" ", ""), "hex");
-    return type.Type.read(new binary.Binary(buffer));
+    return type.Type.fromDER(new binary.Binary(buffer));
 }
 uvu.test("Read", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
     assert.assert(hexToType("30").equals(certificate.Certificate.type));

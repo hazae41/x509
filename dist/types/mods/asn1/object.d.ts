@@ -1,8 +1,10 @@
 import { Type } from './type/type.js';
 
-interface ASN1 {
+interface Typed {
     type: Type;
+}
+interface ToStringable {
     toString(): string;
 }
 
-export { ASN1 };
+export { ToStringable, Typed };

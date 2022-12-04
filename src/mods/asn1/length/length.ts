@@ -8,7 +8,7 @@ export class Length {
     readonly value: number
   ) { }
 
-  static read(binary: Binary) {
+  static fromDER(binary: Binary) {
     const first = binary.readUint8()
     if (first < 128) return new this(first)
 

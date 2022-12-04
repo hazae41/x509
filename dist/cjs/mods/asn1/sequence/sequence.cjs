@@ -17,15 +17,15 @@ class Sequence {
     toString() {
         return stringify(this);
     }
-    static read(binary, read) {
-        const type$1 = type.Type.read(binary);
+    static fromDER(binary, parse) {
+        const type$1 = type.Type.fromDER(binary);
         if (!this.type.equals(type$1))
             throw new Error(`Invalid type`);
-        const length$1 = length.Length.read(binary);
+        const length$1 = length.Length.fromDER(binary);
         const content = binary.offset;
         const inner = new Array();
         while (binary.offset - content < length$1.value) {
-            inner.push(read(binary));
+            inner.push(parse(binary));
         }
         return new this(inner);
     }

@@ -8,7 +8,7 @@ declare class Integer {
     constructor(value: bigint);
     get type(): Type;
     toString(): string;
-    static read(binary: Binary): Integer;
+    static fromDER(binary: Binary): Integer;
 }
 
 export { Integer };

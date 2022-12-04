@@ -20,11 +20,11 @@ class Integer {
     toString() {
         return `INTEGER ${this.value}`;
     }
-    static read(binary) {
-        const type$1 = type.Type.read(binary);
+    static fromDER(binary) {
+        const type$1 = type.Type.fromDER(binary);
         if (!this.type.equals(type$1))
             throw new Error(`Invalid type`);
-        const length$1 = length.Length.read(binary);
+        const length$1 = length.Length.fromDER(binary);
         let value = BigInt(0);
         const first = binary.readUint8(true);
         const negative = first > 127;

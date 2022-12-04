@@ -1,15 +1,15 @@
 import { Binary } from '../../../libs/binary/binary.js';
-import { ASN1 } from '../object.js';
+import { ToStringable } from '../object.js';
 import { Type } from '../type/type.js';
 
-declare class Sequence implements ASN1 {
-    readonly inner: ASN1[];
+declare class Sequence {
+    readonly inner: ToStringable[];
     readonly class: typeof Sequence;
     static type: Type;
-    constructor(inner: ASN1[]);
+    constructor(inner: ToStringable[]);
     get type(): Type;
     toString(): string;
-    static read(binary: Binary, read: (binary: Binary) => unknown): Sequence;
+    static fromDER(binary: Binary, parse: (binary: Binary) => ToStringable): Sequence;
 }
 
 export { Sequence };

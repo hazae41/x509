@@ -17,7 +17,7 @@ declare class Type {
     };
     constructor(clazz: number, constructed: boolean, tag: number);
     equals(other: Type): boolean;
-    static read(binary: Binary): Type;
+    static fromDER(binary: Binary): Type;
 }
 
 export { Type };

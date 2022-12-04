@@ -3,22 +3,17 @@ import { Length } from "mods/asn1/length/length.js";
 import { ToStringable } from "mods/asn1/object.js";
 import { Type } from "mods/asn1/type/type.js";
 
-const stringify = (sequence: Sequence) => `SEQUENCE {
-  ${sequence.inner.map(it => it.toString()).join(`\n`).replaceAll("\n", "\n" + "  ")}
+const stringify = (constructed: Constructed) => `[${constructed.type.tag}] {
+  ${constructed.inner.map(it => it.toString()).join(`\n`).replaceAll("\n", "\n" + "  ")}
 }`
 
-export class Sequence {
-  readonly class = Sequence
-
-  static type = new Type(Type.clazzes.universal, true, Type.tags.sequence)
+export class Constructed {
+  readonly class = Constructed
 
   constructor(
+    readonly type: Type,
     readonly inner: ToStringable[]
   ) { }
-
-  get type() {
-    return this.class.type
-  }
 
   toString() {
     return stringify(this)
@@ -26,11 +21,8 @@ export class Sequence {
 
   static fromDER(binary: Binary, parse: (binary: Binary) => ToStringable) {
     const type = Type.fromDER(binary)
-
-    if (!this.type.equals(type))
-      throw new Error(`Invalid type`)
-
     const length = Length.fromDER(binary)
+
     const content = binary.offset
 
     const inner = new Array()
@@ -39,6 +31,6 @@ export class Sequence {
       inner.push(parse(binary))
     }
 
-    return new this(inner)
+    return new this(type, inner)
   }
 }

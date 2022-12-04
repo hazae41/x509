@@ -4,7 +4,7 @@ export * from "mods/index.test.js";
 
 import { readFile } from "fs/promises";
 import { Binary } from "libs/binary/binary.js";
-import { read } from "mods/asn1/read.js";
+import { DER } from "mods/asn1/der.js";
 import { PEM } from "mods/x509/pem/pem.js";
 import { relative, resolve } from "node:path";
 import { test } from "uvu";
@@ -17,7 +17,7 @@ test.before(async () => {
 
 test("The test", async () => {
   const text = await readFile("./test/cert.pem", "utf8")
-  const asn1 = read(new Binary(PEM.parse(text)))
+  const asn1 = DER.parse(new Binary(PEM.parse(text)))
   console.log(asn1.toString())
 })
 

@@ -9,7 +9,7 @@ require('./mods/asn1/type/type.test.cjs');
 require('./mods/x509/pem/pem.test.cjs');
 var promises = require('fs/promises');
 var binary = require('./libs/binary/binary.cjs');
-var read = require('./mods/asn1/read.cjs');
+var der = require('./mods/asn1/der.cjs');
 var pem = require('./mods/x509/pem/pem.cjs');
 var node_path = require('node:path');
 var uvu = require('uvu');
@@ -21,7 +21,7 @@ uvu.test.before(() => tslib.__awaiter(void 0, void 0, void 0, function* () {
 }));
 uvu.test("The test", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
     const text = yield promises.readFile("./test/cert.pem", "utf8");
-    const asn1 = read.read(new binary.Binary(pem.PEM.parse(text)));
+    const asn1 = der.DER.parse(new binary.Binary(pem.PEM.parse(text)));
     console.log(asn1.toString());
 }));
 uvu.test.run();

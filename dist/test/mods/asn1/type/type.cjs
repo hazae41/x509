@@ -18,7 +18,7 @@ class Type {
             return false;
         return true;
     }
-    static read(binary) {
+    static fromDER(binary) {
         const type = binary.readUint8();
         const bitset$1 = new bitset.Bitset(type, 8);
         const clazz = bitset$1.first(2);

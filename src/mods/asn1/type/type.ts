@@ -32,7 +32,7 @@ export class Type {
     return true
   }
 
-  static read(binary: Binary) {
+  static fromDER(binary: Binary) {
     const type = binary.readUint8()
     const bitset = new Bitset(type, 8)
 

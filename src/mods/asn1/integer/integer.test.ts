@@ -12,7 +12,7 @@ test.before(async () => {
 
 function hexToInteger(hex: string) {
   const buffer = Buffer.from(hex.replaceAll(" ", ""), "hex")
-  return Integer.read(new Binary(buffer)).value
+  return Integer.fromDER(new Binary(buffer)).value
 }
 
 test("Read", async () => {

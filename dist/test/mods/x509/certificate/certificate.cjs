@@ -10,10 +10,10 @@ class Certificate {
         this.class = Certificate;
     }
     static read(binary) {
-        const type$1 = type.Type.read(binary);
+        const type$1 = type.Type.fromDER(binary);
         if (!this.type.equals(type$1))
             throw new Error(`Invalid type`);
-        length.Length.read(binary);
+        length.Length.fromDER(binary);
         const tbscert = tbscertificate.TBSCertificate.read(binary);
         return new this(tbscert);
     }

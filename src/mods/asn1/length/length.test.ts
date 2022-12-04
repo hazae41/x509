@@ -12,7 +12,7 @@ test.before(async () => {
 
 function hexToLength(hex: string) {
   const buffer = Buffer.from(hex.replaceAll(" ", ""), "hex")
-  return Length.read(new Binary(buffer)).value
+  return Length.fromDER(new Binary(buffer)).value
 }
 
 test("Read", async () => {

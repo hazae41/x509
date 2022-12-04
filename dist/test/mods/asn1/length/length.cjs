@@ -7,7 +7,7 @@ class Length {
         this.value = value;
         this.class = Length;
     }
-    static read(binary) {
+    static fromDER(binary) {
         const first = binary.readUint8();
         if (first < 128)
             return new this(first);

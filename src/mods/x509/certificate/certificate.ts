@@ -15,12 +15,12 @@ export class Certificate {
   ) { }
 
   static read(binary: Binary) {
-    const type = Type.read(binary)
+    const type = Type.fromDER(binary)
 
     if (!this.type.equals(type))
       throw new Error(`Invalid type`)
 
-    const length = Length.read(binary)
+    const length = Length.fromDER(binary)
 
     const tbscert = TBSCertificate.read(binary)
 

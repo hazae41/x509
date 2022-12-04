@@ -13,7 +13,7 @@ test.before(async () => {
 
 function hexToType(hex: string) {
   const buffer = Buffer.from(hex.replaceAll(" ", ""), "hex")
-  return Type.read(new Binary(buffer))
+  return Type.fromDER(new Binary(buffer))
 }
 
 test("Read", async () => {

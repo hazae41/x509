@@ -14,7 +14,7 @@ uvu.test.before(() => tslib.__awaiter(void 0, void 0, void 0, function* () {
 }));
 function hexToInteger(hex) {
     const buffer = Buffer.from(hex.replaceAll(" ", ""), "hex");
-    return integer.Integer.read(new binary.Binary(buffer)).value;
+    return integer.Integer.fromDER(new binary.Binary(buffer)).value;
 }
 uvu.test("Read", () => tslib.__awaiter(void 0, void 0, void 0, function* () {
     assert.assert(hexToInteger("02 01 00") === BigInt(0));
