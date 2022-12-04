@@ -22,7 +22,6 @@ export class Constructed {
   static fromDER(binary: Binary, parse: (binary: Binary) => ToStringable) {
     const type = Type.fromDER(binary)
     const length = Length.fromDER(binary)
-
     const content = binary.offset
 
     const inner = new Array()
