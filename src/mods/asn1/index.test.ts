@@ -1,5 +1,6 @@
 export * from "./integer/integer.test.js";
 export * from "./length/length.test.js";
+export * from "./object_identifier/object_identifier.test.js";
 export * from "./type/type.test.js";
 
 import { readFile } from "fs/promises";
@@ -53,13 +54,13 @@ test.before(async () => {
 test("Cert 1", async () => {
   const text = await readFile("./test/cert.pem", "utf8")
   const asn1 = DER.parse(new Binary(PEM.parse(text)))
-  console.log("Cert 1", asn1.toString())
+  // console.log("Cert 1", asn1.toString())
 })
 
 test("Cert 2", async () => {
   const text = await readFile("./test/cert2.pem", "utf8")
   const asn1 = DER.parse(new Binary(PEM.parse(text)))
-  // console.log("Cert 2", asn1.toString())
+  console.log("Cert 2", asn1.toString())
 })
 
 test("Cert 3", async () => {
