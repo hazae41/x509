@@ -1,5 +1,5 @@
 import { Constructed, Integer, Sequence } from "@hazae41/asn1";
-import { AlgorithmIdentifier } from "mods/x509/algorithm/algorithm.js";
+import { AlgorithmIdentifier } from "mods/algorithm/algorithm.js";
 
 export class TBSCertificate {
   readonly class = TBSCertificate

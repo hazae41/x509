@@ -1,5 +1,5 @@
 import { assert } from "libs/assert/assert.js";
-import { PEM } from "mods/x509/pem/pem.js";
+import { PEM } from "mods/pem/pem.js";
 import { readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 import { test } from "uvu";
