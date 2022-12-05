@@ -2,7 +2,7 @@
   "type": "module",
   "name": "@hazae41/x509",
   "version": "0.0.1",
-  "description": "Modern X509 certificates implementation",
+  "description": "Zero-copy X.509 certificates in pure modern TypeScript",
   "author": "hazae41",
   "license": "MIT",
   "types": "./dist/types/index.d.ts",
