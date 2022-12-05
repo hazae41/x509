@@ -1,4 +1,4 @@
-# Zero-copy X.509 certificates
+# Zero-copy X.509 certificates 🏎️
 
 Zero-copy X.509 certificates encoding/decoding in pure modern TypeScript
 
