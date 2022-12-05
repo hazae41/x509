@@ -36,5 +36,8 @@
       "import": "./dist/cjs/index.cjs",
       "require": "./dist/cjs/index.cjs"
     }
+  },
+  "dependencies": {
+    "@hazae41/asn1": "^0.0.3"
   }
 }
