@@ -5,7 +5,7 @@ export class AlgorithmIdentifier {
   readonly #class = AlgorithmIdentifier
 
   constructor(
-    readonly algorith: ObjectIdentifier,
+    readonly algorithm: ObjectIdentifier,
     readonly parameters: Triplet
   ) { }
 
