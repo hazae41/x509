@@ -16,7 +16,7 @@ export const config = [
       entryFileNames: "[name].cjs",
     }],
     plugins: [resolve(), ts({ typescript }), commonjs()],
-    external: ["tslib"]
+    external: ["tslib", "@hazae41/asn1"]
   },
   {
     input: "./src/index.ts",
@@ -28,7 +28,7 @@ export const config = [
       entryFileNames: "[name].d.ts",
     }],
     plugins: [dts(), resolve(), ts({ typescript })],
-    external: ["tslib"]
+    external: ["tslib", "@hazae41/asn1"]
   },
   {
     input: "./src/index.test.ts",
@@ -41,7 +41,7 @@ export const config = [
       entryFileNames: "[name].cjs",
     }],
     plugins: [resolve(), ts({ typescript }), commonjs()],
-    external: ["tslib", "uvu", "uvu/assert"]
+    external: ["tslib", "@hazae41/asn1", "uvu"]
   },
 ]
 

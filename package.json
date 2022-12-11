@@ -37,7 +37,7 @@
       "require": "./dist/cjs/index.cjs"
     }
   },
-  "dependencies": {
-    "@hazae41/asn1": "^0.0.3"
+  "peerDependencies": {
+    "@hazae41/asn1": "^1.0.2"
   }
 }

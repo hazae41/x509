@@ -17,7 +17,7 @@ function ignoreLastNewline(text: string) {
 }
 
 test("Parse and stringify", async () => {
-  const text = await readFile("./test/cert.pem", "utf8")
+  const text = await readFile("./test/ed25519.pem", "utf8")
   const buffer = PEM.parse(text)
   const text2 = PEM.stringify(buffer)
 
