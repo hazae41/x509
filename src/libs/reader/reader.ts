@@ -1,4 +1,4 @@
-import { BitString, Constructed, Integer, ObjectIdentifier, Sequence, Triplet, Type } from "@hazae41/asn1"
+import { BitString, Constructed, Integer, ObjectIdentifier, Sequence, Set, Triplet, Type } from "@hazae41/asn1"
 
 export interface Readable<T> {
   fromASN1(triplet: Triplet): T
@@ -13,6 +13,12 @@ export class Reader {
 
   static fromSequence(triplet: Triplet) {
     if (triplet instanceof Sequence)
+      return new this(triplet.triplets)
+    throw new Error(`Invalid instance`)
+  }
+
+  static fromSet(triplet: Triplet) {
+    if (triplet instanceof Set)
       return new this(triplet.triplets)
     throw new Error(`Invalid instance`)
   }

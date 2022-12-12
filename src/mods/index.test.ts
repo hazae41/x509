@@ -51,8 +51,9 @@ test.before(async () => {
 test("Cert Ed25519", async () => {
   const text = await readFile("./test/ed25519.pem", "utf8")
   const triplet = DER.fromBuffer(PEM.parse(text))
+  const cert = Certificate.fromASN1(triplet)
 
-  console.log(Certificate.fromASN1(triplet))
+  console.log(cert.tbsCertificate.issuer.inner.triplets.map(it => it.triplets))
 })
 
 test.run()
