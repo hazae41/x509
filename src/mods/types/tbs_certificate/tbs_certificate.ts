@@ -1,7 +1,7 @@
 import { Integer, Triplet, Type } from "@hazae41/asn1";
 import { Reader } from "libs/reader/reader.js";
-import { AlgorithmIdentifier } from "mods/algorithm/algorithm.js";
-import { Name } from "mods/name/name.js";
+import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
+import { Name } from "mods/types/name/name.js";
 
 export class TBSCertificate {
   readonly #class = TBSCertificate

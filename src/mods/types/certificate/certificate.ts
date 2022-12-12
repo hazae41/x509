@@ -1,7 +1,7 @@
 import { BitString, Triplet } from "@hazae41/asn1";
 import { Reader } from "libs/reader/reader.js";
-import { AlgorithmIdentifier } from "mods/algorithm/algorithm.js";
-import { TBSCertificate } from "./tbscertificate.js";
+import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
+import { TBSCertificate } from "mods/types/tbs_certificate/tbs_certificate.js";
 
 export class Certificate {
   readonly #class = Certificate

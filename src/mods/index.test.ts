@@ -1,8 +1,9 @@
 export * from "./pem/pem.test.js";
+export * from "./types/index.test.js";
 
 import { DER } from "@hazae41/asn1";
 import { readFile } from "fs/promises";
-import { Certificate } from "mods/certificate/certificate.js";
+import { Certificate } from "mods/types/certificate/certificate.js";
 import { relative, resolve } from "path";
 import { test } from "uvu";
 
