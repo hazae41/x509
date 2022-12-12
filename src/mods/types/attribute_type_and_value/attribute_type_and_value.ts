@@ -12,7 +12,7 @@ export class AttributeTypeAndValue {
   static fromASN1(triplet: Triplet) {
     const reader = Reader.fromSequence(triplet)
     const type = reader.readObjectIdentifier()
-    const value = reader.read()
+    const value = reader.readTriplet()
 
     return new this(type, value)
   }

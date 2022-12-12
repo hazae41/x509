@@ -31,12 +31,12 @@ export class Reader {
     throw new Error(`Invalid instance`)
   }
 
-  read() {
+  readTriplet() {
     return this.triplets[this.offset++]
   }
 
   readInteger() {
-    const triplet = this.read()
+    const triplet = this.readTriplet()
 
     if (triplet instanceof Integer)
       return triplet
@@ -44,7 +44,7 @@ export class Reader {
   }
 
   readObjectIdentifier() {
-    const triplet = this.read()
+    const triplet = this.readTriplet()
 
     if (triplet instanceof ObjectIdentifier)
       return triplet
@@ -52,7 +52,7 @@ export class Reader {
   }
 
   readBitString() {
-    const triplet = this.read()
+    const triplet = this.readTriplet()
 
     if (triplet instanceof BitString)
       return triplet
@@ -60,7 +60,7 @@ export class Reader {
   }
 
   readType<T>(type: Readable<T>) {
-    return type.fromASN1(this.read())
+    return type.fromASN1(this.readTriplet())
   }
 
   tryReadType<T>(type: Readable<T>) {

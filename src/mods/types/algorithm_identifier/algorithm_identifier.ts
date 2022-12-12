@@ -12,7 +12,7 @@ export class AlgorithmIdentifier {
   static fromASN1(triplet: Triplet) {
     const reader = Reader.fromSequence(triplet)
     const algorithm = reader.readObjectIdentifier()
-    const parameters = reader.read()
+    const parameters = reader.readTriplet()
 
     return new this(algorithm, parameters)
   }
