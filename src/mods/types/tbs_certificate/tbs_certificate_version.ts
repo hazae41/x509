@@ -13,6 +13,10 @@ export class TBSCertificateVersion {
     readonly value = new Integer(BigInt(1))
   ) { }
 
+  toASN1() {
+    return new Constructed(this.#class.type, [this.value])
+  }
+
   static fromASN1(triplet: Triplet) {
     const reader = Reader.fromTagged(triplet, Constructed, this.type)
     const value = reader.readClass(Integer)

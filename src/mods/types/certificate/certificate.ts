@@ -12,6 +12,14 @@ export class Certificate {
     readonly signatureValue: BitString
   ) { }
 
+  toASN1() {
+    return new Sequence([
+      this.tbsCertificate.toASN1(),
+      this.algorithmIdentifier.toASN1(),
+      this.signatureValue
+    ])
+  }
+
   static fromASN1(triplet: Triplet) {
     const reader = Reader.from(triplet, Sequence)
     const tbsCertificate = reader.readType(TBSCertificate)

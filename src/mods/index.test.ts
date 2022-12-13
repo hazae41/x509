@@ -3,6 +3,7 @@ export * from "./types/index.test.js";
 
 import { DER } from "@hazae41/asn1";
 import { readFile } from "fs/promises";
+import { assert } from "libs/assert/assert.js";
 import { Certificate } from "mods/types/certificate/certificate.js";
 import { relative, resolve } from "path";
 import { test } from "uvu";
@@ -49,26 +50,26 @@ test.before(async () => {
   console.log(relative(directory, pathname.replace(".cjs", ".ts")))
 })
 
-function checkCertificate(cert: Certificate) {
-  console.log(cert)
-  console.log(cert.tbsCertificate.issuer.toNameObject())
-  console.log(cert.tbsCertificate.subject.toNameObject())
+function checkCertificate(buffer: Buffer, cert: Certificate) {
+  assert(buffer.equals(DER.toBuffer(cert.toASN1())))
 }
 
 test("Cert Ed25519", async () => {
   const text = await readFile("./test/ed25519.pem", "utf8")
-  const triplet = DER.fromBuffer(PEM.parse(text))
+  const buffer = PEM.parse(text)
+  const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
 
-  checkCertificate(cert)
+  checkCertificate(buffer, cert)
 })
 
 test("Cert Let's Encrypt", async () => {
   const text = await readFile("./test/letsencrypt.pem", "utf8")
-  const triplet = DER.fromBuffer(PEM.parse(text))
+  const buffer = PEM.parse(text)
+  const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
 
-  checkCertificate(cert)
+  checkCertificate(buffer, cert)
 })
 
 test("Cert frank4dd-rsa", async () => {
@@ -76,7 +77,7 @@ test("Cert frank4dd-rsa", async () => {
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
 
-  checkCertificate(cert)
+  checkCertificate(buffer, cert)
 })
 
 test("Cert frank4dd-dsa", async () => {
@@ -84,7 +85,7 @@ test("Cert frank4dd-dsa", async () => {
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
 
-  checkCertificate(cert)
+  checkCertificate(buffer, cert)
 })
 
 test("Cert Tor", async () => {
@@ -93,7 +94,7 @@ test("Cert Tor", async () => {
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
 
-  checkCertificate(cert)
+  checkCertificate(buffer, cert)
 })
 
 test("Cert Tor 2", async () => {
@@ -102,7 +103,7 @@ test("Cert Tor 2", async () => {
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
 
-  checkCertificate(cert)
+  checkCertificate(buffer, cert)
 })
 
 test.run()

@@ -12,6 +12,10 @@ export class Validity {
     readonly notAfter: Time
   ) { }
 
+  toASN1() {
+    return new Sequence([this.notBefore, this.notAfter])
+  }
+
   static fromASN1(triplet: Triplet) {
     const reader = Reader.from(triplet, Sequence)
     const notBefore = reader.readClass(UTCTime)

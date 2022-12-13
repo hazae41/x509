@@ -20,6 +20,19 @@ export class TBSCertificate {
     readonly rest: Triplet[]
   ) { }
 
+  toASN1() {
+    return new Sequence([
+      this.version.toASN1(),
+      this.serialNumber,
+      this.signature.toASN1(),
+      this.issuer.toASN1(),
+      this.validity.toASN1(),
+      this.subject.toASN1(),
+      this.subjectPublicKeyInfo.toASN1(),
+      ...this.rest
+    ])
+  }
+
   static fromASN1(triplet: Triplet) {
     const reader = Reader.from(triplet, Sequence)
     const version = reader.tryReadType(TBSCertificateVersion)

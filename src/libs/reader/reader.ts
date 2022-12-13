@@ -25,16 +25,24 @@ export class Reader {
     throw new Error(`Invalid instance`)
   }
 
-  readTriplet() {
-    return this.triplets[this.offset++]
+  tryReadTriplet() {
+    return this.triplets[this.offset++] as Triplet | undefined
   }
 
   readTriplets() {
     return this.triplets.slice(this.offset)
   }
 
+  readTriplet() {
+    const triplet = this.tryReadTriplet()
+
+    if (triplet !== undefined)
+      return triplet
+    throw new Error(`Undefined triplet`)
+  }
+
   readClass<C extends abstract new (...x: any[]) => any>(clazz: C) {
-    const triplet = this.readTriplet()
+    const triplet = this.tryReadTriplet()
 
     if (triplet instanceof clazz)
       return triplet as InstanceType<C>
@@ -42,7 +50,7 @@ export class Reader {
   }
 
   readClasses<C extends abstract new (...x: any[]) => any>(...clazzes: C[]) {
-    const triplet = this.readTriplet()
+    const triplet = this.tryReadTriplet()
 
     for (const clazz of clazzes)
       if (triplet instanceof clazz)

@@ -8,6 +8,10 @@ export class RelativeDistinguishedName {
     readonly triplets: AttributeTypeAndValue[]
   ) { }
 
+  toASN1() {
+    return new Set(this.triplets.map(it => it.toASN1()))
+  }
+
   static fromASN1(triplet: Triplet) {
     const reader = Reader.from(triplet, Set)
 

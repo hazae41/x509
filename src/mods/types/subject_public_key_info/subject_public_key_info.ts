@@ -9,6 +9,10 @@ export class SubjectPublicKeyInfo {
     readonly subjectPublicKey: BitString
   ) { }
 
+  toASN1() {
+    return new Sequence([this.algorithm.toASN1(), this.subjectPublicKey])
+  }
+
   static fromASN1(triplet: Triplet) {
     const reader = Reader.from(triplet, Sequence)
     const algorithm = reader.readType(AlgorithmIdentifier)

@@ -1,4 +1,4 @@
-import { Triplet } from "@hazae41/asn1";
+import { Sequence, Triplet } from "@hazae41/asn1";
 import { OIDs } from "mods/oids/oids.js";
 import { RDNSequence } from "mods/types/rdn_sequence/rdn_sequence.js";
 
@@ -12,6 +12,14 @@ export class Name {
     readonly inner: RDNSequence
   ) { }
 
+  toASN1(): Sequence {
+    return this.inner.toASN1()
+  }
+
+  static fromASN1(triplet: Triplet) {
+    return new this(RDNSequence.fromASN1(triplet))
+  }
+
   toNameObject() {
     const object: NameObject = {}
 
@@ -24,11 +32,5 @@ export class Name {
     }
 
     return object
-  }
-
-  static fromASN1(triplet: Triplet) {
-    const inner = RDNSequence.fromASN1(triplet)
-
-    return new this(inner)
   }
 }

@@ -8,6 +8,10 @@ export class RDNSequence {
     readonly triplets: RelativeDistinguishedName[]
   ) { }
 
+  toASN1() {
+    return new Sequence(this.triplets.map(it => it.toASN1()))
+  }
+
   static fromASN1(triplet: Triplet) {
     const reader = Reader.from(triplet, Sequence)
 

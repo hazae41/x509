@@ -9,6 +9,18 @@ export class AttributeTypeAndValue {
     readonly value: Triplet
   ) { }
 
+  toASN1() {
+    return new Sequence([this.type, this.value])
+  }
+
+  static fromASN1(triplet: Triplet) {
+    const reader = Reader.from(triplet, Sequence)
+    const type = reader.readClass(ObjectIdentifier)
+    const value = reader.readTriplet()
+
+    return new this(type, value)
+  }
+
   getValueString() {
     if (this.value instanceof UTF8String)
       return this.value.value
@@ -19,11 +31,4 @@ export class AttributeTypeAndValue {
     throw new Error(`Cannot convert ${this.value} to string`)
   }
 
-  static fromASN1(triplet: Triplet) {
-    const reader = Reader.from(triplet, Sequence)
-    const type = reader.readClass(ObjectIdentifier)
-    const value = reader.readTriplet()
-
-    return new this(type, value)
-  }
 }
