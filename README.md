@@ -6,6 +6,8 @@ Zero-copy X.509 certificates in pure modern TypeScript
 npm i @hazae41/x509
 ```
 
+[**Node Package 📦**](https://www.npmjs.com/package/@hazae41/x509)
+
 ### Current features
 - 100% TypeScript and ESM
 - Zero-copy reading and writing
@@ -23,6 +25,6 @@ npm i @hazae41/x509
 import { DER } from "@hazae41/asn1";
 import { PEM, Certificate } from "@hazae41/x509";
 
-const buffer = PEM.parse(await readFile("./test/ed25519.pem", "utf8"))
+const buffer = PEM.parse(await readFile("./cert.pem", "utf8"))
 const cert = Certificate.fromASN1(DER.fromBuffer(buffer))
 ```
