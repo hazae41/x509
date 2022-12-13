@@ -10,7 +10,8 @@ export namespace OIDs {
     stateOrProvinceName: "2.5.4.8",
     organizationName: "2.5.4.10",
     organizationUnitName: "2.5.4.11",
-    emailAddress: "1.2.840.113549.1.9.1"
+    emailAddress: "1.2.840.113549.1.9.1",
+    sha256WithRSAEncryption: "1.2.840.113549.1.1.11"
   } as const
 
   export const values = invert(keys)
