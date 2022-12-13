@@ -12,7 +12,7 @@ export class Name {
     readonly inner: RDNSequence
   ) { }
 
-  toObject() {
+  toNameObject() {
     const object: NameObject = {}
 
     for (const rdn of this.inner.triplets) {
