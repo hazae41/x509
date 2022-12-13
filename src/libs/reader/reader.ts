@@ -17,16 +17,20 @@ export class Reader {
     throw new Error(`Invalid instance`)
   }
 
-  static fromConstructed(triplet: Triplet, type: Type) {
+  static fromTagged<C extends typeof Constructed>(triplet: Triplet, clazz: C, type: Type) {
     if (!triplet.type.equals(type))
       throw new Error(`Invalid type`)
-    if (triplet instanceof Constructed)
+    if (triplet instanceof clazz)
       return new this(triplet.triplets)
     throw new Error(`Invalid instance`)
   }
 
   readTriplet() {
     return this.triplets[this.offset++]
+  }
+
+  readTriplets() {
+    return this.triplets.slice(this.offset)
   }
 
   readClass<C extends abstract new (...x: any[]) => any>(clazz: C) {
