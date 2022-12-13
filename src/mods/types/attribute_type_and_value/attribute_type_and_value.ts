@@ -1,4 +1,4 @@
-import { ObjectIdentifier, Triplet } from "@hazae41/asn1";
+import { IA5String, ObjectIdentifier, PrintableString, Triplet, UTF8String } from "@hazae41/asn1";
 import { Reader } from "libs/reader/reader.js";
 
 export class AttributeTypeAndValue {
@@ -8,6 +8,16 @@ export class AttributeTypeAndValue {
     readonly type: ObjectIdentifier,
     readonly value: Triplet
   ) { }
+
+  getValueString() {
+    if (this.value instanceof UTF8String)
+      return this.value.value
+    if (this.value instanceof PrintableString)
+      return this.value.value
+    if (this.value instanceof IA5String)
+      return this.value.value
+    throw new Error(`Cannot convert ${this.value} to string`)
+  }
 
   static fromASN1(triplet: Triplet) {
     const reader = Reader.fromSequence(triplet)

@@ -54,7 +54,49 @@ test("Cert Ed25519", async () => {
   const triplet = DER.fromBuffer(PEM.parse(text))
   const cert = Certificate.fromASN1(triplet)
 
-  console.log(cert.tbsCertificate.issuer.inner.triplets.map(it => it.triplets))
+  console.log(cert.tbsCertificate.issuer.toObject())
+})
+
+test("Cert Let's Encrypt", async () => {
+  const text = await readFile("./test/letsencrypt.pem", "utf8")
+  const triplet = DER.fromBuffer(PEM.parse(text))
+  const cert = Certificate.fromASN1(triplet)
+
+  console.log(cert.tbsCertificate.issuer.toObject())
+})
+
+test("Cert frank4dd-rsa", async () => {
+  const buffer = await readFile("./test/frank4dd-rsa.der")
+  const triplet = DER.fromBuffer(buffer)
+  const cert = Certificate.fromASN1(triplet)
+
+  console.log(cert.tbsCertificate.issuer.toObject())
+})
+
+test("Cert frank4dd-dsa", async () => {
+  const buffer = await readFile("./test/frank4dd-dsa.der")
+  const triplet = DER.fromBuffer(buffer)
+  const cert = Certificate.fromASN1(triplet)
+
+  console.log(cert.tbsCertificate.issuer.toObject())
+})
+
+test("Cert Tor", async () => {
+  const text = await readFile("./test/tor.pem", "utf8")
+  const buffer = Buffer.from(text, "base64")
+  const triplet = DER.fromBuffer(buffer)
+  const cert = Certificate.fromASN1(triplet)
+
+  console.log(cert.tbsCertificate.issuer.toObject())
+})
+
+test("Cert Tor 2", async () => {
+  const text = await readFile("./test/tor2.pem", "utf8")
+  const buffer = Buffer.from(text, "base64")
+  const triplet = DER.fromBuffer(buffer)
+  const cert = Certificate.fromASN1(triplet)
+
+  console.log(cert.tbsCertificate.issuer.toObject())
 })
 
 test.run()
