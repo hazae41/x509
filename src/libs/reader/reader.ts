@@ -1,4 +1,4 @@
-import { BitString, Constructed, Integer, ObjectIdentifier, Sequence, Set, Triplet, Type } from "@hazae41/asn1"
+import { Constructed, Sequence, Set, Triplet, Type } from "@hazae41/asn1"
 
 export interface Readable<T> {
   fromASN1(triplet: Triplet): T
@@ -11,14 +11,8 @@ export class Reader {
     readonly triplets: Triplet[]
   ) { }
 
-  static fromSequence(triplet: Triplet) {
-    if (triplet instanceof Sequence)
-      return new this(triplet.triplets)
-    throw new Error(`Invalid instance`)
-  }
-
-  static fromSet(triplet: Triplet) {
-    if (triplet instanceof Set)
+  static from<C extends typeof Sequence | typeof Set>(triplet: Triplet, clazz: C) {
+    if (triplet instanceof clazz)
       return new this(triplet.triplets)
     throw new Error(`Invalid instance`)
   }
@@ -35,27 +29,20 @@ export class Reader {
     return this.triplets[this.offset++]
   }
 
-  readInteger() {
+  readClass<C extends abstract new (...x: any[]) => any>(clazz: C) {
     const triplet = this.readTriplet()
 
-    if (triplet instanceof Integer)
-      return triplet
+    if (triplet instanceof clazz)
+      return triplet as InstanceType<C>
     throw new Error(`Invalid instance`)
   }
 
-  readObjectIdentifier() {
+  readClasses<C extends abstract new (...x: any[]) => any>(...clazzes: C[]) {
     const triplet = this.readTriplet()
 
-    if (triplet instanceof ObjectIdentifier)
-      return triplet
-    throw new Error(`Invalid instance`)
-  }
-
-  readBitString() {
-    const triplet = this.readTriplet()
-
-    if (triplet instanceof BitString)
-      return triplet
+    for (const clazz of clazzes)
+      if (triplet instanceof clazz)
+        return triplet as InstanceType<C>
     throw new Error(`Invalid instance`)
   }
 

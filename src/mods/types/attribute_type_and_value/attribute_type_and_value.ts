@@ -1,4 +1,4 @@
-import { IA5String, ObjectIdentifier, PrintableString, Triplet, UTF8String } from "@hazae41/asn1";
+import { IA5String, ObjectIdentifier, PrintableString, Sequence, Triplet, UTF8String } from "@hazae41/asn1";
 import { Reader } from "libs/reader/reader.js";
 
 export class AttributeTypeAndValue {
@@ -20,8 +20,8 @@ export class AttributeTypeAndValue {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = Reader.fromSequence(triplet)
-    const type = reader.readObjectIdentifier()
+    const reader = Reader.from(triplet, Sequence)
+    const type = reader.readClass(ObjectIdentifier)
     const value = reader.readTriplet()
 
     return new this(type, value)
