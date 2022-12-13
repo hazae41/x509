@@ -50,6 +50,7 @@ test.before(async () => {
 })
 
 function checkCertificate(cert: Certificate) {
+  console.log(cert)
   console.log(cert.tbsCertificate.issuer.toNameObject())
   console.log(cert.tbsCertificate.subject.toNameObject())
 }

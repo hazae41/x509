@@ -2,6 +2,7 @@ import { Integer, Sequence, Triplet, Type } from "@hazae41/asn1";
 import { Reader } from "libs/reader/reader.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { Name } from "mods/types/name/name.js";
+import { SubjectPublicKeyInfo } from "mods/types/subject_public_key_info/subject_public_key_info.js";
 import { Validity } from "mods/types/validity/validity.js";
 
 export class TBSCertificate {
@@ -14,6 +15,7 @@ export class TBSCertificate {
     readonly issuer: Name,
     readonly validity: Validity,
     readonly subject: Name,
+    readonly subjectPublicKeyInfo: SubjectPublicKeyInfo
   ) { }
 
   static fromASN1(triplet: Triplet) {
@@ -24,8 +26,9 @@ export class TBSCertificate {
     const issuer = reader.readType(Name)
     const validity = reader.readType(Validity)
     const subject = reader.readType(Name)
+    const subjectPublicKeyInfo = reader.readType(SubjectPublicKeyInfo)
 
-    return new this(version, serialNumber, signature, issuer, validity, subject)
+    return new this(version, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo)
   }
 }
 
