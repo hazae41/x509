@@ -4,7 +4,7 @@ export interface Readable<T> {
   fromASN1(triplet: Triplet): T
 }
 
-export class Reader {
+export class ASN1Reader {
   offset = 0
 
   constructor(

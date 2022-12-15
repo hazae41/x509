@@ -1,5 +1,5 @@
-import { Integer, Sequence, Triplet } from "@hazae41/asn1";
-import { Reader } from "libs/reader/reader.js";
+import { DER, Integer, Sequence, Triplet } from "@hazae41/asn1";
+import { ASN1Reader } from "libs/reader/reader.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { Name } from "mods/types/name/name.js";
 import { SubjectPublicKeyInfo } from "mods/types/subject_public_key_info/subject_public_key_info.js";
@@ -34,7 +34,7 @@ export class TBSCertificate {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = Reader.from(triplet, Sequence)
+    const reader = ASN1Reader.from(triplet, Sequence)
     const version = reader.tryReadType(TBSCertificateVersion)
     const serialNumber = reader.readClass(Integer)
     const signature = reader.readType(AlgorithmIdentifier)
@@ -45,5 +45,13 @@ export class TBSCertificate {
     const rest = reader.readTriplets()
 
     return new this(version, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, rest)
+  }
+
+  toBuffer() {
+    return DER.toBuffer(this.toASN1())
+  }
+
+  static fromBuffer(buffer: Buffer) {
+    return this.fromASN1(DER.fromBuffer(buffer))
   }
 }

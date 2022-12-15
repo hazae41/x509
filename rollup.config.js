@@ -21,6 +21,19 @@ export const config = [
   {
     input: "./src/index.ts",
     output: [{
+      dir: "./dist/esm",
+      format: "esm",
+      exports: "named",
+      preserveModules: true,
+      sourcemap: true,
+      entryFileNames: "[name].mjs",
+    }],
+    plugins: [resolve(), ts({ typescript }), commonjs()],
+    external: ["tslib", "@hazae41/asn1"]
+  },
+  {
+    input: "./src/index.ts",
+    output: [{
       dir: "./dist/types",
       format: "esm",
       exports: "named",

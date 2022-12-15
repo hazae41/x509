@@ -1,5 +1,5 @@
 import { Sequence, Triplet, UTCTime } from "@hazae41/asn1";
-import { Reader } from "libs/reader/reader.js";
+import { ASN1Reader } from "libs/reader/reader.js";
 
 export type Time =
   | UTCTime
@@ -17,7 +17,7 @@ export class Validity {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = Reader.from(triplet, Sequence)
+    const reader = ASN1Reader.from(triplet, Sequence)
     const notBefore = reader.readClass(UTCTime)
     const notAfter = reader.readClass(UTCTime)
 

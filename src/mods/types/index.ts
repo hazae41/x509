@@ -8,3 +8,4 @@ export * from "./subject_public_key_info/subject_public_key_info.js";
 export * from "./tbs_certificate/tbs_certificate.js";
 export * from "./tbs_certificate/tbs_certificate_version.js";
 export * from "./validity/validity.js";
+

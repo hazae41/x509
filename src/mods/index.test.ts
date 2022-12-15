@@ -20,7 +20,7 @@ function checkCertificate(buffer: Buffer, cert: Certificate) {
 }
 
 test("Cert Ed25519", async () => {
-  const text = await readFile("./test/ed25519.pem", "utf8")
+  const text = await readFile("./certs/ed25519.pem", "utf8")
   const buffer = PEM.parse(text)
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
@@ -29,7 +29,7 @@ test("Cert Ed25519", async () => {
 })
 
 test("Cert Let's Encrypt", async () => {
-  const text = await readFile("./test/letsencrypt.pem", "utf8")
+  const text = await readFile("./certs/letsencrypt.pem", "utf8")
   const buffer = PEM.parse(text)
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
@@ -38,7 +38,7 @@ test("Cert Let's Encrypt", async () => {
 })
 
 test("Cert frank4dd-rsa", async () => {
-  const buffer = await readFile("./test/frank4dd-rsa.der")
+  const buffer = await readFile("./certs/frank4dd-rsa.der")
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
 
@@ -46,7 +46,7 @@ test("Cert frank4dd-rsa", async () => {
 })
 
 test("Cert frank4dd-dsa", async () => {
-  const buffer = await readFile("./test/frank4dd-dsa.der")
+  const buffer = await readFile("./certs/frank4dd-dsa.der")
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
 
@@ -54,7 +54,7 @@ test("Cert frank4dd-dsa", async () => {
 })
 
 test("Cert Tor", async () => {
-  const text = await readFile("./test/tor.pem", "utf8")
+  const text = await readFile("./certs/tor.pem", "utf8")
   const buffer = Buffer.from(text, "base64")
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
@@ -65,7 +65,7 @@ test("Cert Tor", async () => {
 })
 
 test("Cert Tor 2", async () => {
-  const text = await readFile("./test/tor2.pem", "utf8")
+  const text = await readFile("./certs/tor2.pem", "utf8")
   const buffer = Buffer.from(text, "base64")
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)

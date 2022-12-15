@@ -1,5 +1,5 @@
 import { Set, Triplet } from "@hazae41/asn1";
-import { Reader } from "libs/reader/reader.js";
+import { ASN1Reader } from "libs/reader/reader.js";
 import { AttributeTypeAndValue } from "mods/types/attribute_type_and_value/attribute_type_and_value.js";
 
 export class RelativeDistinguishedName {
@@ -13,7 +13,7 @@ export class RelativeDistinguishedName {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = Reader.from(triplet, Set)
+    const reader = ASN1Reader.from(triplet, Set)
 
     const triplets = new Array<AttributeTypeAndValue>(reader.triplets.length)
 

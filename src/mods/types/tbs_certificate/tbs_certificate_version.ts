@@ -1,5 +1,5 @@
 import { Constructed, Integer, Triplet, Type } from "@hazae41/asn1";
-import { Reader } from "libs/reader/reader.js";
+import { ASN1Reader } from "libs/reader/reader.js";
 
 export class TBSCertificateVersion {
   readonly #class = TBSCertificateVersion
@@ -18,7 +18,7 @@ export class TBSCertificateVersion {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = Reader.fromTagged(triplet, Constructed, this.type)
+    const reader = ASN1Reader.fromTagged(triplet, Constructed, this.type)
     const value = reader.readClass(Integer)
 
     return new this(value)
