@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@hazae41/x509",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Zero-copy X.509 certificates in pure modern TypeScript",
   "author": "hazae41",
   "license": "MIT",
