@@ -1,14 +1,21 @@
 {
   "type": "module",
   "name": "@hazae41/x509",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Zero-copy X.509 certificates in pure modern TypeScript",
+  "homepage": "https://github.com/hazae41/x509",
+  "repository": "github:hazae41/x509",
   "author": "hazae41",
   "license": "MIT",
   "main": "./dist/cjs/index.cjs",
   "module": "./dist/esm/index.mjs",
   "types": "./dist/types/index.d.ts",
   "sideEffects": false,
+  "files": [
+    "./dist/esm",
+    "./dist/cjs",
+    "./dist/types"
+  ],
   "scripts": {
     "build": "rimraf dist && rollup -c",
     "test": "node ./dist/test/index.test.cjs",
@@ -41,7 +48,26 @@
       "require": "./dist/cjs/index.cjs"
     }
   },
-  "files": [
-    "/dist"
+  "keywords": [
+    "x509",
+    "pem",
+    "certificates",
+    "encoding",
+    "decoding",
+    "buffer",
+    "bytes",
+    "packets",
+    "stream",
+    "encoder",
+    "decoder",
+    "parsing",
+    "parser",
+    "asn1",
+    "der",
+    "ber",
+    "typescript",
+    "esmodules",
+    "tested",
+    "unit-tested"
   ]
 }
