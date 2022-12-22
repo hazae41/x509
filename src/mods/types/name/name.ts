@@ -1,5 +1,5 @@
 import { Sequence, Triplet } from "@hazae41/asn1";
-import { OID } from "libs/oids/oids.js";
+import { OID } from "mods/oids/oids.js";
 import { RDNSequence } from "mods/types/rdn_sequence/rdn_sequence.js";
 
 export type NameObject = {

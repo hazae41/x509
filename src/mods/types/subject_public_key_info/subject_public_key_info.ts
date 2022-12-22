@@ -1,6 +1,6 @@
 import { BitString, DER, Integer, Sequence, Triplet } from "@hazae41/asn1";
-import { OID } from "libs/oids/oids.js";
 import { ASN1Reader } from "libs/reader/reader.js";
+import { OID } from "mods/oids/oids.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 
 export class SubjectPublicKeyInfo {
