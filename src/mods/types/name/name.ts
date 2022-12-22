@@ -1,6 +1,8 @@
-import { Sequence, Triplet } from "@hazae41/asn1";
+import { ObjectIdentifier, Sequence, Triplet, UTF8String } from "@hazae41/asn1";
 import { OID } from "mods/oids/oids.js";
+import { AttributeTypeAndValue } from "mods/types/attribute_type_and_value/attribute_type_and_value.js";
 import { RDNSequence } from "mods/types/rdn_sequence/rdn_sequence.js";
+import { RelativeDistinguishedName } from "mods/types/relative_distinguished_name/relative_distinguished_name.js";
 
 export type NameObject = {
   -readonly [name in keyof typeof OID.keys]?: string
@@ -32,5 +34,19 @@ export class Name {
     }
 
     return object
+  }
+
+  static fromNameObject(object: NameObject) {
+    const triplets = new Array<RelativeDistinguishedName>()
+
+    for (const property in object) {
+      const key = property as keyof typeof OID.keys
+      const type = new ObjectIdentifier(OID.keys[key])
+      const value = new UTF8String(object[key]!)
+      const atav = new AttributeTypeAndValue(type, value)
+      triplets.push(new RelativeDistinguishedName([atav]))
+    }
+
+    return new this(new RDNSequence(triplets))
   }
 }

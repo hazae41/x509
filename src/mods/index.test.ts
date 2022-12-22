@@ -2,18 +2,16 @@ export * from "./pem/pem.test.js";
 export * from "./types/index.test.js";
 
 import { DER } from "@hazae41/asn1";
+import { assert, test } from "@hazae41/phobos";
 import { readFile } from "fs/promises";
-import { assert } from "libs/assert/assert.js";
 import { PEM } from "mods/pem/pem.js";
 import { Certificate } from "mods/types/certificate/certificate.js";
 import { relative, resolve } from "path";
-import { test } from "uvu";
 
-test.before(async () => {
-  const directory = resolve("./dist/test/")
-  const { pathname } = new URL(import.meta.url)
-  console.log(relative(directory, pathname.replace(".cjs", ".ts")))
-})
+
+const directory = resolve("./dist/test/")
+const { pathname } = new URL(import.meta.url)
+console.log(relative(directory, pathname.replace(".cjs", ".ts")))
 
 function checkCertificate(buffer: Buffer, cert: Certificate) {
   assert(buffer.equals(DER.toBuffer(cert.toASN1())))
@@ -74,5 +72,3 @@ test("Cert Tor 2", async () => {
 
   checkCertificate(buffer, cert)
 })
-
-test.run()

@@ -48,7 +48,7 @@ export const config = [
       entryFileNames: "[name].cjs",
     }],
     plugins: [resolve(), ts({ typescript }), commonjs()],
-    external: ["tslib", "@hazae41/asn1", "uvu"]
+    external: ["tslib", "@hazae41/asn1", "@hazae41/phobos"]
   },
 ]
 
