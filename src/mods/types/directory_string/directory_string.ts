@@ -11,7 +11,7 @@ export type DirectoryStringInnerType =
 export class DirectoryString {
 
   constructor(
-    readonly inner: UTF8String | PrintableString | IA5String
+    readonly inner: DirectoryStringInner
   ) { }
 
   toASN1() {
