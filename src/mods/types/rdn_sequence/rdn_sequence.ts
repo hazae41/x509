@@ -8,6 +8,10 @@ export class RDNSequence {
     readonly triplets: RelativeDistinguishedName[]
   ) { }
 
+  toString() {
+    return this.triplets.map(it => it.toString()).reverse().join(",")
+  }
+
   toASN1() {
     return new Sequence(this.triplets.map(it => it.toASN1()))
   }

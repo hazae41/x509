@@ -8,6 +8,10 @@ export class RelativeDistinguishedName {
     readonly triplets: AttributeTypeAndValue[]
   ) { }
 
+  toString() {
+    return this.triplets.map(it => it.toString()).join("+")
+  }
+
   toASN1() {
     return new Set(this.triplets.map(it => it.toASN1()))
   }

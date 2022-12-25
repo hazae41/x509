@@ -19,7 +19,10 @@ export class SubjectPublicKeyInfo {
   }
 
   toASN1() {
-    return new Sequence([this.algorithm.toASN1(), this.subjectPublicKey])
+    return new Sequence([
+      this.algorithm.toASN1(),
+      this.subjectPublicKey
+    ])
   }
 
   static fromASN1(triplet: Triplet) {
