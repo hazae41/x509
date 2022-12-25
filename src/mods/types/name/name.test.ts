@@ -6,8 +6,10 @@ const directory = resolve("./dist/test/")
 const { pathname } = new URL(import.meta.url)
 console.log(relative(directory, pathname.replace(".cjs", ".ts")))
 
-test("Name", async () => {
-  const name = Name.fromObject({ commonName: "www.dsjnhfubu.com" })
+function checkFromTo(string: string) {
+  assert(string === Name.fromString(string).toString())
+}
 
-  assert(name.toObject().commonName === "www.dsjnhfubu.com")
+test("Name", async () => {
+  checkFromTo("O=Acme\\20Inc.,L=Paris,ST=Île-de-France,C=FR,CN=www.dfjini.com,CN=www.odncfbse.com")
 })

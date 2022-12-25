@@ -12,6 +12,10 @@ export class RDNSequence {
     return this.triplets.map(it => it.toString()).reverse().join(",")
   }
 
+  static fromString(string: string) {
+    return new this(string.split(",").reverse().map(it => RelativeDistinguishedName.fromString(it)))
+  }
+
   toASN1() {
     return new Sequence(this.triplets.map(it => it.toASN1()))
   }

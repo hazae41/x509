@@ -27,9 +27,39 @@ export class AttributeType {
     readonly inner: ObjectIdentifier
   ) { }
 
-  getShortName() {
+  toShortName() {
     const key = this.inner.value as AttributeTypeShortNames.Key
     const value = AttributeTypeShortNames.keys[key]
-    if (value !== undefined) return value
+
+    if (value === undefined) return
+
+    return value
+  }
+
+  static fromShortName(name: string) {
+    const value = name as AttributeTypeShortNames.Value
+    const key = AttributeTypeShortNames.values[value]
+
+    if (key === undefined) return
+
+    const inner = new ObjectIdentifier(key)
+
+    return new this(inner)
+  }
+
+  toString() {
+    const name = this.toShortName()
+    if (name !== undefined) return name
+
+    return this.inner.value
+  }
+
+  static fromString(string: string) {
+    const short = this.fromShortName(string)
+    if (short !== undefined) return short
+
+    const inner = new ObjectIdentifier(string)
+
+    return new this(inner)
   }
 }

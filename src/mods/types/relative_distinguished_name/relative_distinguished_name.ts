@@ -12,6 +12,10 @@ export class RelativeDistinguishedName {
     return this.triplets.map(it => it.toString()).join("+")
   }
 
+  static fromString(string: string) {
+    return new this(string.split("+").map(it => AttributeTypeAndValue.fromString(it)))
+  }
+
   toASN1() {
     return new Set(this.triplets.map(it => it.toASN1()))
   }

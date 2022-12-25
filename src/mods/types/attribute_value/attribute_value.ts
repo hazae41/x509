@@ -11,17 +11,7 @@ export class AttributeValue {
     return DirectoryString.fromASN1(this.inner)
   }
 
-  toString() {
-    return this.toDirectoryString().inner.value
-      .replaceAll("\\", "\\5C")
-      .replaceAll(" ", "\\20")
-      .replaceAll("\"", "\\22")
-      .replaceAll("#", "\\23")
-      .replaceAll("+", "\\2B")
-      .replaceAll(",", "\\2C")
-      .replaceAll(";", "\\3B")
-      .replaceAll("<", "\\3C")
-      .replaceAll("=", "\\3D")
-      .replaceAll(">", "\\3E")
+  static fromDirectoryString(dstring: DirectoryString) {
+    return new this(dstring.toASN1())
   }
 }
