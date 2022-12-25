@@ -2,7 +2,7 @@ import { Sequence, Triplet } from "@hazae41/asn1";
 import { ASN1Reader } from "libs/reader/reader.js";
 import { RelativeDistinguishedName } from "mods/types/relative_distinguished_name/relative_distinguished_name.js";
 
-const UNESCAPED_COMMA_REGEX = /(?<!\\),/
+const UNESCAPED_COMMA_REGEX = /[^\\],/g
 
 export class RDNSequence {
 
@@ -15,7 +15,7 @@ export class RDNSequence {
   }
 
   static fromX501(x501: string) {
-    return new this(x501.split(UNESCAPED_COMMA_REGEX).reverse().map(it => RelativeDistinguishedName.fromX501(it)))
+    return new this(x501.replaceAll(UNESCAPED_COMMA_REGEX, ([c]) => `${c},,`).split(",,").reverse().map(it => RelativeDistinguishedName.fromX501(it)))
   }
 
   toASN1() {
