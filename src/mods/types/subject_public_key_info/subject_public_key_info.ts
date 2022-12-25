@@ -1,6 +1,6 @@
-import { BitString, DER, Integer, Sequence, Triplet } from "@hazae41/asn1";
+import { BitString, DER, Sequence, Triplet } from "@hazae41/asn1";
 import { ASN1Reader } from "libs/reader/reader.js";
-import { OID } from "mods/oids/oids.js";
+import { RsaPublicKey } from "mods/keys/rsa/public.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 
 export class SubjectPublicKeyInfo {
@@ -12,8 +12,9 @@ export class SubjectPublicKeyInfo {
   ) { }
 
   getPublicKey() {
-    if (this.algorithm.algorithm.value === OID.keys.rsaEncryption)
+    if (this.algorithm.algorithm.value === RsaPublicKey.oid)
       return RsaPublicKey.fromBuffer(this.subjectPublicKey.buffer)
+
     throw new Error(`Unknown ${this.#class.name} algorithm OID`)
   }
 
@@ -27,48 +28,6 @@ export class SubjectPublicKeyInfo {
     const subjectPublicKey = reader.readClass(BitString)
 
     return new this(algorithm, subjectPublicKey)
-  }
-
-  toBuffer() {
-    return DER.toBuffer(this.toASN1())
-  }
-
-  static fromBuffer(buffer: Buffer) {
-    return this.fromASN1(DER.fromBuffer(buffer))
-  }
-}
-
-export interface RsaPublicKeyObject {
-  publicExponent: bigint,
-  modulus: bigint
-}
-
-export class RsaPublicKey {
-
-  constructor(
-    readonly publicExponent: Integer,
-    readonly modulus: Integer
-  ) { }
-
-  toRsaPublicKeyObject() {
-    const publicExponent = this.publicExponent.value
-    const modulus = this.modulus.value
-    return { publicExponent, modulus } as RsaPublicKeyObject
-  }
-
-  toASN1() {
-    return new Sequence([
-      this.publicExponent,
-      this.modulus
-    ])
-  }
-
-  static fromASN1(triplet: Triplet) {
-    const reader = ASN1Reader.from(triplet, Sequence)
-    const publicExponent = reader.readClass(Integer)
-    const modulus = reader.readClass(Integer)
-
-    return new this(publicExponent, modulus)
   }
 
   toBuffer() {

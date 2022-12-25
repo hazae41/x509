@@ -53,7 +53,7 @@ test("Cert frank4dd-dsa", async () => {
 
 test("Cert Tor", async () => {
   const text = await readFile("./certs/tor.pem", "utf8")
-  const buffer = Buffer.from(text, "base64")
+  const buffer = PEM.parse(text)
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
 
@@ -64,11 +64,22 @@ test("Cert Tor", async () => {
 
 test("Cert Tor 2", async () => {
   const text = await readFile("./certs/tor2.pem", "utf8")
-  const buffer = Buffer.from(text, "base64")
+  const buffer = PEM.parse(text)
   const triplet = DER.fromBuffer(buffer)
   const cert = Certificate.fromASN1(triplet)
 
   console.log(cert)
+
+  checkCertificate(buffer, cert)
+})
+
+test("Cert full", async () => {
+  const text = await readFile("./certs/full.pem", "utf8")
+  const buffer = PEM.parse(text)
+  const triplet = DER.fromBuffer(buffer)
+  const cert = Certificate.fromASN1(triplet)
+
+  console.log(cert.toASN1().toString())
 
   checkCertificate(buffer, cert)
 })

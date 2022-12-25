@@ -11,16 +11,23 @@ npm i @hazae41/x509
 
 [**Node Package 📦**](https://www.npmjs.com/package/@hazae41/x509)
 
+### DO NOT USE
+
+This is experimental software in early development
+
+1. It has security issues
+2. Things change quickly
+
 ### Current features
 - 100% TypeScript and ESM
 - Zero-copy reading and writing
 - No external dependency
 - No cryptography
-- PEM <=> DER conversion
-- X.509 certificates
+- PEM and DER parsing
+- X.509 certificates (v3)
 
 ### Upcoming features
-- X.509 extensions
+- X.509 extensions (v3)
 
 ### Usage
 

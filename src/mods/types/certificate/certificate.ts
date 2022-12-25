@@ -31,15 +31,19 @@ export class Certificate {
     return new this(tbsCertificate, algorithmIdentifier, signatureValue)
   }
 
+  toObject() {
+    return {} as CertificateObject
+  }
+
+  static fromObject(object: CertificateObject): Certificate {
+    throw new Error("Unimplemented")
+  }
+
   toBuffer() {
     return DER.toBuffer(this.toASN1())
   }
 
   static fromBuffer(buffer: Buffer) {
     return this.fromASN1(DER.fromBuffer(buffer))
-  }
-
-  toCertificateObject() {
-    return {}
   }
 }

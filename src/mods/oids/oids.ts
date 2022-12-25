@@ -1,6 +1,7 @@
 import { invert } from "libs/invert/invert.js"
 
-export namespace OID {
+export namespace OIDs {
+
   export const keys = {
     commonName: "2.5.4.3",
     serialNumber: "2.5.4.5",
