@@ -29,21 +29,30 @@ export class DirectoryString {
   }
 
   toX501() {
-    return this.inner.value
-      .replaceAll("\\", "\\5C")
-      .replaceAll(" ", "\\20")
-      .replaceAll("\"", "\\22")
-      .replaceAll("#", "\\23")
-      .replaceAll("+", "\\2B")
-      .replaceAll(",", "\\2C")
-      .replaceAll(";", "\\3B")
-      .replaceAll("<", "\\3C")
-      .replaceAll("=", "\\3D")
-      .replaceAll(">", "\\3E")
+    let x501 = this.inner.value
+      .replaceAll("\x00", "\\00")
+      .replaceAll("\\", "\\\\")
+      .replaceAll("\"", "\\\"")
+      .replaceAll("#", "\\#")
+      .replaceAll("+", "\\+")
+      .replaceAll(",", "\\,")
+      .replaceAll(";", "\\;")
+      .replaceAll("<", "\\<")
+      .replaceAll("=", "\\=")
+      .replaceAll(">", "\\>")
+
+    if (x501.startsWith(" "))
+      x501 = "\\ " + x501.slice(1)
+
+    if (x501.endsWith(" "))
+      x501 = x501.slice(0, -1) + "\\ "
+
+    return x501
   }
 
-  static fromX501<C extends DirectoryStringInnerType>(string: string, clazz: C) {
-    const inner = new clazz(string
+  static fromX501<C extends DirectoryStringInnerType>(x501: string, clazz: C) {
+    const inner = new clazz(x501
+      .replaceAll("\\20", " ")
       .replaceAll("\\3E", ">")
       .replaceAll("\\3D", "=")
       .replaceAll("\\3C", "<")
@@ -52,8 +61,18 @@ export class DirectoryString {
       .replaceAll("\\2B", "+")
       .replaceAll("\\23", "#")
       .replaceAll("\\22", "\"")
-      .replaceAll("\\20", " ")
-      .replaceAll("\\5C", "\\"))
+      .replaceAll("\\5C", "\\")
+      .replaceAll("\\00", "\x00")
+      .replaceAll("\\ ", " ")
+      .replaceAll("\\\"", "\"")
+      .replaceAll("\\#", "#")
+      .replaceAll("\\+", "+")
+      .replaceAll("\\,", ",")
+      .replaceAll("\\;", ";")
+      .replaceAll("\\<", "<")
+      .replaceAll("\\=", "=")
+      .replaceAll("\\>", ">")
+      .replaceAll("\\\\", "\\"))
 
     return new this(inner)
   }

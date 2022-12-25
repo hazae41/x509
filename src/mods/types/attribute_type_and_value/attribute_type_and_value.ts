@@ -25,13 +25,28 @@ export class AttributeTypeAndValue {
   }
 
   static fromX501(x501: string) {
-    const [type, value] = x501.split("=")
+    const [rawType, rawValue] = x501.split("=")
 
-    const type2 = AttributeType.fromX501(type)
-    const dstring = DirectoryString.fromX501(value, UTF8String)
-    const value2 = AttributeValue.fromDirectoryString(dstring)
+    const shortType = AttributeType.fromShortName(rawType)
 
-    return new this(type2, value2)
+    if (shortType !== undefined) {
+      const dstring = DirectoryString.fromX501(rawValue, UTF8String)
+      const value = AttributeValue.fromDirectoryString(dstring)
+
+      return new this(shortType, value)
+    }
+
+    const oid = new ObjectIdentifier(rawType)
+    const oidType = new AttributeType(oid)
+
+    if (!rawValue.startsWith("#"))
+      throw new Error(`AttributeValue not preceded by hash`)
+
+    const buffer = Buffer.from(rawValue.slice(1), "hex")
+    const triplet = DER.fromBuffer(buffer)
+    const value = new AttributeValue(triplet)
+
+    return new this(oidType, value)
   }
 
   toASN1() {

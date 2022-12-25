@@ -2,6 +2,8 @@ import { Set, Triplet } from "@hazae41/asn1";
 import { ASN1Reader } from "libs/reader/reader.js";
 import { AttributeTypeAndValue } from "mods/types/attribute_type_and_value/attribute_type_and_value.js";
 
+const UNESCAPED_PLUS_REGEX = /(?<!\\)\+/
+
 export class RelativeDistinguishedName {
 
   constructor(
@@ -13,7 +15,7 @@ export class RelativeDistinguishedName {
   }
 
   static fromX501(x501: string) {
-    return new this(x501.split("+").map(it => AttributeTypeAndValue.fromX501(it)))
+    return new this(x501.split(UNESCAPED_PLUS_REGEX).map(it => AttributeTypeAndValue.fromX501(it)))
   }
 
   toASN1() {
