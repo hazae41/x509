@@ -47,14 +47,14 @@ export class AttributeType {
     return new this(inner)
   }
 
-  toString() {
+  toX501() {
     const name = this.toShortName()
     if (name !== undefined) return name
 
     return this.inner.value
   }
 
-  static fromString(string: string) {
+  static fromX501(string: string) {
     const short = this.fromShortName(string)
     if (short !== undefined) return short
 

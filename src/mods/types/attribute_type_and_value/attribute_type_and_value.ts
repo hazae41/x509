@@ -12,7 +12,7 @@ export class AttributeTypeAndValue {
     readonly value: AttributeValue
   ) { }
 
-  toString() {
+  toX501() {
     const type = this.type.toShortName()
 
     if (type === undefined) {
@@ -21,14 +21,14 @@ export class AttributeTypeAndValue {
       return `${type}=#${value.toString("hex")}`
     }
 
-    return `${type}=${this.value.toDirectoryString().toString()}`
+    return `${type}=${this.value.toDirectoryString().toX501()}`
   }
 
-  static fromString(string: string) {
-    const [type, value] = string.split("=")
+  static fromX501(x501: string) {
+    const [type, value] = x501.split("=")
 
-    const type2 = AttributeType.fromString(type)
-    const dstring = DirectoryString.fromString(value, UTF8String)
+    const type2 = AttributeType.fromX501(type)
+    const dstring = DirectoryString.fromX501(value, UTF8String)
     const value2 = AttributeValue.fromDirectoryString(dstring)
 
     return new this(type2, value2)

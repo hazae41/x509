@@ -7,12 +7,12 @@ export class Name {
     readonly inner: RDNSequence
   ) { }
 
-  toString() {
-    return this.inner.toString()
+  toX501() {
+    return this.inner.toX501()
   }
 
-  static fromString(string: string) {
-    return new this(RDNSequence.fromString(string))
+  static fromX501(x501: string) {
+    return new this(RDNSequence.fromX501(x501))
   }
 
   toASN1(): Sequence {

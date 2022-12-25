@@ -6,8 +6,8 @@ const directory = resolve("./dist/test/")
 const { pathname } = new URL(import.meta.url)
 console.log(relative(directory, pathname.replace(".cjs", ".ts")))
 
-function checkFromTo(string: string) {
-  assert(string === Name.fromString(string).toString())
+function checkFromTo(x501: string) {
+  assert(x501 === Name.fromX501(x501).toX501())
 }
 
 test("Name", async () => {

@@ -8,12 +8,12 @@ export class RelativeDistinguishedName {
     readonly triplets: AttributeTypeAndValue[]
   ) { }
 
-  toString() {
-    return this.triplets.map(it => it.toString()).join("+")
+  toX501() {
+    return this.triplets.map(it => it.toX501()).join("+")
   }
 
-  static fromString(string: string) {
-    return new this(string.split("+").map(it => AttributeTypeAndValue.fromString(it)))
+  static fromX501(x501: string) {
+    return new this(x501.split("+").map(it => AttributeTypeAndValue.fromX501(it)))
   }
 
   toASN1() {

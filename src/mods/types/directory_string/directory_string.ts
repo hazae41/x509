@@ -28,7 +28,7 @@ export class DirectoryString {
     throw new Error(`Cannot convert ${triplet} to a DirectoryString`)
   }
 
-  toString() {
+  toX501() {
     return this.inner.value
       .replaceAll("\\", "\\5C")
       .replaceAll(" ", "\\20")
@@ -42,7 +42,7 @@ export class DirectoryString {
       .replaceAll(">", "\\3E")
   }
 
-  static fromString<C extends DirectoryStringInnerType>(string: string, clazz: C) {
+  static fromX501<C extends DirectoryStringInnerType>(string: string, clazz: C) {
     const inner = new clazz(string
       .replaceAll("\\3E", ">")
       .replaceAll("\\3D", "=")

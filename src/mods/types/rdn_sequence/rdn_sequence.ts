@@ -8,12 +8,12 @@ export class RDNSequence {
     readonly triplets: RelativeDistinguishedName[]
   ) { }
 
-  toString() {
-    return this.triplets.map(it => it.toString()).reverse().join(",")
+  toX501() {
+    return this.triplets.map(it => it.toX501()).reverse().join(",")
   }
 
-  static fromString(string: string) {
-    return new this(string.split(",").reverse().map(it => RelativeDistinguishedName.fromString(it)))
+  static fromX501(x501: string) {
+    return new this(x501.split(",").reverse().map(it => RelativeDistinguishedName.fromX501(it)))
   }
 
   toASN1() {
