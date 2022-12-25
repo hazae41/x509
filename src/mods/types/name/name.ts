@@ -35,7 +35,7 @@ export class Name {
       for (const atav of rdn.triplets) {
         const name = OIDs.values[atav.type.inner.value as OIDs.Value]
         if (!name) throw new Error(`Unknown OID ${atav.type.inner.value}`)
-        object[name] = atav.value.toDirectoryString().value
+        object[name] = atav.value.toDirectoryString().inner.value
       }
     }
 

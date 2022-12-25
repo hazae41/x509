@@ -1,8 +1,5 @@
-import { IA5String, PrintableString, Triplet, UTF8String } from "@hazae41/asn1";
-
-export class DirectoryString {
-  // TODO
-}
+import { Triplet } from "@hazae41/asn1";
+import { DirectoryString } from "mods/types/directory_string/directory_string.js";
 
 export class AttributeValue {
 
@@ -11,18 +8,11 @@ export class AttributeValue {
   ) { }
 
   toDirectoryString() {
-    if (this.inner instanceof UTF8String)
-      return this.inner
-    if (this.inner instanceof PrintableString)
-      return this.inner
-    if (this.inner instanceof IA5String)
-      return this.inner
-
-    throw new Error(`Cannot convert ${this.inner} to a DirectoryString`)
+    return DirectoryString.fromASN1(this.inner)
   }
 
   toString() {
-    return this.toDirectoryString().value
+    return this.toDirectoryString().inner.value
       .replaceAll("\\", "\\5C")
       .replaceAll(" ", "\\20")
       .replaceAll("\"", "\\22")

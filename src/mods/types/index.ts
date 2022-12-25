@@ -3,6 +3,7 @@ export * from "./attribute_type/attribute_type.js";
 export * from "./attribute_type_and_value/attribute_type_and_value.js";
 export * from "./attribute_value/attribute_value.js";
 export * from "./certificate/certificate.js";
+export * from "./directory_string/directory_string.js";
 export * from "./name/name.js";
 export * from "./rdn_sequence/rdn_sequence.js";
 export * from "./relative_distinguished_name/relative_distinguished_name.js";
