@@ -25,6 +25,7 @@ This is experimental software in early development
 - No cryptography
 - PEM and DER parsing
 - X.509 certificates (v3)
+- X.501 encoding and decoding
 
 ### Upcoming features
 - X.509 extensions (v3)
