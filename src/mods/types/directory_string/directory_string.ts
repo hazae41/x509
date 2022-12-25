@@ -8,6 +8,16 @@ export type DirectoryStringInnerType =
   | typeof PrintableString
   | typeof IA5String
 
+function escape(match: string) {
+  const hex = Buffer.from(match, "utf8").toString("hex")
+  return hex.replaceAll(/../g, m => "\\" + m)
+}
+
+function unescape(match: string) {
+  const hex = match.replaceAll("\\", "")
+  return Buffer.from(hex, "hex").toString("utf8")
+}
+
 export class DirectoryString {
 
   constructor(
@@ -30,7 +40,6 @@ export class DirectoryString {
 
   toX501() {
     let x501 = this.inner.value
-      .replaceAll("\x00", "\\00")
       .replaceAll("\\", "\\\\")
       .replaceAll("\"", "\\\"")
       .replaceAll("#", "\\#")
@@ -40,6 +49,7 @@ export class DirectoryString {
       .replaceAll("<", "\\<")
       .replaceAll("=", "\\=")
       .replaceAll(">", "\\>")
+      .replaceAll(/[\p{Cc}\p{Cn}\p{Cs}]+/gu, escape)
 
     if (x501.startsWith(" "))
       x501 = "\\ " + x501.slice(1)
@@ -51,18 +61,7 @@ export class DirectoryString {
   }
 
   static fromX501<C extends DirectoryStringInnerType>(x501: string, clazz: C) {
-    const inner = new clazz(x501
-      .replaceAll("\\20", " ")
-      .replaceAll("\\3E", ">")
-      .replaceAll("\\3D", "=")
-      .replaceAll("\\3C", "<")
-      .replaceAll("\\3B", ";")
-      .replaceAll("\\2C", ",")
-      .replaceAll("\\2B", "+")
-      .replaceAll("\\23", "#")
-      .replaceAll("\\22", "\"")
-      .replaceAll("\\5C", "\\")
-      .replaceAll("\\00", "\x00")
+    let value = x501
       .replaceAll("\\ ", " ")
       .replaceAll("\\\"", "\"")
       .replaceAll("\\#", "#")
@@ -72,7 +71,10 @@ export class DirectoryString {
       .replaceAll("\\<", "<")
       .replaceAll("\\=", "=")
       .replaceAll("\\>", ">")
-      .replaceAll("\\\\", "\\"))
+      .replaceAll("\\\\", "\\")
+      .replaceAll(/(\\[0-9A-Fa-f]{2})+/g, unescape)
+
+    const inner = new clazz(value)
 
     return new this(inner)
   }
