@@ -27,7 +27,7 @@ This is experimental software in early development
 - X.509 certificates (v3)
 - X.501 encoding and decoding
 
-### Upcoming features
+### [Upcoming features](https://github.com/sponsors/hazae41)
 - X.509 extensions (v3)
 
 ### Usage
