@@ -36,7 +36,7 @@ This is experimental software in early development
 import { DER } from "@hazae41/asn1";
 import { PEM, Certificate } from "@hazae41/x509";
 
-const buffer = PEM.parse(await readFile("./cert.pem", "utf8"))
-const cert = Certificate.fromASN1(DER.fromBuffer(buffer))
+const bytes = PEM.parse(await readFile("./cert.pem", "utf8"))
+const cert = Certificate.fromBytes(bytes)
 ```
 
