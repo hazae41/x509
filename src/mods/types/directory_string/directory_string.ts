@@ -1,4 +1,5 @@
 import { IA5String, PrintableString, Triplet, UTF8String } from "@hazae41/asn1"
+import { Bytes } from "libs/bytes/bytes.js"
 
 export type DirectoryStringInner =
   InstanceType<DirectoryStringInnerType>
@@ -9,13 +10,13 @@ export type DirectoryStringInnerType =
   | typeof IA5String
 
 function escape(match: string) {
-  const hex = Buffer.from(match, "utf8").toString("hex")
+  const hex = Bytes.toHex(Bytes.fromUtf8(match))
   return hex.replaceAll(/../g, m => "\\" + m)
 }
 
 function unescape(match: string) {
   const hex = match.replaceAll("\\", "")
-  return Buffer.from(hex, "hex").toString("utf8")
+  return Bytes.toUtf8(Bytes.fromHex(hex))
 }
 
 export class DirectoryString {

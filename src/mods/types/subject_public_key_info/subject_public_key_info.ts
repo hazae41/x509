@@ -13,7 +13,7 @@ export class SubjectPublicKeyInfo {
 
   getPublicKey() {
     if (this.algorithm.algorithm.value === RsaPublicKey.oid)
-      return RsaPublicKey.fromBuffer(this.subjectPublicKey.buffer)
+      return RsaPublicKey.fromBytes(this.subjectPublicKey.bytes)
 
     throw new Error(`Unknown ${this.#class.name} algorithm OID`)
   }
@@ -33,11 +33,11 @@ export class SubjectPublicKeyInfo {
     return new this(algorithm, subjectPublicKey)
   }
 
-  toBuffer() {
-    return DER.toBuffer(this.toASN1())
+  toBytes() {
+    return DER.toBytes(this.toASN1())
   }
 
-  static fromBuffer(buffer: Buffer) {
-    return this.fromASN1(DER.fromBuffer(buffer))
+  static fromBytes(bytes: Uint8Array) {
+    return this.fromASN1(DER.fromBytes(bytes))
   }
 }

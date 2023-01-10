@@ -1,4 +1,5 @@
 import { DER, ObjectIdentifier, Sequence, Triplet, UTF8String } from "@hazae41/asn1";
+import { Bytes } from "libs/bytes/bytes.js";
 import { ASN1Reader } from "libs/reader/reader.js";
 import { AttributeType } from "mods/types/attribute_type/attribute_type.js";
 import { AttributeValue } from "mods/types/attribute_value/attribute_value.js";
@@ -17,8 +18,8 @@ export class AttributeTypeAndValue {
 
     if (type === undefined) {
       const type = this.type.inner.value
-      const value = DER.toBuffer(this.value.inner)
-      return `${type}=#${value.toString("hex")}`
+      const value = DER.toBytes(this.value.inner)
+      return `${type}=#${Bytes.toHex(value)}`
     }
 
     return `${type}=${this.value.toDirectoryString().toX501()}`
@@ -42,8 +43,8 @@ export class AttributeTypeAndValue {
     if (!rawValue.startsWith("#"))
       throw new Error(`AttributeValue not preceded by hash`)
 
-    const buffer = Buffer.from(rawValue.slice(1), "hex")
-    const triplet = DER.fromBuffer(buffer)
+    const bytes = Bytes.fromHex(rawValue.slice(1))
+    const triplet = DER.fromBytes(bytes)
     const value = new AttributeValue(triplet)
 
     return new this(oidType, value)

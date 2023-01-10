@@ -1,3 +1,5 @@
+import { Bytes } from "libs/bytes/bytes.js"
+
 export namespace PEM {
   export const header = `-----BEGIN CERTIFICATE-----`
   export const footer = `-----END CERTIFICATE-----`
@@ -12,12 +14,12 @@ export namespace PEM {
 
     const body = text.slice(header.length, -footer.length)
 
-    return Buffer.from(body, "base64")
+    return Bytes.fromBase64(body)
   }
 
-  export function stringify(buffer: Buffer) {
+  export function stringify(bytes: Uint8Array) {
     let result = `${header}\n`
-    let body = buffer.toString("base64")
+    let body = Bytes.toBase64(bytes)
 
     while (body) {
       result += `${body.slice(0, 64)}\n`

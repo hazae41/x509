@@ -43,11 +43,11 @@ export class RsaPublicKey {
     return new this(publicExponent, modulus)
   }
 
-  toBuffer() {
-    return DER.toBuffer(this.toASN1())
+  toBytes() {
+    return DER.toBytes(this.toASN1())
   }
 
-  static fromBuffer(buffer: Buffer) {
-    return this.fromASN1(DER.fromBuffer(buffer))
+  static fromBytes(bytes: Uint8Array) {
+    return this.fromASN1(DER.fromBytes(bytes))
   }
 }
