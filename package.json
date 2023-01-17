@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@hazae41/x509",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Zero-copy X.509 certificates in pure modern TypeScript",
   "homepage": "https://github.com/hazae41/x509",
   "repository": "github:hazae41/x509",
