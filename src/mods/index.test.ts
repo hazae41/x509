@@ -9,10 +9,9 @@ import { PEM } from "mods/pem/pem.js";
 import { Certificate } from "mods/types/certificate/certificate.js";
 import { relative, resolve } from "path";
 
-
 const directory = resolve("./dist/test/")
 const { pathname } = new URL(import.meta.url)
-console.log(relative(directory, pathname.replace(".cjs", ".ts")))
+console.log(relative(directory, pathname.replace(".mjs", ".ts")))
 
 function checkCertificate(bytes: Uint8Array, cert: Certificate) {
   assert(Bytes.toHex(bytes) === Bytes.toHex(DER.toBytes(cert.toASN1())))

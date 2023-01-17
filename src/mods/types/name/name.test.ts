@@ -4,7 +4,7 @@ import { Name } from "./name.js";
 
 const directory = resolve("./dist/test/")
 const { pathname } = new URL(import.meta.url)
-console.log(relative(directory, pathname.replace(".cjs", ".ts")))
+console.log(relative(directory, pathname.replace(".mjs", ".ts")))
 
 function checkFromTo(x501: string, message?: string) {
   // console.log("aaa", x501)

@@ -4,7 +4,7 @@ import { Validity } from "./validity.js";
 
 const directory = resolve("./dist/test/")
 const { pathname } = new URL(import.meta.url)
-console.log(relative(directory, pathname.replace(".cjs", ".ts")))
+console.log(relative(directory, pathname.replace(".mjs", ".ts")))
 
 test("Validity generation", async () => {
   const inOneDay = Validity.generate(1)
