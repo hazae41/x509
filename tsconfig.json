@@ -7,6 +7,7 @@
     "strict": true,
     "downlevelIteration": true,
     "lib": [
+      "DOM",
       "ESNext"
     ],
     "paths": {
@@ -15,6 +16,9 @@
       ],
       "libs/*": [
         "libs/*"
+      ],
+      "tests/*": [
+        "tests/*"
       ],
     }
   },
