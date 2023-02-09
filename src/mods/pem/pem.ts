@@ -1,4 +1,4 @@
-import { Bytes } from "libs/bytes/bytes.js"
+import { Bytes } from "@hazae41/bytes"
 
 export namespace PEM {
   export const header = `-----BEGIN CERTIFICATE-----`

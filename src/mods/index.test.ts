@@ -2,9 +2,9 @@ export * from "./pem/pem.test.js";
 export * from "./types/index.test.js";
 
 import { DER } from "@hazae41/asn1";
+import { Bytes } from "@hazae41/bytes";
 import { assert, test } from "@hazae41/phobos";
 import { readFile } from "fs/promises";
-import { Bytes } from "libs/bytes/bytes.js";
 import { PEM } from "mods/pem/pem.js";
 import { Certificate } from "mods/types/certificate/certificate.js";
 import { relative, resolve } from "path";

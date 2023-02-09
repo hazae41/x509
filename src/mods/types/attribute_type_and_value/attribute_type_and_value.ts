@@ -1,5 +1,5 @@
 import { DER, ObjectIdentifier, Sequence, Triplet, UTF8String } from "@hazae41/asn1";
-import { Bytes } from "libs/bytes/bytes.js";
+import { Bytes } from "@hazae41/bytes";
 import { ASN1Reader } from "libs/reader/reader.js";
 import { AttributeType } from "mods/types/attribute_type/attribute_type.js";
 import { AttributeValue } from "mods/types/attribute_value/attribute_value.js";

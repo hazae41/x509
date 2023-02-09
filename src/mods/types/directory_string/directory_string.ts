@@ -1,5 +1,5 @@
 import { IA5String, PrintableString, Triplet, UTF8String } from "@hazae41/asn1"
-import { Bytes } from "libs/bytes/bytes.js"
+import { Bytes } from "@hazae41/bytes"
 
 export type DirectoryStringInner =
   InstanceType<DirectoryStringInnerType>
