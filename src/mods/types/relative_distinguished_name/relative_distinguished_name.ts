@@ -18,8 +18,8 @@ export class RelativeDistinguishedName {
     return new this(x501.replaceAll(UNESCAPED_PLUS_REGEX, ([c]) => `${c}++`).split("++").map(it => AttributeTypeAndValue.fromX501(it)))
   }
 
-  toASN1() {
-    return new Set(this.triplets.map(it => it.toASN1()))
+  toASN1(): Triplet {
+    return Set.new(this.triplets.map(it => it.toASN1()))
   }
 
   static fromASN1(triplet: Triplet) {

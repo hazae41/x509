@@ -1,4 +1,4 @@
-import { Sequence, Triplet } from "@hazae41/asn1";
+import { Triplet } from "@hazae41/asn1";
 import { RDNSequence } from "mods/types/rdn_sequence/rdn_sequence.js";
 
 export class Name {
@@ -15,7 +15,7 @@ export class Name {
     return new this(RDNSequence.fromX501(x501))
   }
 
-  toASN1(): Sequence {
+  toASN1(): Triplet {
     return this.inner.toASN1()
   }
 

@@ -37,7 +37,7 @@ export class AttributeTypeAndValue {
       return new this(shortType, value)
     }
 
-    const oid = new ObjectIdentifier(rawType)
+    const oid = ObjectIdentifier.new(rawType)
     const oidType = new AttributeType(oid)
 
     if (!rawValue.startsWith("#"))
@@ -50,8 +50,8 @@ export class AttributeTypeAndValue {
     return new this(oidType, value)
   }
 
-  toASN1() {
-    return new Sequence([
+  toASN1(): Triplet {
+    return Sequence.new([
       this.type.inner,
       this.value.inner
     ])

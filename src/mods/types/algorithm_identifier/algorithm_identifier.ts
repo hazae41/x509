@@ -9,12 +9,12 @@ export class AlgorithmIdentifier {
     readonly parameters?: Triplet
   ) { }
 
-  toASN1() {
+  toASN1(): Triplet {
     const triplets = new Array<Triplet>()
     triplets.push(this.algorithm)
     if (this.parameters)
       triplets.push(this.parameters)
-    return new Sequence(triplets)
+    return Sequence.new(triplets)
   }
 
   static fromASN1(triplet: Triplet) {

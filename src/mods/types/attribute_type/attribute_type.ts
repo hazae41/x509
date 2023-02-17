@@ -42,7 +42,7 @@ export class AttributeType {
 
     if (key === undefined) return
 
-    const inner = new ObjectIdentifier(key)
+    const inner = ObjectIdentifier.new(key)
 
     return new this(inner)
   }
@@ -58,7 +58,7 @@ export class AttributeType {
     const short = this.fromShortName(string)
     if (short !== undefined) return short
 
-    const inner = new ObjectIdentifier(string)
+    const inner = ObjectIdentifier.new(string)
 
     return new this(inner)
   }

@@ -25,7 +25,7 @@ export class DirectoryString {
     readonly inner: DirectoryStringInner
   ) { }
 
-  toASN1() {
+  toASN1(): Triplet {
     return this.inner
   }
 
@@ -75,7 +75,7 @@ export class DirectoryString {
       .replaceAll("\\\\", "\\")
       .replaceAll(/(\\[0-9A-Fa-f]{2})+/g, unescape)
 
-    const inner = new clazz(value)
+    const inner = clazz.new(value)
 
     return new this(inner)
   }

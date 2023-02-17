@@ -14,8 +14,8 @@ export class Certificate {
     readonly signatureValue: BitString
   ) { }
 
-  toASN1() {
-    return new Sequence([
+  toASN1(): Triplet {
+    return Sequence.new([
       this.tbsCertificate.toASN1(),
       this.algorithmIdentifier.toASN1(),
       this.signatureValue

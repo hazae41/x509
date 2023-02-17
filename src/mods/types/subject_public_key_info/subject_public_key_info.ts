@@ -18,8 +18,8 @@ export class SubjectPublicKeyInfo {
     throw new Error(`Unknown ${this.#class.name} algorithm OID`)
   }
 
-  toASN1() {
-    return new Sequence([
+  toASN1(): Triplet {
+    return Sequence.new([
       this.algorithm.toASN1(),
       this.subjectPublicKey
     ])

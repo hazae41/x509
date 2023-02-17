@@ -10,10 +10,10 @@ export class TBSCertificateVersion {
     0)
 
   constructor(
-    readonly value = new Integer(BigInt(1))
+    readonly value = Integer.new(BigInt(1))
   ) { }
 
-  toASN1() {
+  toASN1(): Triplet {
     return new Constructed(this.#class.type, [this.value])
   }
 
@@ -29,6 +29,6 @@ export class TBSCertificateVersion {
   }
 
   static fromNumber(value: number) {
-    return new this(new Integer(BigInt(value)))
+    return new this(Integer.new(BigInt(value)))
   }
 }

@@ -20,8 +20,8 @@ export class TBSCertificate {
     readonly rest: Triplet[]
   ) { }
 
-  toASN1() {
-    return new Sequence([
+  toASN1(): Triplet {
+    return Sequence.new([
       this.version.toASN1(),
       this.serialNumber,
       this.signature.toASN1(),

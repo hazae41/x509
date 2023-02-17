@@ -16,8 +16,8 @@ export class RsaPublicKey {
     readonly modulus: Integer
   ) { }
 
-  toASN1() {
-    return new Sequence([
+  toASN1(): Triplet {
+    return Sequence.new([
       this.publicExponent,
       this.modulus
     ])
@@ -38,8 +38,8 @@ export class RsaPublicKey {
   }
 
   static fromObject(object: RsaPublicKeyObject) {
-    const publicExponent = new Integer(object.publicExponent)
-    const modulus = new Integer(object.modulus)
+    const publicExponent = Integer.new(object.publicExponent)
+    const modulus = Integer.new(object.modulus)
     return new this(publicExponent, modulus)
   }
 

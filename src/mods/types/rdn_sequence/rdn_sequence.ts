@@ -18,8 +18,8 @@ export class RDNSequence {
     return new this(x501.replaceAll(UNESCAPED_COMMA_REGEX, ([c]) => `${c},,`).split(",,").reverse().map(it => RelativeDistinguishedName.fromX501(it)))
   }
 
-  toASN1() {
-    return new Sequence(this.triplets.map(it => it.toASN1()))
+  toASN1(): Triplet {
+    return Sequence.new(this.triplets.map(it => it.toASN1()))
   }
 
   static fromASN1(triplet: Triplet) {
