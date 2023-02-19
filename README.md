@@ -1,9 +1,6 @@
 <div align="center">
-<img width="500" src="https://user-images.githubusercontent.com/4405263/207936451-2c8ed697-0319-4c59-b90e-34b7cd447b60.png" />
+<img  src="https://user-images.githubusercontent.com/4405263/219945066-a2adbe64-f75e-4317-bb22-91a8457181fa.png" />
 </div>
-<h3 align="center">
-Zero-copy X.509 certificates for the web 🏎️
-</h3>
 
 ```bash
 npm i @hazae41/x509
@@ -11,12 +8,14 @@ npm i @hazae41/x509
 
 [**Node Package 📦**](https://www.npmjs.com/package/@hazae41/x509)
 
-### DO NOT USE
+## DO NOT USE
 
 This is experimental software in early development
 
 1. It has security issues
 2. Things change quickly
+
+## Features
 
 ### Current features
 - 100% TypeScript and ESM
@@ -30,7 +29,7 @@ This is experimental software in early development
 ### [Upcoming features](https://github.com/sponsors/hazae41)
 - X.509 extensions (v3)
 
-### Usage
+## Usage
 
 ```typescript
 import { DER } from "@hazae41/asn1";
