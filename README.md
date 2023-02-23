@@ -32,10 +32,16 @@ This is experimental software in early development
 ## Usage
 
 ```typescript
-import { DER } from "@hazae41/asn1";
 import { PEM, Certificate } from "@hazae41/x509";
 
 const bytes = PEM.parse(await readFile("./cert.pem", "utf8"))
+const cert = Certificate.fromBytes(bytes)
+```
+
+```typescript
+import { Certificate } from "@hazae41/x509";
+
+const bytes = await readFile("./cert.der", "utf8")
 const cert = Certificate.fromBytes(bytes)
 ```
 
