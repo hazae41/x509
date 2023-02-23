@@ -5,6 +5,7 @@ export interface Readable<T> {
 }
 
 export class ASN1Reader {
+
   offset = 0
 
   constructor(
