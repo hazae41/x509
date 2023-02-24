@@ -1,5 +1,5 @@
 import { Set, Triplet } from "@hazae41/asn1";
-import { ASN1Reader } from "libs/reader/reader.js";
+import { ASN1Cursor } from "libs/asn1/cursor.js";
 import { AttributeTypeAndValue } from "mods/types/attribute_type_and_value/attribute_type_and_value.js";
 
 const UNESCAPED_PLUS_REGEX = /[^\\]\+/g
@@ -23,12 +23,12 @@ export class RelativeDistinguishedName {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = ASN1Reader.from(triplet, Set)
+    const cursor = ASN1Cursor.fromAs(triplet, Set)
 
-    const triplets = new Array<AttributeTypeAndValue>(reader.triplets.length)
+    const triplets = new Array<AttributeTypeAndValue>(cursor.triplets.length)
 
     for (let i = 0; i < triplets.length; i++)
-      triplets[i] = reader.readType(AttributeTypeAndValue)
+      triplets[i] = cursor.readAndConvert(AttributeTypeAndValue)
 
     return new this(triplets)
   }

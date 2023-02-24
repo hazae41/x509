@@ -1,5 +1,5 @@
 import { DER, Integer, Sequence, Triplet } from "@hazae41/asn1";
-import { ASN1Reader } from "libs/reader/reader.js";
+import { ASN1Cursor } from "libs/asn1/cursor.js";
 import { OIDs } from "mods/oids/oids.js";
 
 export interface RsaPublicKeyObject {
@@ -24,9 +24,9 @@ export class RsaPublicKey {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = ASN1Reader.from(triplet, Sequence)
-    const publicExponent = reader.readClass(Integer)
-    const modulus = reader.readClass(Integer)
+    const cursor = ASN1Cursor.fromAs(triplet, Sequence)
+    const publicExponent = cursor.readAs(Integer)
+    const modulus = cursor.readAs(Integer)
 
     return new this(publicExponent, modulus)
   }

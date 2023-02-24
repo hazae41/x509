@@ -1,5 +1,5 @@
 import { ObjectIdentifier, Sequence, Triplet } from "@hazae41/asn1"
-import { ASN1Reader } from "libs/reader/reader.js"
+import { ASN1Cursor } from "libs/asn1/cursor.js"
 
 export class AlgorithmIdentifier {
   readonly #class = AlgorithmIdentifier
@@ -18,9 +18,9 @@ export class AlgorithmIdentifier {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = ASN1Reader.from(triplet, Sequence)
-    const algorithm = reader.readClass(ObjectIdentifier)
-    const parameters = reader.tryReadTriplet()
+    const cursor = ASN1Cursor.fromAs(triplet, Sequence)
+    const algorithm = cursor.readAs(ObjectIdentifier)
+    const parameters = cursor.tryRead()
 
     return new this(algorithm, parameters)
   }

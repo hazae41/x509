@@ -1,5 +1,5 @@
 import { Sequence, Triplet } from "@hazae41/asn1";
-import { ASN1Reader } from "libs/reader/reader.js";
+import { ASN1Cursor } from "libs/asn1/cursor.js";
 import { RelativeDistinguishedName } from "mods/types/relative_distinguished_name/relative_distinguished_name.js";
 
 const UNESCAPED_COMMA_REGEX = /[^\\],/g
@@ -23,12 +23,12 @@ export class RDNSequence {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = ASN1Reader.from(triplet, Sequence)
+    const cursor = ASN1Cursor.fromAs(triplet, Sequence)
 
-    const triplets = new Array<RelativeDistinguishedName>(reader.triplets.length)
+    const triplets = new Array<RelativeDistinguishedName>(cursor.triplets.length)
 
     for (let i = 0; i < triplets.length; i++)
-      triplets[i] = reader.readType(RelativeDistinguishedName)
+      triplets[i] = cursor.readAndConvert(RelativeDistinguishedName)
 
     return new this(triplets)
   }

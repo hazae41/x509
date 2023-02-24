@@ -1,5 +1,5 @@
 import { BitString, DER, Sequence, Triplet } from "@hazae41/asn1";
-import { ASN1Reader } from "libs/reader/reader.js";
+import { ASN1Cursor } from "libs/asn1/cursor.js";
 import { RsaPublicKey } from "mods/keys/rsa/public.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 
@@ -26,9 +26,9 @@ export class SubjectPublicKeyInfo {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = ASN1Reader.from(triplet, Sequence)
-    const algorithm = reader.readType(AlgorithmIdentifier)
-    const subjectPublicKey = reader.readClass(BitString)
+    const cursor = ASN1Cursor.fromAs(triplet, Sequence)
+    const algorithm = cursor.readAndConvert(AlgorithmIdentifier)
+    const subjectPublicKey = cursor.readAs(BitString)
 
     return new this(algorithm, subjectPublicKey)
   }

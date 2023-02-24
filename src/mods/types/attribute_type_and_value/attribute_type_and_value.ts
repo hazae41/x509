@@ -1,6 +1,6 @@
 import { DER, ObjectIdentifier, Sequence, Triplet, UTF8String } from "@hazae41/asn1";
 import { Bytes } from "@hazae41/bytes";
-import { ASN1Reader } from "libs/reader/reader.js";
+import { ASN1Cursor } from "libs/asn1/cursor.js";
 import { AttributeType } from "mods/types/attribute_type/attribute_type.js";
 import { AttributeValue } from "mods/types/attribute_value/attribute_value.js";
 import { DirectoryString } from "mods/types/directory_string/directory_string.js";
@@ -58,9 +58,9 @@ export class AttributeTypeAndValue {
   }
 
   static fromASN1(triplet: Triplet) {
-    const reader = ASN1Reader.from(triplet, Sequence)
-    const type = new AttributeType(reader.readClass(ObjectIdentifier))
-    const value = new AttributeValue(reader.readTriplet())
+    const cursor = ASN1Cursor.fromAs(triplet, Sequence)
+    const type = new AttributeType(cursor.readAs(ObjectIdentifier))
+    const value = new AttributeValue(cursor.read())
 
     return new this(type, value)
   }
