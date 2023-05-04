@@ -1,13 +1,6 @@
-import { IA5String, PrintableString, Triplet, UTF8String } from "@hazae41/asn1"
+import { PrintableString, Triplet, UTF8String } from "@hazae41/asn1"
 import { Bytes } from "@hazae41/bytes"
-
-export type DirectoryStringInner =
-  InstanceType<DirectoryStringInnerType>
-
-export type DirectoryStringInnerType =
-  | typeof UTF8String
-  | typeof PrintableString
-  | typeof IA5String
+import { Err, Ok, Result } from "@hazae41/result"
 
 function escape(match: string) {
   const hex = Bytes.toHex(Bytes.fromUtf8(match))
@@ -19,24 +12,37 @@ function unescape(match: string) {
   return Bytes.toUtf8(Bytes.fromHex(hex))
 }
 
-export class DirectoryString {
+export type DirectoryStringType =
+  | UTF8String
+  | PrintableString
+// | BMPString
+// | TeletexString
+// |UniversalString
+
+export interface Creator<T> {
+  create(value: string): T
+}
+
+export class DirectoryString<T extends DirectoryStringType = DirectoryStringType> {
 
   constructor(
-    readonly inner: DirectoryStringInner
+    readonly inner: T
   ) { }
 
-  toASN1(): Triplet {
+  toASN1(): T {
     return this.inner
   }
 
-  static fromASN1(triplet: Triplet) {
+  static fromASN1<T extends DirectoryStringType>(inner: T) {
+    return new DirectoryString(inner)
+  }
+
+  static tryRead(triplet: Triplet): Result<DirectoryString, Error> {
     if (triplet instanceof UTF8String)
-      return new this(triplet)
+      return new Ok(new DirectoryString(triplet))
     if (triplet instanceof PrintableString)
-      return new this(triplet)
-    if (triplet instanceof IA5String)
-      return new this(triplet)
-    throw new Error(`Cannot convert ${triplet} to a DirectoryString`)
+      return new Ok(new DirectoryString(triplet))
+    return new Err(new Error(`Cannot convert ${triplet} to a DirectoryString`))
   }
 
   toX501() {
@@ -61,8 +67,8 @@ export class DirectoryString {
     return x501
   }
 
-  static fromX501<C extends DirectoryStringInnerType>(x501: string, clazz: C) {
-    let value = x501
+  static fromX501<T extends DirectoryStringType>(x501: string, creator: Creator<T>) {
+    const value = x501
       .replaceAll("\\ ", " ")
       .replaceAll("\\\"", "\"")
       .replaceAll("\\#", "#")
@@ -75,8 +81,8 @@ export class DirectoryString {
       .replaceAll("\\\\", "\\")
       .replaceAll(/(\\[0-9A-Fa-f]{2})+/g, unescape)
 
-    const inner = clazz.new(value)
+    const inner = creator.create(value)
 
-    return new this(inner)
+    return new DirectoryString(inner)
   }
 }

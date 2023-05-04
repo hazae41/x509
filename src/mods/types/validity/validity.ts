@@ -1,9 +1,15 @@
 import { Sequence, Triplet, UTCTime } from "@hazae41/asn1";
+import { Ok, Result } from "@hazae41/result";
 import { ASN1Cursor } from "libs/asn1/cursor.js";
 
 export type Time =
   | UTCTime
 // | GeneralizedTime
+
+export interface ValidityJSON {
+  notBefore: string,
+  notAfter: string
+}
 
 export class Validity {
 
@@ -24,15 +30,38 @@ export class Validity {
     return new this(notBefore2, notAfter2)
   }
 
-  toASN1(): Triplet {
-    return Sequence.new([this.notBefore, this.notAfter])
+  toASN1() {
+    return Sequence.new([this.notBefore, this.notAfter] as const)
   }
 
-  static fromASN1(triplet: Triplet) {
-    const cursor = ASN1Cursor.fromAs(triplet, Sequence)
-    const notBefore = cursor.readAs(UTCTime)
-    const notAfter = cursor.readAs(UTCTime)
+  static fromASN1(sequence: Sequence<[Time, Time]>) {
+    const [notBefore, notAfter] = sequence.triplets
 
-    return new this(notBefore, notAfter)
+    return new Validity(notBefore, notAfter)
   }
+
+  toJSON() {
+    const notBefore = this.notBefore.value.toJSON()
+    const notAfter = this.notAfter.value.toJSON()
+
+    return { notBefore, notAfter }
+  }
+
+  static fromJSON(json: ValidityJSON) {
+    const notBefore = UTCTime.new(new Date(json.notBefore))
+    const notAfter = UTCTime.new(new Date(json.notAfter))
+
+    return new Validity(notBefore, notAfter)
+  }
+
+  static tryRead(triplet: Triplet): Result<Validity, Error> {
+    return Result.unthrowSync(() => {
+      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
+      const notBefore = cursor.tryReadAndCast(UTCTime).throw()
+      const notAfter = cursor.tryReadAndCast(UTCTime).throw()
+
+      return new Ok(new Validity(notBefore, notAfter))
+    }, Error)
+  }
+
 }

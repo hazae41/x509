@@ -18,7 +18,7 @@ export class TBSCertificateVersion {
   }
 
   static fromASN1(triplet: Triplet) {
-    const cursor = ASN1Cursor.fromAsTyped(triplet, Constructed, this.type)
+    const cursor = ASN1Cursor.tryTypedCastAndFrom(triplet, Constructed, this.type)
     const value = cursor.readAs(Integer)
 
     return new this(value)

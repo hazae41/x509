@@ -23,7 +23,7 @@ export class RelativeDistinguishedName {
   }
 
   static fromASN1(triplet: Triplet) {
-    const cursor = ASN1Cursor.fromAs(triplet, Set)
+    const cursor = ASN1Cursor.tryCastAndFrom(triplet, Set)
 
     const triplets = new Array<AttributeTypeAndValue>(cursor.triplets.length)
 

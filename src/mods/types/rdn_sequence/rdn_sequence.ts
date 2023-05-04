@@ -23,7 +23,7 @@ export class RDNSequence {
   }
 
   static fromASN1(triplet: Triplet) {
-    const cursor = ASN1Cursor.fromAs(triplet, Sequence)
+    const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence)
 
     const triplets = new Array<RelativeDistinguishedName>(cursor.triplets.length)
 

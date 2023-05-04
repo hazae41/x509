@@ -1,102 +1,87 @@
 import { Triplet, Type } from "@hazae41/asn1"
-
-type Class<T> = new (...params: any[]) => T
-
-export interface ASN1Readable<T> {
-  fromASN1(triplet: Triplet): T
-}
-
-export interface ASN1Typed {
-  type: Type
-}
+import { Err, Ok, Result } from "@hazae41/result"
+import { Class } from "libs/reflection/reflection.js"
 
 export interface ANS1Holder {
   triplets: Triplet[]
 }
 
-export class ASN1Cursor {
+export interface ASN1Readable<T> {
+  tryRead(triplet: Triplet): Result<T, Error>
+}
+
+export class ASN1CastError extends Error {
+  readonly #class = ASN1CastError
+
+  constructor() {
+    super(`ASN1Cursor cast failed`)
+  }
+}
+
+export class ASN1ReadOverflowError extends Error {
+  readonly #class = ASN1ReadOverflowError
+
+  constructor() {
+    super(`ASN1Cursor read overflow`)
+  }
+}
+
+export class ASN1Cursor<T extends ANS1Holder> {
 
   offset = 0
 
   constructor(
-    readonly triplets: Triplet[]
+    readonly inner: T
   ) { }
 
-  static from(holder: ANS1Holder) {
-    return new this(holder.triplets)
+  static new<T extends ANS1Holder>(inner: T) {
+    return new this(inner)
   }
 
-  static fromAs<C extends Class<ANS1Holder>>(holder: unknown, clazz: C) {
-    if (!(holder instanceof clazz))
-      throw new Error(`Expected class ${clazz.name}`)
+  static tryCastAndFrom<T extends ANS1Holder>(holder: Triplet, clazz: Class<T>, type?: Type): Result<ASN1Cursor<T>, ASN1CastError> {
+    if (holder instanceof clazz)
+      if (type === undefined || holder.type.equals(type))
+        return new Ok(new this(holder))
 
-    return this.from(holder)
-  }
-
-  static fromAsTyped<C extends Class<ANS1Holder & ASN1Typed>>(holder: unknown, clazz: C, type: Type) {
-    if (!(holder instanceof clazz))
-      throw new Error(`Expected class ${clazz.name}`)
-
-    if (!holder.type.equals(type))
-      throw new Error(`Expected type ${type.toDER().byte}`)
-
-    return this.from(holder)
+    return new Err(new ASN1CastError())
   }
 
   get before() {
-    return this.triplets.slice(0, this.offset)
+    return this.inner.triplets.slice(0, this.offset)
   }
 
   get after() {
-    return this.triplets.slice(this.offset)
+    return this.inner.triplets.slice(this.offset)
   }
 
-  get() {
-    const triplet = this.triplets.at(this.offset)
+  tryGet(): Result<Triplet, ASN1ReadOverflowError> {
+    const triplet = this.inner.triplets.at(this.offset)
 
     if (triplet === undefined)
-      throw new Error(`Expected triplet but got undefined`)
+      return new Err(new ASN1ReadOverflowError())
 
-    return triplet
+    return new Ok(triplet)
   }
 
-  read() {
-    const triplet = this.get()
-    this.offset++
-    return triplet
+  tryRead(): Result<Triplet, ASN1ReadOverflowError> {
+    return this.tryGet().inspectSync(() => this.offset++)
   }
 
-  tryRead() {
-    const offset = this.offset
-
-    try {
-      return this.read()
-    } catch (e: unknown) {
-      this.offset = offset
-    }
+  tryReadAndConvert<T>(readable: ASN1Readable<T>): Result<T, Error> {
+    return this.tryRead().andThenSync(triplet => readable.tryRead(triplet))
   }
 
-  readAs<T, C extends Class<T>>(...clazzes: C[]) {
-    const triplet = this.read()
+  tryReadAndCast<T>(...clazzes: Class<T>[]): Result<T, ASN1ReadOverflowError | ASN1CastError> {
+    const triplet = this.tryRead()
+
+    if (triplet.isErr())
+      return triplet
 
     for (const clazz of clazzes)
       if (triplet instanceof clazz)
-        return triplet as InstanceType<C>
+        return new Ok(triplet as T)
 
-    throw new Error(`Expected class ${clazzes.map(it => it.name).join(" or ")}`)
+    return new Err(new ASN1CastError())
   }
 
-  readAndConvert<T>(readable: ASN1Readable<T>) {
-    return readable.fromASN1(this.read())
-  }
-
-  tryReadAndConvert<T>(readable: ASN1Readable<T>) {
-    const offset = this.offset
-
-    try {
-      return this.readAndConvert(readable)
-    } catch (e: unknown) {
-      this.offset = offset
-    }
-  }
 }

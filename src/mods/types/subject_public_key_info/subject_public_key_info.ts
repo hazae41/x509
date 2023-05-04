@@ -26,7 +26,7 @@ export class SubjectPublicKeyInfo {
   }
 
   static fromASN1(triplet: Triplet) {
-    const cursor = ASN1Cursor.fromAs(triplet, Sequence)
+    const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence)
     const algorithm = cursor.readAndConvert(AlgorithmIdentifier)
     const subjectPublicKey = cursor.readAs(BitString)
 

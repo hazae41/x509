@@ -34,7 +34,7 @@ export class TBSCertificate {
   }
 
   static fromASN1(triplet: Triplet) {
-    const cursor = ASN1Cursor.fromAs(triplet, Sequence)
+    const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence)
     const version = cursor.tryReadAndConvert(TBSCertificateVersion)
     const serialNumber = cursor.readAs(Integer)
     const signature = cursor.readAndConvert(AlgorithmIdentifier)
