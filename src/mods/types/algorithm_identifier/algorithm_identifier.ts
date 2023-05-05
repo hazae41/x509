@@ -16,7 +16,7 @@ export class AlgorithmIdentifier {
       return Sequence.create([this.algorithm] as const)
   }
 
-  fromASN1(sequence: Sequence<[ObjectIdentifier, Triplet] | [ObjectIdentifier]>) {
+  fromASN1(sequence: Sequence<readonly [ObjectIdentifier, Triplet]> | Sequence<readonly [ObjectIdentifier]>) {
     const [algorithm, parameters] = sequence.triplets
 
     return new AlgorithmIdentifier(algorithm, parameters)

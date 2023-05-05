@@ -22,7 +22,7 @@ export class RsaPublicKey {
     return Sequence.create([this.publicExponent, this.modulus] as const)
   }
 
-  static fromASN1(sequence: Sequence<[Integer, Integer]>) {
+  static fromASN1(sequence: Sequence<readonly [Integer, Integer]>) {
     const [publicExponent, modulus] = sequence.triplets
 
     return new RsaPublicKey(publicExponent, modulus)

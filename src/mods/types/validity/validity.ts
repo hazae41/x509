@@ -24,17 +24,17 @@ export class Validity {
 
     notAfter.setDate(notAfter.getDate() + days)
 
-    const notBefore2 = UTCTime.new(notBefore)
-    const notAfter2 = UTCTime.new(notAfter)
+    const notBefore2 = UTCTime.create(notBefore)
+    const notAfter2 = UTCTime.create(notAfter)
 
     return new this(notBefore2, notAfter2)
   }
 
   toASN1() {
-    return Sequence.new([this.notBefore, this.notAfter] as const)
+    return Sequence.create([this.notBefore, this.notAfter] as const)
   }
 
-  static fromASN1(sequence: Sequence<[Time, Time]>) {
+  static fromASN1(sequence: Sequence<readonly [Time, Time]>) {
     const [notBefore, notAfter] = sequence.triplets
 
     return new Validity(notBefore, notAfter)
@@ -48,8 +48,8 @@ export class Validity {
   }
 
   static fromJSON(json: ValidityJSON) {
-    const notBefore = UTCTime.new(new Date(json.notBefore))
-    const notAfter = UTCTime.new(new Date(json.notAfter))
+    const notBefore = UTCTime.create(new Date(json.notBefore))
+    const notAfter = UTCTime.create(new Date(json.notAfter))
 
     return new Validity(notBefore, notAfter)
   }

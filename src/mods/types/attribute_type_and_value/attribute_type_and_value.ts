@@ -69,6 +69,20 @@ export type AttributeTypeAndValue =
 
 export namespace AttributeTypeAndValue {
 
+  export function fromASN1(triplet: Sequence<readonly [ObjectIdentifier, DirectoryStringInner]>) {
+    const [type, value] = triplet.triplets
+
+    const type2 = AttributeType.fromASN1(type)
+
+    if (type2.isKnown()) {
+      const value2 = KnownAttributeValue.fromASN1(value)
+      return new KnownAttributeTypeAndValue(type2, value2)
+    }
+
+    const value2 = UnknownAttributeValue.fromASN1(value)
+    return new UnknownAttributeTypeAndValue(type2, value2)
+  }
+
   export function tryResolveFromASN1(triplet: Triplet): Result<AttributeTypeAndValue, Error> {
     return Result.unthrowSync<AttributeTypeAndValue, Error>(() => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
