@@ -44,7 +44,7 @@ export class RDNSequence {
       const triplets = new Array<RelativeDistinguishedName>(cursor.inner.triplets.length)
 
       for (let i = 0; i < triplets.length; i++)
-        triplets[i] = cursor.tryReadAndConvert(RelativeDistinguishedName).throw()
+        triplets[i] = cursor.tryReadAndResolve(RelativeDistinguishedName).throw()
 
       return new Ok(new this(triplets))
     }, Error)

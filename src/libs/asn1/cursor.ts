@@ -67,7 +67,7 @@ export class ASN1Cursor<T extends ANS1Holder> {
     return this.tryGet().inspectSync(() => this.offset++)
   }
 
-  tryReadAndConvert<T>(readable: ASN1Resolvable<T>): Result<T, Error> {
+  tryReadAndResolve<T>(readable: ASN1Resolvable<T>): Result<T, Error> {
     return this.tryRead().andThenSync(triplet => readable.tryResolveFromASN1(triplet))
   }
 

@@ -91,13 +91,13 @@ export namespace AttributeTypeAndValue {
       const type = AttributeType.fromASN1(oid)
 
       if (type.isKnown()) {
-        const string = cursor.tryReadAndConvert(DirectoryString).throw()
+        const string = cursor.tryReadAndResolve(DirectoryString).throw()
         const value = new KnownAttributeValue(string)
 
         return new Ok(new KnownAttributeTypeAndValue(type, value))
       }
 
-      const string = cursor.tryReadAndConvert(DirectoryString).throw()
+      const string = cursor.tryReadAndResolve(DirectoryString).throw()
       const value = new UnknownAttributeValue(string)
 
       return new Ok(new UnknownAttributeTypeAndValue(type, value))

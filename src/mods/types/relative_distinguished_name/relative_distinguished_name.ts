@@ -43,7 +43,7 @@ export class RelativeDistinguishedName {
       const triplets = new Array<AttributeTypeAndValue>(cursor.inner.triplets.length)
 
       for (let i = 0; i < triplets.length; i++)
-        triplets[i] = cursor.tryReadAndConvert(AttributeTypeAndValue).throw()
+        triplets[i] = cursor.tryReadAndResolve(AttributeTypeAndValue).throw()
 
       return new Ok(new this(triplets))
     }, Error)

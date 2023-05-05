@@ -1,4 +1,5 @@
 import { Constructed, Integer, Triplet, Type } from "@hazae41/asn1";
+import { Ok, Result } from "@hazae41/result";
 import { ASN1Cursor } from "libs/asn1/cursor.js";
 
 export class TBSCertificateVersion {
@@ -10,18 +11,17 @@ export class TBSCertificateVersion {
     0)
 
   constructor(
-    readonly value = Integer.new(BigInt(1))
+    readonly value = Integer.create(BigInt(1))
   ) { }
 
-  toASN1(): Triplet {
-    return new Constructed(this.#class.type, [this.value])
+  toASN1(): Constructed<readonly [Integer]> {
+    return new Constructed(this.#class.type, [this.value] as const)
   }
 
-  static fromASN1(triplet: Triplet) {
-    const cursor = ASN1Cursor.tryTypedCastAndFrom(triplet, Constructed, this.type)
-    const value = cursor.readAs(Integer)
+  static fromASN1(triplet: Constructed<readonly [Integer]>) {
+    const [version] = triplet.triplets
 
-    return new this(value)
+    return new this(version)
   }
 
   toNumber() {
@@ -29,6 +29,16 @@ export class TBSCertificateVersion {
   }
 
   static fromNumber(value: number) {
-    return new this(Integer.new(BigInt(value)))
+    return new this(Integer.create(BigInt(value)))
   }
+
+  static tryResolveFromASN1(triplet: Triplet): Result<TBSCertificateVersion, Error> {
+    return Result.unthrowSync(() => {
+      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Constructed, this.type).throw()
+      const value = cursor.tryReadAndCast(Integer).throw()
+
+      return new Ok(new this(value))
+    }, Error)
+  }
+
 }
