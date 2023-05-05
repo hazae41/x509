@@ -54,7 +54,7 @@ export class Validity {
     return new Validity(notBefore, notAfter)
   }
 
-  static tryRead(triplet: Triplet): Result<Validity, Error> {
+  static tryResolveFromASN1(triplet: Triplet): Result<Validity, Error> {
     return Result.unthrowSync(() => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
       const notBefore = cursor.tryReadAndCast(UTCTime).throw()

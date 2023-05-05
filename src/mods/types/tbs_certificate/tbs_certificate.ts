@@ -1,4 +1,5 @@
-import { DER, Integer, Sequence, Triplet } from "@hazae41/asn1";
+import { Integer, Sequence, Triplet } from "@hazae41/asn1";
+import { Ok, Result } from "@hazae41/result";
 import { ASN1Cursor } from "libs/asn1/cursor.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { Name } from "mods/types/name/name.js";
@@ -20,8 +21,8 @@ export class TBSCertificate {
     readonly rest: Triplet[]
   ) { }
 
-  toASN1(): Triplet {
-    return Sequence.new([
+  toASN1() {
+    return Sequence.create([
       this.version.toASN1(),
       this.serialNumber,
       this.signature.toASN1(),
@@ -30,28 +31,23 @@ export class TBSCertificate {
       this.subject.toASN1(),
       this.subjectPublicKeyInfo.toASN1(),
       ...this.rest
-    ])
+    ] as const)
   }
 
-  static fromASN1(triplet: Triplet) {
-    const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence)
-    const version = cursor.tryReadAndConvert(TBSCertificateVersion)
-    const serialNumber = cursor.readAs(Integer)
-    const signature = cursor.readAndConvert(AlgorithmIdentifier)
-    const issuer = cursor.readAndConvert(Name)
-    const validity = cursor.readAndConvert(Validity)
-    const subject = cursor.readAndConvert(Name)
-    const subjectPublicKeyInfo = cursor.readAndConvert(SubjectPublicKeyInfo)
-    const rest = cursor.after
+  static tryResolveFromASN1(triplet: Triplet) {
+    return Result.unthrowSync(() => {
+      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
+      const version = cursor.tryReadAndResolve(TBSCertificateVersion).ok().inner
+      const serialNumber = cursor.tryReadAndCast(Integer).throw()
+      const signature = cursor.tryReadAndResolve(AlgorithmIdentifier).throw()
+      const issuer = cursor.tryReadAndResolve(Name).throw()
+      const validity = cursor.tryReadAndResolve(Validity).throw()
+      const subject = cursor.tryReadAndResolve(Name).throw()
+      const subjectPublicKeyInfo = cursor.tryReadAndResolve(SubjectPublicKeyInfo).throw()
+      const rest = cursor.after
 
-    return new this(version, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, rest)
+      return new Ok(new this(version, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, rest))
+    }, Error)
   }
 
-  toBytes() {
-    return DER.toBytes(this.toASN1())
-  }
-
-  static fromBytes(bytes: Uint8Array) {
-    return this.fromASN1(DER.fromBytes(bytes))
-  }
 }
