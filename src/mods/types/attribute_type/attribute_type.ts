@@ -1,8 +1,9 @@
-import { ObjectIdentifier } from "@hazae41/asn1";
+import { OID, ObjectIdentifier } from "@hazae41/asn1";
+import { Ok, Result } from "@hazae41/result";
 import { invert } from "libs/invert/invert.js";
 import { OIDs } from "mods/oids/oids.js";
 
-export namespace AttributeTypeShortNames {
+export namespace KnownAttributeTypes {
   export type Key = keyof typeof keys
   export type Value = keyof typeof values
 
@@ -32,7 +33,7 @@ export namespace AttributeTypeShortNames {
 export class KnownAttributeType {
 
   constructor(
-    readonly inner: ObjectIdentifier<AttributeTypeShortNames.Key>
+    readonly inner: ObjectIdentifier<KnownAttributeTypes.Key>
   ) { }
 
   isKnown(): this is KnownAttributeType {
@@ -43,33 +44,19 @@ export class KnownAttributeType {
     return this.inner
   }
 
-  static fromASN1(triplet: ObjectIdentifier<AttributeTypeShortNames.Key>) {
+  static fromASN1(triplet: ObjectIdentifier<KnownAttributeTypes.Key>) {
     return new KnownAttributeType(triplet)
   }
 
-  toOID() {
-    return this.toASN1().value
+  toX501(): string {
+    return KnownAttributeTypes.keys[this.inner.value.inner]
   }
 
-  static fromOID(oid: AttributeTypeShortNames.Key) {
-    const inner = ObjectIdentifier.create(oid)
-
-    return KnownAttributeType.fromASN1(inner)
-  }
-
-  toShortName(): AttributeTypeShortNames.Value {
-    return AttributeTypeShortNames.keys[this.toASN1().value]
-  }
-
-  static fromShortName(name: AttributeTypeShortNames.Value) {
-    const key = AttributeTypeShortNames.values[name]
-    const inner = ObjectIdentifier.create(key)
+  static fromX501(name: KnownAttributeTypes.Value) {
+    const key = KnownAttributeTypes.values[name]
+    const inner = ObjectIdentifier.create(OID.new(key))
 
     return new KnownAttributeType(inner)
-  }
-
-  toX501(): string {
-    return this.toShortName()
   }
 
 }
@@ -93,7 +80,7 @@ export class UnknownAttributeType {
   }
 
   toX501(): string {
-    return this.toASN1().value
+    return this.toASN1().value.inner
   }
 
 }
@@ -102,24 +89,29 @@ export type AttributeType =
   | KnownAttributeType
   | UnknownAttributeType
 
+function isKnownOID(triplet: ObjectIdentifier): triplet is ObjectIdentifier<KnownAttributeTypes.Key> {
+  return KnownAttributeTypes.isKey(triplet.value.inner)
+}
+
 export namespace AttributeType {
 
   export function fromASN1(triplet: ObjectIdentifier) {
-    if (AttributeTypeShortNames.isKey(triplet.value))
-      return KnownAttributeType.fromASN1(triplet as ObjectIdentifier<AttributeTypeShortNames.Key>)
-    return UnknownAttributeType.fromASN1(triplet)
+    if (isKnownOID(triplet))
+      return KnownAttributeType.fromASN1(triplet)
+    else
+      return UnknownAttributeType.fromASN1(triplet)
   }
 
-  export function fromX501(x501: string) {
-    if (AttributeTypeShortNames.isKey(x501))
-      return KnownAttributeType.fromOID(x501)
-    if (AttributeTypeShortNames.isValue(x501))
-      return KnownAttributeType.fromShortName(x501)
+  export function tryFromX501(x501: string): Result<AttributeType, Error> {
+    return Result.unthrowSync<AttributeType, Error>(() => {
+      if (KnownAttributeTypes.isValue(x501))
+        return new Ok(KnownAttributeType.fromX501(x501))
 
-    // TODO: check if isOID
+      const oid = OID.tryNew(x501).throw()
+      const inner = ObjectIdentifier.create(oid)
 
-    const inner = ObjectIdentifier.create(x501)
-    return new UnknownAttributeType(inner)
+      return new Ok(new UnknownAttributeType(inner))
+    }, Error)
   }
 
 }

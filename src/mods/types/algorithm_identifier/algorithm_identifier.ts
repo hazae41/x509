@@ -22,7 +22,7 @@ export class AlgorithmIdentifier {
     return new AlgorithmIdentifier(algorithm, parameters)
   }
 
-  static tryRead(triplet: Triplet): Result<AlgorithmIdentifier, Error> {
+  static tryResolveFromASN1(triplet: Triplet): Result<AlgorithmIdentifier, Error> {
     return Result.unthrowSync(() => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
       const algorithm = cursor.tryReadAndCast(ObjectIdentifier).throw()

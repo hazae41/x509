@@ -1,9 +1,115 @@
-import { DirectoryString } from "mods/types/directory_string/directory_string.js";
+import { DER } from "@hazae41/asn1";
+import { Bytes } from "@hazae41/bytes";
+import { Err, Ok, Result } from "@hazae41/result";
+import { DirectoryString, DirectoryStringInner } from "mods/types/directory_string/directory_string.js";
 
-export class AttributeValue<T extends DirectoryString = DirectoryString> {
+function escape(match: string) {
+  const hex = Bytes.toHex(Bytes.fromUtf8(match))
+  return hex.replaceAll(/../g, m => "\\" + m)
+}
+
+function unescape(match: string) {
+  const hex = match.replaceAll("\\", "")
+  return Bytes.toUtf8(Bytes.fromHex(hex))
+}
+
+export interface StringCreator<T> {
+  create(value: string): T
+}
+
+export class KnownAttributeValue {
 
   constructor(
-    readonly inner: T
+    readonly inner: DirectoryString
   ) { }
 
+  toASN1() {
+    return this.inner.inner
+  }
+
+  static fromASN1(inner: DirectoryStringInner) {
+    return new KnownAttributeValue(DirectoryString.fromASN1(inner))
+  }
+
+  toX501() {
+    let x501 = this.inner.inner.value
+      .replaceAll("\\", "\\\\")
+      .replaceAll("\"", "\\\"")
+      .replaceAll("#", "\\#")
+      .replaceAll("+", "\\+")
+      .replaceAll(",", "\\,")
+      .replaceAll(";", "\\;")
+      .replaceAll("<", "\\<")
+      .replaceAll("=", "\\=")
+      .replaceAll(">", "\\>")
+      .replaceAll(/[\p{Cc}\p{Cn}\p{Cs}]+/gu, escape)
+
+    if (x501.startsWith(" "))
+      x501 = "\\ " + x501.slice(1)
+
+    if (x501.endsWith(" "))
+      x501 = x501.slice(0, -1) + "\\ "
+
+    return x501
+  }
+
+  static fromX501<T extends DirectoryStringInner>(x501: string, creator: StringCreator<T>) {
+    const value = x501
+      .replaceAll("\\ ", " ")
+      .replaceAll("\\\"", "\"")
+      .replaceAll("\\#", "#")
+      .replaceAll("\\+", "+")
+      .replaceAll("\\,", ",")
+      .replaceAll("\\;", ";")
+      .replaceAll("\\<", "<")
+      .replaceAll("\\=", "=")
+      .replaceAll("\\>", ">")
+      .replaceAll("\\\\", "\\")
+      .replaceAll(/(\\[0-9A-Fa-f]{2})+/g, unescape)
+
+    const inner = creator.create(value)
+    const string = new DirectoryString(inner)
+
+    return new KnownAttributeValue(string)
+  }
+
 }
+
+export class UnknownAttributeValue {
+
+  constructor(
+    readonly inner: DirectoryString
+  ) { }
+
+  toASN1() {
+    return this.inner.inner
+  }
+
+  static fromASN1(inner: DirectoryStringInner) {
+    return new this(DirectoryString.fromASN1(inner))
+  }
+
+  tryToX501(): Result<string, Error> {
+    return DER.tryWriteToBytes(this.inner.inner).mapSync(bytes => `#${Bytes.toHex(bytes)}`)
+  }
+
+  static tryFromX501(hex: string): Result<UnknownAttributeValue, Error> {
+    return Result.unthrowSync(() => {
+      if (!hex.startsWith("#"))
+        return Err.error(`AttributeValue not preceded by hash`)
+
+      const bytes = Bytes.fromHex(hex.slice(1))
+      const triplet = DER.tryReadFromBytes(bytes).throw()
+      const inner = DirectoryString.tryResolveFromASN1(triplet).throw()
+
+      return new Ok(new UnknownAttributeValue(inner))
+    }, Error)
+  }
+
+}
+
+export type AttributeValue =
+  | KnownAttributeValue
+  | UnknownAttributeValue
+
+export namespace AttributeValue { }
