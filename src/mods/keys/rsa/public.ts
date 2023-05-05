@@ -42,7 +42,7 @@ export class RsaPublicKey {
     return new this(publicExponent, modulus)
   }
 
-  static tryRead(triplet: Triplet): Result<RsaPublicKey, Error> {
+  static tryResolveFromASN1(triplet: Triplet): Result<RsaPublicKey, Error> {
     return Result.unthrowSync(() => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
       const publicExponent = cursor.tryReadAndCast(Integer).throw()
