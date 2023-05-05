@@ -9,17 +9,11 @@ export class AlgorithmIdentifier {
     readonly parameters?: Triplet
   ) { }
 
-  toASN1() {
+  toASN1(): Triplet {
     if (this.parameters)
       return Sequence.create([this.algorithm, this.parameters] as const)
     else
       return Sequence.create([this.algorithm] as const)
-  }
-
-  static fromASN1(sequence: Sequence<readonly [ObjectIdentifier, Triplet]> | Sequence<readonly [ObjectIdentifier]>) {
-    const [algorithm, parameters] = sequence.triplets
-
-    return new AlgorithmIdentifier(algorithm, parameters)
   }
 
   static tryResolveFromASN1(triplet: Triplet): Result<AlgorithmIdentifier, Error> {

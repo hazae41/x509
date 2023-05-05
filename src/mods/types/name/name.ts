@@ -1,7 +1,6 @@
-import { ObjectIdentifier, Sequence, Set, Triplet } from "@hazae41/asn1";
+import { Triplet } from "@hazae41/asn1";
 import { Result } from "@hazae41/result";
 import { RDNSequence } from "mods/types/rdn_sequence/rdn_sequence.js";
-import { DirectoryStringInner } from "../index.js";
 
 export class Name {
 
@@ -9,12 +8,8 @@ export class Name {
     readonly inner: RDNSequence
   ) { }
 
-  toASN1(): Sequence<Set<Sequence<readonly [ObjectIdentifier, DirectoryStringInner]>[]>[]> {
+  toASN1(): Triplet {
     return this.inner.toASN1()
-  }
-
-  static fromASN1(triplet: Sequence<Set<Sequence<readonly [ObjectIdentifier, DirectoryStringInner]>[]>[]>) {
-    return new this(RDNSequence.fromASN1(triplet))
   }
 
   tryToX501(): Result<string, Error> {

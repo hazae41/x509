@@ -1,8 +1,7 @@
-import { ObjectIdentifier, Sequence, Set, Triplet } from "@hazae41/asn1";
+import { Set, Triplet } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
 import { ASN1Cursor } from "libs/asn1/cursor.js";
 import { AttributeTypeAndValue } from "mods/types/attribute_type_and_value/attribute_type_and_value.js";
-import { DirectoryStringInner } from "../index.js";
 
 const UNESCAPED_PLUS_REGEX = /[^\\]\+/g
 
@@ -12,12 +11,8 @@ export class RelativeDistinguishedName {
     readonly triplets: AttributeTypeAndValue[]
   ) { }
 
-  toASN1(): Set<Sequence<readonly [ObjectIdentifier<string>, DirectoryStringInner]>[]> {
+  toASN1(): Triplet {
     return Set.create(this.triplets.map(it => it.toASN1()))
-  }
-
-  static fromASN1(triplet: Set<Sequence<readonly [ObjectIdentifier, DirectoryStringInner]>[]>) {
-    return new this(triplet.triplets.map(triplet => AttributeTypeAndValue.fromASN1(triplet)))
   }
 
   tryToX501(): Result<string, Error> {

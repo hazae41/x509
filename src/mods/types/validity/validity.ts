@@ -30,14 +30,8 @@ export class Validity {
     return new this(notBefore2, notAfter2)
   }
 
-  toASN1() {
+  toASN1(): Triplet {
     return Sequence.create([this.notBefore, this.notAfter] as const)
-  }
-
-  static fromASN1(sequence: Sequence<readonly [Time, Time]>) {
-    const [notBefore, notAfter] = sequence.triplets
-
-    return new Validity(notBefore, notAfter)
   }
 
   toJSON() {

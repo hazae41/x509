@@ -1,4 +1,4 @@
-import { BitString, ObjectIdentifier, Sequence, Triplet } from "@hazae41/asn1";
+import { BitString, Sequence, Triplet } from "@hazae41/asn1";
 import { Err, Ok, Result } from "@hazae41/result";
 import { ASN1Cursor } from "libs/asn1/cursor.js";
 import { RsaPublicKey } from "mods/keys/rsa/public.js";
@@ -16,18 +16,11 @@ export class SubjectPublicKeyInfo {
     readonly subjectPublicKey: BitString
   ) { }
 
-  toASN1(): Sequence<readonly [Sequence<readonly [ObjectIdentifier, Triplet]> | Sequence<readonly [ObjectIdentifier]>, BitString]> {
+  toASN1(): Triplet {
     return Sequence.create([
       this.algorithm.toASN1(),
       this.subjectPublicKey
     ] as const)
-  }
-
-  static fromASN1(triplet: Sequence<readonly [Sequence<readonly [ObjectIdentifier, Triplet]> | Sequence<readonly [ObjectIdentifier]>, BitString]>) {
-    const [algorithm, subjectPublicKey] = triplet.triplets
-
-    const algorithm2 = AlgorithmIdentifier.fromASN1(algorithm)
-    return new SubjectPublicKeyInfo(algorithm2, subjectPublicKey)
   }
 
   tryReadPublicKey(): Result<SubjectPublicKey, Error> {

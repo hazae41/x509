@@ -18,14 +18,8 @@ export class RsaPublicKey {
     readonly modulus: Integer
   ) { }
 
-  toASN1() {
+  toASN1(): Triplet {
     return Sequence.create([this.publicExponent, this.modulus] as const)
-  }
-
-  static fromASN1(sequence: Sequence<readonly [Integer, Integer]>) {
-    const [publicExponent, modulus] = sequence.triplets
-
-    return new RsaPublicKey(publicExponent, modulus)
   }
 
   toJSON() {

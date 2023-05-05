@@ -1,7 +1,7 @@
 import { ObjectIdentifier, Sequence, Triplet, UTF8String } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
 import { ASN1Cursor } from "libs/asn1/cursor.js";
-import { AttributeType, KnownAttributeType, KnownAttributeTypes, UnknownAttributeType } from "mods/types/attribute_type/attribute_type.js";
+import { AttributeType, KnownAttributeType, UnknownAttributeType } from "mods/types/attribute_type/attribute_type.js";
 import { KnownAttributeValue, UnknownAttributeValue } from "mods/types/attribute_value/attribute_value.js";
 import { DirectoryString, DirectoryStringInner } from "mods/types/directory_string/directory_string.js";
 
@@ -16,49 +16,30 @@ export class KnownAttributeTypeAndValue {
     return new Ok(`${this.type.toX501()}=${this.value.toX501()}`)
   }
 
-  toASN1(): Sequence<readonly [ObjectIdentifier<KnownAttributeTypes.Key>, DirectoryStringInner]> {
+  toASN1(): Triplet {
     return Sequence.create([
       this.type.inner,
       this.value.inner.toASN1()
     ] as const)
   }
-
-  static fromASN1(triplet: Sequence<readonly [ObjectIdentifier<KnownAttributeTypes.Key>, DirectoryStringInner]>) {
-    const [type, value] = triplet.triplets
-
-    const type2 = KnownAttributeType.fromASN1(type)
-    const value2 = KnownAttributeValue.fromASN1(value)
-
-    return new KnownAttributeTypeAndValue(type2, value2)
-  }
-
 }
 
-export class UnknownAttributeTypeAndValue {
+export class UnknownAttributeTypeAndValue<T extends Triplet = Triplet> {
 
   constructor(
     readonly type: UnknownAttributeType,
-    readonly value: UnknownAttributeValue
+    readonly value: UnknownAttributeValue<T>
   ) { }
 
   tryToX501(): Result<string, Error> {
     return this.value.tryToX501().mapSync(value => `${this.type.toX501()}=${value}`)
   }
 
-  toASN1(): Sequence<readonly [ObjectIdentifier, DirectoryStringInner]> {
+  toASN1(): Sequence<readonly [ObjectIdentifier, Triplet]> {
     return Sequence.create([
       this.type.inner,
-      this.value.inner.toASN1()
+      this.value.inner
     ] as const)
-  }
-
-  static fromASN1(triplet: Sequence<readonly [ObjectIdentifier, DirectoryStringInner]>) {
-    const [type, value] = triplet.triplets
-
-    const type2 = UnknownAttributeType.fromASN1(type)
-    const value2 = UnknownAttributeValue.fromASN1(value)
-
-    return new UnknownAttributeTypeAndValue(type2, value2)
   }
 
 }
@@ -97,8 +78,8 @@ export namespace AttributeTypeAndValue {
         return new Ok(new KnownAttributeTypeAndValue(type, value))
       }
 
-      const string = cursor.tryReadAndResolve(DirectoryString).throw()
-      const value = new UnknownAttributeValue(string)
+      const inner = cursor.tryRead().throw()
+      const value = new UnknownAttributeValue(inner)
 
       return new Ok(new UnknownAttributeTypeAndValue(type, value))
     }, Error)

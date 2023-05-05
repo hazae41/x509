@@ -14,14 +14,8 @@ export class TBSCertificateVersion {
     readonly value = Integer.create(BigInt(1))
   ) { }
 
-  toASN1(): Constructed<readonly [Integer]> {
+  toASN1(): Triplet {
     return new Constructed(this.#class.type, [this.value] as const)
-  }
-
-  static fromASN1(triplet: Constructed<readonly [Integer]>) {
-    const [version] = triplet.triplets
-
-    return new this(version)
   }
 
   toNumber() {

@@ -1,4 +1,4 @@
-import { OID, ObjectIdentifier } from "@hazae41/asn1";
+import { OID, ObjectIdentifier, Triplet } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
 import { invert } from "libs/invert/invert.js";
 import { OIDs } from "mods/oids/oids.js";
@@ -40,7 +40,7 @@ export class KnownAttributeType {
     return true
   }
 
-  toASN1() {
+  toASN1(): Triplet {
     return this.inner
   }
 
@@ -71,7 +71,7 @@ export class UnknownAttributeType {
     return false
   }
 
-  toASN1() {
+  toASN1(): Triplet {
     return this.inner
   }
 
@@ -80,7 +80,7 @@ export class UnknownAttributeType {
   }
 
   toX501(): string {
-    return this.toASN1().value.inner
+    return this.inner.value.inner
   }
 
 }

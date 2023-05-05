@@ -1,4 +1,4 @@
-import { DER } from "@hazae41/asn1";
+import { DER, Triplet } from "@hazae41/asn1";
 import { Bytes } from "@hazae41/bytes";
 import { Err, Ok, Result } from "@hazae41/result";
 import { DirectoryString, DirectoryStringInner } from "mods/types/directory_string/directory_string.js";
@@ -23,7 +23,7 @@ export class KnownAttributeValue {
     readonly inner: DirectoryString
   ) { }
 
-  toASN1() {
+  toASN1(): Triplet {
     return this.inner.inner
   }
 
@@ -75,22 +75,22 @@ export class KnownAttributeValue {
 
 }
 
-export class UnknownAttributeValue {
+export class UnknownAttributeValue<T extends Triplet = Triplet> {
 
   constructor(
-    readonly inner: DirectoryString
+    readonly inner: T
   ) { }
 
-  toASN1() {
-    return this.inner.inner
+  toASN1(): Triplet {
+    return this.inner
   }
 
-  static fromASN1(inner: DirectoryStringInner) {
-    return new this(DirectoryString.fromASN1(inner))
+  static fromASN1<T extends Triplet>(inner: T) {
+    return new this(inner)
   }
 
   tryToX501(): Result<string, Error> {
-    return DER.tryWriteToBytes(this.inner.inner).mapSync(bytes => `#${Bytes.toHex(bytes)}`)
+    return DER.tryWriteToBytes(this.inner).mapSync(bytes => `#${Bytes.toHex(bytes)}`)
   }
 
   static tryFromX501(hex: string): Result<UnknownAttributeValue, Error> {
@@ -100,9 +100,8 @@ export class UnknownAttributeValue {
 
       const bytes = Bytes.fromHex(hex.slice(1))
       const triplet = DER.tryReadFromBytes(bytes).throw()
-      const inner = DirectoryString.tryResolveFromASN1(triplet).throw()
 
-      return new Ok(new UnknownAttributeValue(inner))
+      return new Ok(new UnknownAttributeValue(triplet))
     }, Error)
   }
 

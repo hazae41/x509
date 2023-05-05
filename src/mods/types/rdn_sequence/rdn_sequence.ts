@@ -1,8 +1,7 @@
-import { ObjectIdentifier, Sequence, Set, Triplet } from "@hazae41/asn1";
+import { Sequence, Triplet } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
 import { ASN1Cursor } from "libs/asn1/cursor.js";
 import { RelativeDistinguishedName } from "mods/types/relative_distinguished_name/relative_distinguished_name.js";
-import { DirectoryStringInner } from "../index.js";
 
 const UNESCAPED_COMMA_REGEX = /[^\\],/g
 
@@ -12,12 +11,8 @@ export class RDNSequence {
     readonly triplets: RelativeDistinguishedName[]
   ) { }
 
-  toASN1(): Sequence<Set<Sequence<readonly [ObjectIdentifier, DirectoryStringInner]>[]>[]> {
+  toASN1(): Triplet {
     return Sequence.create(this.triplets.map(it => it.toASN1()))
-  }
-
-  static fromASN1(triplet: Sequence<Set<Sequence<readonly [ObjectIdentifier, DirectoryStringInner]>[]>[]>) {
-    return new this(triplet.triplets.map(triplet => RelativeDistinguishedName.fromASN1(triplet)))
   }
 
   tryToX501(): Result<string, Error> {

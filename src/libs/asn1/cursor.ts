@@ -13,8 +13,11 @@ export interface ASN1Resolvable<T> {
 export class ASN1CastError extends Error {
   readonly #class = ASN1CastError
 
-  constructor() {
-    super(`ASN1Cursor cast failed`)
+  constructor(
+    readonly triplet: Triplet,
+    readonly clazzes: Class<unknown>[]
+  ) {
+    super(`Could not cast ${triplet.toString()} to ${clazzes.map(clazz => clazz.name).join(",")}`)
   }
 }
 
@@ -43,7 +46,7 @@ export class ASN1Cursor<T extends ANS1Holder> {
       if (type === undefined || holder.type.equals(type))
         return new Ok(new this(holder))
 
-    return new Err(new ASN1CastError())
+    return new Err(new ASN1CastError(holder, [clazz]))
   }
 
   get before() {
@@ -79,9 +82,9 @@ export class ASN1Cursor<T extends ANS1Holder> {
 
     for (const clazz of clazzes)
       if (triplet instanceof clazz)
-        return new Ok(triplet as T)
+        return new Ok(triplet.inner as T)
 
-    return new Err(new ASN1CastError())
+    return new Err(new ASN1CastError(triplet.inner, clazzes))
   }
 
 }

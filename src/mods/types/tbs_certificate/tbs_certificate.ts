@@ -21,7 +21,7 @@ export class TBSCertificate {
     readonly rest: Triplet[]
   ) { }
 
-  toASN1() {
+  toASN1(): Triplet {
     return Sequence.create([
       this.version.toASN1(),
       this.serialNumber,
@@ -34,7 +34,7 @@ export class TBSCertificate {
     ] as const)
   }
 
-  static tryResolveFromASN1(triplet: Triplet) {
+  static tryResolveFromASN1(triplet: Triplet): Result<TBSCertificate, Error> {
     return Result.unthrowSync(() => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
       const version = cursor.tryReadAndResolve(TBSCertificateVersion).ok().inner
