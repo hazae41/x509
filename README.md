@@ -16,7 +16,7 @@ npm i @hazae41/x509
 - No external dependency
 - No cryptography
 - Rust-like patterns
-- PEM and DER parsing
+- Zero-copy PEM <=> DER <=> ASN1 <=> X509 reading and writing
 - X.509 certificates (v3)
 - X.501 encoding and decoding
 
