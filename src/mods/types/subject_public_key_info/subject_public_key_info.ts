@@ -3,7 +3,7 @@ import { Err, Ok, Result } from "@hazae41/result";
 import { ASN1Cursor } from "libs/asn1/cursor.js";
 import { RsaPublicKey } from "mods/keys/rsa/public.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
-import { X509Types } from "../types.js";
+import { tryReadFromBytes } from "../types.js";
 
 export type SubjectPublicKey =
   | RsaPublicKey
@@ -25,7 +25,7 @@ export class SubjectPublicKeyInfo {
 
   tryReadPublicKey(): Result<SubjectPublicKey, Error> {
     if (this.algorithm.algorithm.value.inner === RsaPublicKey.oid)
-      return X509Types.tryReadFromBytes(this.subjectPublicKey.bytes, RsaPublicKey)
+      return tryReadFromBytes(this.subjectPublicKey.bytes, RsaPublicKey)
 
     return Err.error(`Unknown ${this.#class.name} algorithm OID`)
   }
