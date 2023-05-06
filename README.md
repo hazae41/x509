@@ -8,13 +8,6 @@ npm i @hazae41/x509
 
 [**Node Package 📦**](https://www.npmjs.com/package/@hazae41/x509)
 
-## DO NOT USE
-
-This is experimental software in early development
-
-1. It has security issues
-2. Things change quickly
-
 ## Features
 
 ### Current features
@@ -22,6 +15,7 @@ This is experimental software in early development
 - Zero-copy reading and writing
 - No external dependency
 - No cryptography
+- Rust-like patterns
 - PEM and DER parsing
 - X.509 certificates (v3)
 - X.501 encoding and decoding
@@ -31,17 +25,21 @@ This is experimental software in early development
 
 ## Usage
 
-```typescript
-import { PEM, Certificate } from "@hazae41/x509";
+### DER
 
-const bytes = PEM.parse(await readFile("./cert.pem", "utf8"))
-const cert = Certificate.fromBytes(bytes)
+```typescript
+import { Certificate, X509 } from "@hazae41/x509";
+
+const bytes = await readFile("./cert.der")
+const cert = X509.tryReadFromBytes(bytes, Certificate).unwrap()
 ```
 
-```typescript
-import { Certificate } from "@hazae41/x509";
+### PEM
 
-const bytes = await readFile("./cert.der", "utf8")
-const cert = Certificate.fromBytes(bytes)
+```typescript
+import { PEM, Certificate, X509 } from "@hazae41/x509";
+
+const bytes = PEM.tryParse(await readFile("./cert.pem", "utf8")).unwrap()
+const cert = X509.tryReadFromBytes(bytes, Certificate).unwrap()
 ```
 
