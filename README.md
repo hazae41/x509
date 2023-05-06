@@ -25,7 +25,7 @@ npm i @hazae41/x509
 
 ## Usage
 
-### DER
+### Reading DER
 
 ```typescript
 import { Certificate, X509 } from "@hazae41/x509";
@@ -34,7 +34,7 @@ const bytes = await readFile("./cert.der")
 const cert = X509.tryReadFromBytes(bytes, Certificate).unwrap()
 ```
 
-### PEM
+### Reading PEM
 
 ```typescript
 import { PEM, Certificate, X509 } from "@hazae41/x509";

@@ -14,6 +14,6 @@ export function tryWriteToBytes(type: X509Type): Result<Bytes, Error> {
   return DER.tryWriteToBytes(type.toASN1())
 }
 
-export function tryReadFromBytes<T>(bytes: Uint8Array, type: X509Resolver<T>): Result<T, Error> {
+export function tryReadFromBytes<T>(bytes: Bytes, type: X509Resolver<T>): Result<T, Error> {
   return DER.tryReadFromBytes(bytes).andThenSync(triplet => type.tryResolveFromASN1(triplet))
 }

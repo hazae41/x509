@@ -22,7 +22,7 @@ export namespace PEM {
     return new Ok(Bytes.fromBase64(body))
   }
 
-  export function stringify(bytes: Uint8Array) {
+  export function stringify(bytes: Bytes) {
     let result = `${header}\n`
     let body = Bytes.toBase64(bytes)
 
