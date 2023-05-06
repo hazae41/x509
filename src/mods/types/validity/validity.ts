@@ -49,13 +49,13 @@ export class Validity {
   }
 
   static tryResolveFromASN1(triplet: Triplet): Result<Validity, Error> {
-    return Result.unthrowSync(() => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
-      const notBefore = cursor.tryReadAndCast(UTCTime).throw()
-      const notAfter = cursor.tryReadAndCast(UTCTime).throw()
+    return Result.unthrowSync(t => {
+      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
+      const notBefore = cursor.tryReadAndCast(UTCTime).throw(t)
+      const notAfter = cursor.tryReadAndCast(UTCTime).throw(t)
 
       return new Ok(new Validity(notBefore, notAfter))
-    }, Error)
+    })
   }
 
 }

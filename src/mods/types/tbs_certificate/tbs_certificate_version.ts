@@ -27,12 +27,12 @@ export class TBSCertificateVersion {
   }
 
   static tryResolveFromASN1(triplet: Triplet): Result<TBSCertificateVersion, Error> {
-    return Result.unthrowSync(() => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Constructed, this.type).throw()
-      const value = cursor.tryReadAndCast(Integer).throw()
+    return Result.unthrowSync(t => {
+      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Constructed, this.type).throw(t)
+      const value = cursor.tryReadAndCast(Integer).throw(t)
 
       return new Ok(new this(value))
-    }, Error)
+    })
   }
 
 }

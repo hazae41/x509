@@ -16,32 +16,32 @@ export class RelativeDistinguishedName {
   }
 
   tryToX501(): Result<string, Error> {
-    return Result.unthrowSync(() => {
-      return new Ok(this.triplets.map(it => it.tryToX501().throw()).join("+"))
-    }, Error)
+    return Result.unthrowSync(t => {
+      return new Ok(this.triplets.map(it => it.tryToX501().throw(t)).join("+"))
+    })
   }
 
   static tryFromX501(x501: string): Result<RelativeDistinguishedName, Error> {
-    return Result.unthrowSync(() => {
+    return Result.unthrowSync(t => {
       const triplets = x501
         .replaceAll(UNESCAPED_PLUS_REGEX, ([c]) => `${c}++`)
         .split("++")
-        .map(it => AttributeTypeAndValue.tryFromX501(it).throw())
+        .map(it => AttributeTypeAndValue.tryFromX501(it).throw(t))
       return new Ok(new this(triplets))
-    }, Error)
+    })
   }
 
   static tryResolveFromASN1(triplet: Triplet): Result<RelativeDistinguishedName, Error> {
-    return Result.unthrowSync(() => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Set).throw()
+    return Result.unthrowSync(t => {
+      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Set).throw(t)
 
       const triplets = new Array<AttributeTypeAndValue>(cursor.inner.triplets.length)
 
       for (let i = 0; i < triplets.length; i++)
-        triplets[i] = cursor.tryReadAndResolve(AttributeTypeAndValue).throw()
+        triplets[i] = cursor.tryReadAndResolve(AttributeTypeAndValue).throw(t)
 
       return new Ok(new this(triplets))
-    }, Error)
+    })
   }
 
 }

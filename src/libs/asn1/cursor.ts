@@ -17,7 +17,7 @@ export class ASN1CastError extends Error {
     readonly triplet: Triplet,
     readonly clazzes: Class<unknown>[]
   ) {
-    super(`Could not cast ${triplet.toString()} to ${clazzes.map(clazz => clazz.name).join(",")}`)
+    super(`Could not cast triplet to ${clazzes.map(clazz => clazz.name).join(",")}`)
   }
 }
 
@@ -75,16 +75,16 @@ export class ASN1Cursor<T extends ANS1Holder> {
   }
 
   tryReadAndCast<T>(...clazzes: Class<T>[]): Result<T, ASN1ReadOverflowError | ASN1CastError> {
-    const triplet = this.tryRead()
+    const tripletRes = this.tryRead()
 
-    if (triplet.isErr())
-      return triplet
+    if (tripletRes.isErr())
+      return tripletRes
 
     for (const clazz of clazzes)
-      if (triplet instanceof clazz)
-        return new Ok(triplet.inner as T)
+      if (tripletRes.inner instanceof clazz)
+        return new Ok(tripletRes.inner as T)
 
-    return new Err(new ASN1CastError(triplet.inner, clazzes))
+    return new Err(new ASN1CastError(tripletRes.inner, clazzes))
   }
 
 }

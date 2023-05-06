@@ -21,14 +21,14 @@ export class Certificate {
   }
 
   static tryResolveFromASN1(triplet: Triplet): Result<Certificate, Error> {
-    return Result.unthrowSync(() => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
-      const tbsCertificate = cursor.tryReadAndResolve(TBSCertificate).throw()
-      const algorithmIdentifier = cursor.tryReadAndResolve(AlgorithmIdentifier).throw()
-      const signatureValue = cursor.tryReadAndCast(BitString).throw()
+    return Result.unthrowSync(t => {
+      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
+      const tbsCertificate = cursor.tryReadAndResolve(TBSCertificate).throw(t)
+      const algorithmIdentifier = cursor.tryReadAndResolve(AlgorithmIdentifier).throw(t)
+      const signatureValue = cursor.tryReadAndCast(BitString).throw(t)
 
       return new Ok(new this(tbsCertificate, algorithmIdentifier, signatureValue))
-    }, Error)
+    })
   }
 
 }

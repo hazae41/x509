@@ -65,40 +65,40 @@ export namespace AttributeTypeAndValue {
   }
 
   export function tryResolveFromASN1(triplet: Triplet): Result<AttributeTypeAndValue, Error> {
-    return Result.unthrowSync<AttributeTypeAndValue, Error>(() => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
+    return Result.unthrowSync<AttributeTypeAndValue, Error>(t => {
+      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
 
-      const oid = cursor.tryReadAndCast(ObjectIdentifier).throw()
+      const oid = cursor.tryReadAndCast(ObjectIdentifier).throw(t)
       const type = AttributeType.fromASN1(oid)
 
       if (type.isKnown()) {
-        const string = cursor.tryReadAndResolve(DirectoryString).throw()
+        const string = cursor.tryReadAndResolve(DirectoryString).throw(t)
         const value = new KnownAttributeValue(string)
 
         return new Ok(new KnownAttributeTypeAndValue(type, value))
       }
 
-      const inner = cursor.tryRead().throw()
+      const inner = cursor.tryRead().throw(t)
       const value = new UnknownAttributeValue(inner)
 
       return new Ok(new UnknownAttributeTypeAndValue(type, value))
-    }, Error)
+    })
   }
 
   export function tryFromX501(x501: string): Result<AttributeTypeAndValue, Error> {
-    return Result.unthrowSync<AttributeTypeAndValue, Error>(() => {
+    return Result.unthrowSync<AttributeTypeAndValue, Error>(t => {
       const [rawType, rawValue] = x501.split("=")
 
-      const type = AttributeType.tryFromX501(rawType).throw()
+      const type = AttributeType.tryFromX501(rawType).throw(t)
 
       if (type.isKnown()) {
         const value = KnownAttributeValue.fromX501(rawValue, UTF8String)
         return new Ok(new KnownAttributeTypeAndValue(type, value))
       }
 
-      const value = UnknownAttributeValue.tryFromX501(rawValue).throw()
+      const value = UnknownAttributeValue.tryFromX501(rawValue).throw(t)
       return new Ok(new UnknownAttributeTypeAndValue(type, value))
-    }, Error)
+    })
   }
 
 }

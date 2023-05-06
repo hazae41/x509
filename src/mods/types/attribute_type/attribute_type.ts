@@ -103,15 +103,15 @@ export namespace AttributeType {
   }
 
   export function tryFromX501(x501: string): Result<AttributeType, Error> {
-    return Result.unthrowSync<AttributeType, Error>(() => {
+    return Result.unthrowSync<AttributeType, Error>(t => {
       if (KnownAttributeTypes.isValue(x501))
         return new Ok(KnownAttributeType.fromX501(x501))
 
-      const oid = OID.tryNew(x501).throw()
+      const oid = OID.tryNew(x501).throw(t)
       const inner = ObjectIdentifier.create(oid)
 
       return new Ok(new UnknownAttributeType(inner))
-    }, Error)
+    })
   }
 
 }

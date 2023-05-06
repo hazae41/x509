@@ -17,12 +17,12 @@ export class AlgorithmIdentifier {
   }
 
   static tryResolveFromASN1(triplet: Triplet): Result<AlgorithmIdentifier, Error> {
-    return Result.unthrowSync(() => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
-      const algorithm = cursor.tryReadAndCast(ObjectIdentifier).throw()
+    return Result.unthrowSync(t => {
+      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
+      const algorithm = cursor.tryReadAndCast(ObjectIdentifier).throw(t)
       const parameters = cursor.tryRead().ok().inner
 
       return new Ok(new AlgorithmIdentifier(algorithm, parameters))
-    }, Error)
+    })
   }
 }

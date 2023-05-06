@@ -37,13 +37,13 @@ export class RsaPublicKey {
   }
 
   static tryResolveFromASN1(triplet: Triplet): Result<RsaPublicKey, Error> {
-    return Result.unthrowSync(() => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw()
-      const publicExponent = cursor.tryReadAndCast(Integer).throw()
-      const modulus = cursor.tryReadAndCast(Integer).throw()
+    return Result.unthrowSync(t => {
+      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
+      const publicExponent = cursor.tryReadAndCast(Integer).throw(t)
+      const modulus = cursor.tryReadAndCast(Integer).throw(t)
 
       return new Ok(new RsaPublicKey(publicExponent, modulus))
-    }, Error)
+    })
   }
 
 }

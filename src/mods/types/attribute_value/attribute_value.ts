@@ -94,15 +94,15 @@ export class UnknownAttributeValue<T extends Triplet = Triplet> {
   }
 
   static tryFromX501(hex: string): Result<UnknownAttributeValue, Error> {
-    return Result.unthrowSync(() => {
+    return Result.unthrowSync(t => {
       if (!hex.startsWith("#"))
         return Err.error(`AttributeValue not preceded by hash`)
 
       const bytes = Bytes.fromHex(hex.slice(1))
-      const triplet = DER.tryReadFromBytes(bytes).throw()
+      const triplet = DER.tryReadFromBytes(bytes).throw(t)
 
       return new Ok(new UnknownAttributeValue(triplet))
-    }, Error)
+    })
   }
 
 }
