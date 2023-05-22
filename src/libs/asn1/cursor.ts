@@ -6,8 +6,8 @@ export interface ANS1Holder {
   triplets: Triplet[]
 }
 
-export interface ASN1Resolvable<T> {
-  tryResolveFromASN1(triplet: Triplet): Result<T, Error>
+export interface ASN1Resolvable<Output, Error> {
+  tryResolveFromASN1(triplet: Triplet): Result<Output, Error>
 }
 
 export class ASN1CastError extends Error {
@@ -70,21 +70,21 @@ export class ASN1Cursor<T extends ANS1Holder> {
     return this.tryGet().inspectSync(() => this.offset++)
   }
 
-  tryReadAndResolve<T>(readable: ASN1Resolvable<T>): Result<T, Error> {
+  tryReadAndResolve<Output, Error>(readable: ASN1Resolvable<Output, Error>): Result<Output, Error | ASN1ReadOverflowError> {
     return this.tryRead().andThenSync(triplet => readable.tryResolveFromASN1(triplet))
   }
 
   tryReadAndCast<T>(...clazzes: Class<T>[]): Result<T, ASN1ReadOverflowError | ASN1CastError> {
-    const tripletRes = this.tryRead()
+    const triplet = this.tryRead()
 
-    if (tripletRes.isErr())
-      return tripletRes
+    if (triplet.isErr())
+      return triplet
 
     for (const clazz of clazzes)
-      if (tripletRes.inner instanceof clazz)
-        return new Ok(tripletRes.inner as T)
+      if (triplet.inner instanceof clazz)
+        return triplet as Ok<T>
 
-    return new Err(new ASN1CastError(tripletRes.inner, clazzes))
+    return new Err(new ASN1CastError(triplet.get(), clazzes))
   }
 
 }

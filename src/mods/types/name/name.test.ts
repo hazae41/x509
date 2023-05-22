@@ -1,10 +1,13 @@
 import { assert, test } from "@hazae41/phobos";
+import { Debug } from "@hazae41/result";
 import { relative, resolve } from "path";
 import { Name } from "./name.js";
 
 const directory = resolve("./dist/test/")
 const { pathname } = new URL(import.meta.url)
 console.log(relative(directory, pathname.replace(".mjs", ".ts")))
+
+Debug.debug = true
 
 function checkFromTo(x501: string, message?: string) {
   // console.log("aaa", x501)

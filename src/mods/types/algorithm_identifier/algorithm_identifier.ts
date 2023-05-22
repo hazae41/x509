@@ -20,7 +20,7 @@ export class AlgorithmIdentifier {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
       const algorithm = cursor.tryReadAndCast(ObjectIdentifier).throw(t)
-      const parameters = cursor.tryRead().ok().inner
+      const parameters = cursor.tryRead().ok().get()
 
       return new Ok(new AlgorithmIdentifier(algorithm, parameters))
     })

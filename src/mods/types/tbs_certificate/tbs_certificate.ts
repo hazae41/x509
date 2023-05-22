@@ -37,7 +37,7 @@ export class TBSCertificate {
   static tryResolveFromASN1(triplet: Triplet): Result<TBSCertificate, Error> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
-      const version = cursor.tryReadAndResolve(TBSCertificateVersion).ok().inner
+      const version = cursor.tryReadAndResolve(TBSCertificateVersion).ok().get()
       const serialNumber = cursor.tryReadAndCast(Integer).throw(t)
       const signature = cursor.tryReadAndResolve(AlgorithmIdentifier).throw(t)
       const issuer = cursor.tryReadAndResolve(Name).throw(t)
