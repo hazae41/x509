@@ -12,7 +12,7 @@ export class Name {
     return this.inner.toASN1()
   }
 
-  tryToX501(): Result<string, Error> {
+  tryToX501(): Result<string, unknown> {
     return this.inner.tryToX501()
   }
 

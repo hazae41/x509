@@ -15,7 +15,7 @@ export class RDNSequence {
     return Sequence.create(this.triplets.map(it => it.toASN1()))
   }
 
-  tryToX501(): Result<string, Error> {
+  tryToX501(): Result<string, unknown> {
     return Result.unthrowSync(t => {
       return new Ok(this.triplets.map(it => it.tryToX501().throw(t)).reverse().join(","))
     })

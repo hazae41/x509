@@ -31,7 +31,7 @@ export class UnknownAttributeTypeAndValue<T extends Triplet = Triplet> {
     readonly value: UnknownAttributeValue<T>
   ) { }
 
-  tryToX501(): Result<string, Error> {
+  tryToX501(): Result<string, unknown> {
     return this.value.tryToX501().mapSync(value => `${this.type.toX501()}=${value}`)
   }
 

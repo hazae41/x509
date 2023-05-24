@@ -10,7 +10,7 @@ export interface X509Resolver<T> {
   tryResolveFromASN1(triplet: Triplet): Result<T, Error>
 }
 
-export function tryWriteToBytes(type: X509Type): Result<Bytes, Error> {
+export function tryWriteToBytes(type: X509Type): Result<Bytes, unknown> {
   return DER.tryWriteToBytes(type.toASN1())
 }
 

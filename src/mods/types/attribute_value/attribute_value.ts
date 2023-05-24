@@ -89,7 +89,7 @@ export class UnknownAttributeValue<T extends Triplet = Triplet> {
     return new this(inner)
   }
 
-  tryToX501(): Result<string, Error> {
+  tryToX501(): Result<string, unknown> {
     return DER.tryWriteToBytes(this.inner).mapSync(bytes => `#${Bytes.toHex(bytes)}`)
   }
 
