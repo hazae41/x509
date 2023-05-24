@@ -1,6 +1,8 @@
-import { ObjectIdentifier, Sequence, Triplet, UTF8String } from "@hazae41/asn1";
+import { InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, ObjectIdentifier, Sequence, Triplet, UTF8String, Unimplemented } from "@hazae41/asn1";
+import { BinaryReadError } from "@hazae41/binary";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor } from "libs/asn1/cursor.js";
+import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
+import { InvalidFormatError } from "mods/errors.js";
 import { AttributeType, KnownAttributeType, UnknownAttributeType } from "mods/types/attribute_type/attribute_type.js";
 import { KnownAttributeValue, UnknownAttributeValue } from "mods/types/attribute_value/attribute_value.js";
 import { DirectoryString, DirectoryStringInner } from "mods/types/directory_string/directory_string.js";
@@ -64,8 +66,8 @@ export namespace AttributeTypeAndValue {
     return new UnknownAttributeTypeAndValue(type2, value2)
   }
 
-  export function tryResolveFromASN1(triplet: Triplet): Result<AttributeTypeAndValue, Error> {
-    return Result.unthrowSync<AttributeTypeAndValue, Error>(t => {
+  export function tryResolve(triplet: Triplet): Result<AttributeTypeAndValue, ASN1Error | Unimplemented> {
+    return Result.unthrowSync<AttributeTypeAndValue, ASN1Error | Unimplemented>(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
 
       const oid = cursor.tryReadAndCast(ObjectIdentifier).throw(t)
@@ -85,8 +87,8 @@ export namespace AttributeTypeAndValue {
     })
   }
 
-  export function tryFromX501(x501: string): Result<AttributeTypeAndValue, Error> {
-    return Result.unthrowSync<AttributeTypeAndValue, Error>(t => {
+  export function tryFromX501(x501: string): Result<AttributeTypeAndValue, ASN1Error | InvalidFormatError | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID> {
+    return Result.unthrowSync<AttributeTypeAndValue, ASN1Error | InvalidFormatError | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID>(t => {
       const [rawType, rawValue] = x501.split("=")
 
       const type = AttributeType.tryFromX501(rawType).throw(t)

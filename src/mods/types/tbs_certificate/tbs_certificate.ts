@@ -1,6 +1,6 @@
-import { Integer, Sequence, Triplet } from "@hazae41/asn1";
+import { Integer, Sequence, Triplet, Unimplemented } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor } from "libs/asn1/cursor.js";
+import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { Name } from "mods/types/name/name.js";
 import { SubjectPublicKeyInfo } from "mods/types/subject_public_key_info/subject_public_key_info.js";
@@ -34,7 +34,7 @@ export class TBSCertificate {
     ] as const)
   }
 
-  static tryResolveFromASN1(triplet: Triplet): Result<TBSCertificate, Error> {
+  static tryResolve(triplet: Triplet): Result<TBSCertificate, ASN1Error | Unimplemented> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
       const version = cursor.tryReadAndResolve(TBSCertificateVersion).ok().get()

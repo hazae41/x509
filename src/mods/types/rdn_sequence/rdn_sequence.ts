@@ -1,6 +1,8 @@
-import { Sequence, Triplet } from "@hazae41/asn1";
+import { InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Sequence, Triplet, Unimplemented } from "@hazae41/asn1";
+import { BinaryReadError } from "@hazae41/binary";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor } from "libs/asn1/cursor.js";
+import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
+import { InvalidFormatError } from "mods/errors.js";
 import { RelativeDistinguishedName } from "mods/types/relative_distinguished_name/relative_distinguished_name.js";
 
 const UNESCAPED_COMMA_REGEX = /[^\\],/g
@@ -21,7 +23,7 @@ export class RDNSequence {
     })
   }
 
-  static tryFromX501(x501: string): Result<RDNSequence, Error> {
+  static tryFromX501(x501: string): Result<RDNSequence, ASN1Error | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID | InvalidFormatError> {
     return Result.unthrowSync(t => {
       const triplets = x501
         .replaceAll(UNESCAPED_COMMA_REGEX, ([c]) => `${c},,`)
@@ -32,7 +34,7 @@ export class RDNSequence {
     })
   }
 
-  static tryResolveFromASN1(triplet: Triplet): Result<RDNSequence, Error> {
+  static tryResolve(triplet: Triplet): Result<RDNSequence, ASN1Error | Unimplemented> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
 

@@ -1,7 +1,7 @@
 import { Integer, Sequence, Triplet } from "@hazae41/asn1";
 import { Bytes } from "@hazae41/bytes";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor } from "libs/asn1/cursor.js";
+import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 import { OIDs } from "mods/oids/oids.js";
 
 export interface RsaPublicKeyJSON {
@@ -36,7 +36,7 @@ export class RsaPublicKey {
     return new this(publicExponent, modulus)
   }
 
-  static tryResolveFromASN1(triplet: Triplet): Result<RsaPublicKey, Error> {
+  static tryResolve(triplet: Triplet): Result<RsaPublicKey, ASN1Error> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
       const publicExponent = cursor.tryReadAndCast(Integer).throw(t)

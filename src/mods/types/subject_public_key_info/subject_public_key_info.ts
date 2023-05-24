@@ -1,6 +1,7 @@
-import { BitString, Sequence, Triplet } from "@hazae41/asn1";
+import { BitString, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Sequence, Triplet, Unimplemented } from "@hazae41/asn1";
+import { BinaryReadError } from "@hazae41/binary";
 import { Err, Ok, Result } from "@hazae41/result";
-import { ASN1Cursor } from "libs/asn1/cursor.js";
+import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 import { RsaPublicKey } from "mods/keys/rsa/public.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { tryReadFromBytes } from "../types.js";
@@ -23,14 +24,14 @@ export class SubjectPublicKeyInfo {
     ] as const)
   }
 
-  tryReadPublicKey(): Result<SubjectPublicKey, Error> {
+  tryReadPublicKey(): Result<SubjectPublicKey, ASN1Error | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID> {
     if (this.algorithm.algorithm.value.inner === RsaPublicKey.oid)
       return tryReadFromBytes(this.subjectPublicKey.bytes, RsaPublicKey)
 
-    return Err.error(`Unknown ${this.#class.name} algorithm OID`)
+    return new Err(new Unimplemented(`AlgorithmIdentifier`))
   }
 
-  static tryResolveFromASN1(triplet: Triplet): Result<SubjectPublicKeyInfo, Error> {
+  static tryResolve(triplet: Triplet): Result<SubjectPublicKeyInfo, ASN1Error> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
       const algorithm = cursor.tryReadAndResolve(AlgorithmIdentifier).throw(t)

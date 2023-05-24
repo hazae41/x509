@@ -1,6 +1,6 @@
 import { ObjectIdentifier, Sequence, Triplet } from "@hazae41/asn1"
 import { Ok, Result } from "@hazae41/result"
-import { ASN1Cursor } from "libs/asn1/cursor.js"
+import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js"
 
 export class AlgorithmIdentifier {
 
@@ -16,7 +16,7 @@ export class AlgorithmIdentifier {
       return Sequence.create([this.algorithm] as const)
   }
 
-  static tryResolveFromASN1(triplet: Triplet): Result<AlgorithmIdentifier, Error> {
+  static tryResolve(triplet: Triplet): Result<AlgorithmIdentifier, ASN1Error> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
       const algorithm = cursor.tryReadAndCast(ObjectIdentifier).throw(t)

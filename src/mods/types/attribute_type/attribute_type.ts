@@ -1,5 +1,6 @@
-import { OID, ObjectIdentifier, Triplet } from "@hazae41/asn1";
+import { NotAnOID, OID, ObjectIdentifier, Triplet } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
+import { ASN1Error } from "libs/asn1/cursor.js";
 import { invert } from "libs/invert/invert.js";
 import { OIDs } from "mods/oids/oids.js";
 
@@ -102,8 +103,8 @@ export namespace AttributeType {
       return UnknownAttributeType.fromASN1(triplet)
   }
 
-  export function tryFromX501(x501: string): Result<AttributeType, Error> {
-    return Result.unthrowSync<AttributeType, Error>(t => {
+  export function tryFromX501(x501: string): Result<AttributeType, ASN1Error | NotAnOID> {
+    return Result.unthrowSync<AttributeType, ASN1Error | NotAnOID>(t => {
       if (KnownAttributeTypes.isValue(x501))
         return new Ok(KnownAttributeType.fromX501(x501))
 

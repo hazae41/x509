@@ -1,6 +1,6 @@
 import { Sequence, Triplet, UTCTime } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor } from "libs/asn1/cursor.js";
+import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 
 export type Time =
   | UTCTime
@@ -48,7 +48,7 @@ export class Validity {
     return new Validity(notBefore, notAfter)
   }
 
-  static tryResolveFromASN1(triplet: Triplet): Result<Validity, Error> {
+  static tryResolve(triplet: Triplet): Result<Validity, ASN1Error> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
       const notBefore = cursor.tryReadAndCast(UTCTime).throw(t)

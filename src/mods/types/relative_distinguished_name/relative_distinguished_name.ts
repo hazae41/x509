@@ -1,6 +1,8 @@
-import { Set, Triplet } from "@hazae41/asn1";
+import { InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Set, Triplet, Unimplemented } from "@hazae41/asn1";
+import { BinaryReadError } from "@hazae41/binary";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor } from "libs/asn1/cursor.js";
+import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
+import { InvalidFormatError } from "mods/errors.js";
 import { AttributeTypeAndValue } from "mods/types/attribute_type_and_value/attribute_type_and_value.js";
 
 const UNESCAPED_PLUS_REGEX = /[^\\]\+/g
@@ -21,7 +23,7 @@ export class RelativeDistinguishedName {
     })
   }
 
-  static tryFromX501(x501: string): Result<RelativeDistinguishedName, Error> {
+  static tryFromX501(x501: string): Result<RelativeDistinguishedName, ASN1Error | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID | InvalidFormatError> {
     return Result.unthrowSync(t => {
       const triplets = x501
         .replaceAll(UNESCAPED_PLUS_REGEX, ([c]) => `${c}++`)
@@ -31,7 +33,7 @@ export class RelativeDistinguishedName {
     })
   }
 
-  static tryResolveFromASN1(triplet: Triplet): Result<RelativeDistinguishedName, Error> {
+  static tryResolve(triplet: Triplet): Result<RelativeDistinguishedName, ASN1Error | Unimplemented> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Set).throw(t)
 

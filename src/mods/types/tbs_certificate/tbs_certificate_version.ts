@@ -1,6 +1,6 @@
 import { Constructed, Integer, Triplet, Type } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor } from "libs/asn1/cursor.js";
+import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 
 export class TBSCertificateVersion {
   readonly #class = TBSCertificateVersion
@@ -26,7 +26,7 @@ export class TBSCertificateVersion {
     return new this(Integer.create(BigInt(value)))
   }
 
-  static tryResolveFromASN1(triplet: Triplet): Result<TBSCertificateVersion, Error> {
+  static tryResolve(triplet: Triplet): Result<TBSCertificateVersion, ASN1Error> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Constructed, this.type).throw(t)
       const value = cursor.tryReadAndCast(Integer).throw(t)
