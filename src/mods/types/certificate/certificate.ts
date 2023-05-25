@@ -1,6 +1,5 @@
-import { BitString, Sequence, Triplet, Unimplemented } from "@hazae41/asn1";
+import { ASN1Cursor, ASN1Error, BitString, Sequence, Triplet, Unimplemented } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { TBSCertificate } from "mods/types/tbs_certificate/tbs_certificate.js";
 

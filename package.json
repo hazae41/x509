@@ -22,7 +22,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "@hazae41/asn1": "^1.2.18",
+    "@hazae41/asn1": "^1.2.19",
     "@hazae41/binary": "^1.2.31",
     "@hazae41/bytes": "^1.1.12",
     "@hazae41/cursor": "^1.1.14",

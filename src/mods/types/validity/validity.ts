@@ -1,6 +1,5 @@
-import { Sequence, Triplet, UTCTime } from "@hazae41/asn1";
+import { ASN1Cursor, ASN1Error, Sequence, Triplet, UTCTime } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 
 export type Time =
   | UTCTime

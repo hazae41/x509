@@ -1,6 +1,5 @@
-import { Integer, Sequence, Triplet, Unimplemented } from "@hazae41/asn1";
+import { ASN1Cursor, ASN1Error, Integer, Sequence, Triplet, Unimplemented } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { Name } from "mods/types/name/name.js";
 import { SubjectPublicKeyInfo } from "mods/types/subject_public_key_info/subject_public_key_info.js";

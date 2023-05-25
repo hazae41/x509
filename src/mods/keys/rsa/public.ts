@@ -1,7 +1,6 @@
-import { Integer, Sequence, Triplet } from "@hazae41/asn1";
+import { ASN1Cursor, ASN1Error, Integer, Sequence, Triplet } from "@hazae41/asn1";
 import { Bytes } from "@hazae41/bytes";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 import { OIDs } from "mods/oids/oids.js";
 
 export interface RsaPublicKeyJSON {

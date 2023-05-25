@@ -1,7 +1,6 @@
-import { InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Set, Triplet, Unimplemented } from "@hazae41/asn1";
+import { ASN1Cursor, ASN1Error, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Set, Triplet, Unimplemented } from "@hazae41/asn1";
 import { BinaryReadError } from "@hazae41/binary";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 import { InvalidFormatError } from "mods/errors.js";
 import { AttributeTypeAndValue } from "mods/types/attribute_type_and_value/attribute_type_and_value.js";
 

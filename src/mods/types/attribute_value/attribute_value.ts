@@ -1,8 +1,7 @@
-import { DER, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Triplet, Unimplemented } from "@hazae41/asn1";
+import { ASN1Error, DER, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Triplet, Unimplemented } from "@hazae41/asn1";
 import { BinaryReadError } from "@hazae41/binary";
 import { Bytes } from "@hazae41/bytes";
 import { Err, Ok, Result } from "@hazae41/result";
-import { ASN1Error } from "libs/asn1/cursor.js";
 import { InvalidFormatError } from "mods/errors.js";
 import { DirectoryString, DirectoryStringInner } from "mods/types/directory_string/directory_string.js";
 

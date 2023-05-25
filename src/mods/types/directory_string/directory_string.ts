@@ -1,6 +1,5 @@
-import { PrintableString, Triplet, UTF8String, Unimplemented } from "@hazae41/asn1"
+import { ASN1Error, PrintableString, Triplet, UTF8String, Unimplemented } from "@hazae41/asn1"
 import { Err, Ok, Result } from "@hazae41/result"
-import { ASN1Error } from "libs/asn1/cursor.js"
 
 export type DirectoryStringInner =
   | UTF8String

@@ -1,7 +1,6 @@
-import { DER, DERReadError, DERWriteError, Triplet } from "@hazae41/asn1"
+import { ASN1Resolvable, DER, DERReadError, DERWriteError, Triplet } from "@hazae41/asn1"
 import { Bytes } from "@hazae41/bytes"
 import { Result } from "@hazae41/result"
-import { ASN1Resolvable } from "libs/asn1/cursor.js"
 
 export interface X509Type {
   toASN1(): Triplet

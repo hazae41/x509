@@ -1,7 +1,6 @@
-import { InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Triplet, Unimplemented } from "@hazae41/asn1";
+import { ASN1Error, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Triplet, Unimplemented } from "@hazae41/asn1";
 import { BinaryReadError } from "@hazae41/binary";
 import { Result } from "@hazae41/result";
-import { ASN1Error } from "libs/asn1/cursor.js";
 import { InvalidFormatError } from "mods/errors.js";
 import { RDNSequence } from "mods/types/rdn_sequence/rdn_sequence.js";
 

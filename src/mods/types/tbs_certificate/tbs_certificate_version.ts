@@ -1,6 +1,5 @@
-import { Constructed, Integer, Triplet, Type } from "@hazae41/asn1";
+import { ASN1Cursor, ASN1Error, Constructed, Integer, Triplet, Type } from "@hazae41/asn1";
 import { Ok, Result } from "@hazae41/result";
-import { ASN1Cursor, ASN1Error } from "libs/asn1/cursor.js";
 
 export class TBSCertificateVersion {
   readonly #class = TBSCertificateVersion
