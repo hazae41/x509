@@ -26,7 +26,7 @@ export class SubjectPublicKeyInfo {
 
   tryReadPublicKey(): Result<SubjectPublicKey, ASN1Error | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID> {
     if (this.algorithm.algorithm.value.inner === RsaPublicKey.oid)
-      return tryReadFromBytes(this.subjectPublicKey.bytes, RsaPublicKey)
+      return tryReadFromBytes(RsaPublicKey, this.subjectPublicKey.bytes)
 
     return new Err(new Unimplemented(`AlgorithmIdentifier`))
   }
