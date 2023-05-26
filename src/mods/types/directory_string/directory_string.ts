@@ -1,5 +1,5 @@
-import { ASN1Error, PrintableString, Triplet, UTF8String, Unimplemented } from "@hazae41/asn1"
-import { Err, Ok, Result } from "@hazae41/result"
+import { ASN1Error, PrintableString, Triplet, UTF8String } from "@hazae41/asn1"
+import { Err, Ok, Result, Unimplemented } from "@hazae41/result"
 
 export type DirectoryStringInner =
   | UTF8String

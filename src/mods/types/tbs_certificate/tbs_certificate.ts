@@ -1,5 +1,5 @@
-import { ASN1Cursor, ASN1Error, Integer, Sequence, Triplet, Unimplemented } from "@hazae41/asn1";
-import { Ok, Result } from "@hazae41/result";
+import { ASN1Cursor, ASN1Error, Integer, Sequence, Triplet } from "@hazae41/asn1";
+import { Ok, Result, Unimplemented } from "@hazae41/result";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { Name } from "mods/types/name/name.js";
 import { SubjectPublicKeyInfo } from "mods/types/subject_public_key_info/subject_public_key_info.js";
@@ -7,7 +7,6 @@ import { TBSCertificateVersion } from "mods/types/tbs_certificate/tbs_certificat
 import { Validity } from "mods/types/validity/validity.js";
 
 export class TBSCertificate {
-  readonly #class = TBSCertificate
 
   constructor(
     readonly version = new TBSCertificateVersion(),

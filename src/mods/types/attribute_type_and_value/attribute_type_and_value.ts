@@ -1,6 +1,5 @@
-import { ASN1Cursor, ASN1Error, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, ObjectIdentifier, Sequence, Triplet, UTF8String, Unimplemented } from "@hazae41/asn1";
-import { BinaryReadError } from "@hazae41/binary";
-import { Ok, Result } from "@hazae41/result";
+import { ASN1Cursor, ASN1Error, DERReadError, ObjectIdentifier, Sequence, Triplet, UTF8String } from "@hazae41/asn1";
+import { Ok, Result, Unimplemented } from "@hazae41/result";
 import { InvalidFormatError } from "mods/errors.js";
 import { AttributeType, KnownAttributeType, UnknownAttributeType } from "mods/types/attribute_type/attribute_type.js";
 import { KnownAttributeValue, UnknownAttributeValue } from "mods/types/attribute_value/attribute_value.js";
@@ -86,8 +85,8 @@ export namespace AttributeTypeAndValue {
     })
   }
 
-  export function tryFromX501(x501: string): Result<AttributeTypeAndValue, ASN1Error | InvalidFormatError | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID> {
-    return Result.unthrowSync<AttributeTypeAndValue, ASN1Error | InvalidFormatError | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID>(t => {
+  export function tryFromX501(x501: string): Result<AttributeTypeAndValue, ASN1Error | InvalidFormatError | DERReadError> {
+    return Result.unthrowSync<AttributeTypeAndValue, ASN1Error | InvalidFormatError | DERReadError>(t => {
       const [rawType, rawValue] = x501.split("=")
 
       const type = AttributeType.tryFromX501(rawType).throw(t)

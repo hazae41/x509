@@ -1,5 +1,4 @@
-import { ASN1Error, DER, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Triplet, Unimplemented } from "@hazae41/asn1";
-import { BinaryReadError } from "@hazae41/binary";
+import { ASN1Error, DER, DERReadError, Triplet } from "@hazae41/asn1";
 import { Bytes } from "@hazae41/bytes";
 import { Err, Ok, Result } from "@hazae41/result";
 import { InvalidFormatError } from "mods/errors.js";
@@ -95,7 +94,7 @@ export class UnknownAttributeValue<T extends Triplet = Triplet> {
     return DER.tryWriteToBytes(this.inner).mapSync(bytes => `#${Bytes.toHex(bytes)}`)
   }
 
-  static tryFromX501(hex: string): Result<UnknownAttributeValue, ASN1Error | InvalidFormatError | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID> {
+  static tryFromX501(hex: string): Result<UnknownAttributeValue, ASN1Error | DERReadError | InvalidFormatError> {
     return Result.unthrowSync(t => {
       if (!hex.startsWith("#"))
         return new Err(new InvalidFormatError(`AttributeValue not preceded by hash`))

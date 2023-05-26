@@ -1,6 +1,5 @@
-import { ASN1Error, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Triplet, Unimplemented } from "@hazae41/asn1";
-import { BinaryReadError } from "@hazae41/binary";
-import { Result } from "@hazae41/result";
+import { ASN1Error, DERReadError, Triplet } from "@hazae41/asn1";
+import { Result, Unimplemented } from "@hazae41/result";
 import { InvalidFormatError } from "mods/errors.js";
 import { RDNSequence } from "mods/types/rdn_sequence/rdn_sequence.js";
 
@@ -18,7 +17,7 @@ export class Name {
     return this.inner.tryToX501()
   }
 
-  static tryFromX501(x501: string): Result<Name, ASN1Error | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID | InvalidFormatError> {
+  static tryFromX501(x501: string): Result<Name, ASN1Error | InvalidFormatError | DERReadError> {
     return RDNSequence.tryFromX501(x501).mapSync(inner => new this(inner))
   }
 
