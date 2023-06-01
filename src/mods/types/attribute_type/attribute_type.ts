@@ -103,7 +103,7 @@ export namespace AttributeType {
   }
 
   export function tryFromX501(x501: string): Result<AttributeType, ASN1Error | NotAnOID> {
-    return Result.unthrowSync<AttributeType, ASN1Error | NotAnOID>(t => {
+    return Result.unthrowSync(t => {
       if (KnownAttributeTypes.isValue(x501))
         return new Ok(KnownAttributeType.fromX501(x501))
 

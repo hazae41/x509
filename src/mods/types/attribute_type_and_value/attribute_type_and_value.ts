@@ -65,7 +65,7 @@ export namespace AttributeTypeAndValue {
   }
 
   export function tryResolve(triplet: Triplet): Result<AttributeTypeAndValue, ASN1Error | Unimplemented> {
-    return Result.unthrowSync<AttributeTypeAndValue, ASN1Error | Unimplemented>(t => {
+    return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
 
       const oid = cursor.tryReadAndCast(ObjectIdentifier).throw(t)
@@ -86,7 +86,7 @@ export namespace AttributeTypeAndValue {
   }
 
   export function tryFromX501(x501: string): Result<AttributeTypeAndValue, ASN1Error | InvalidFormatError | DERReadError> {
-    return Result.unthrowSync<AttributeTypeAndValue, ASN1Error | InvalidFormatError | DERReadError>(t => {
+    return Result.unthrowSync(t => {
       const [rawType, rawValue] = x501.split("=")
 
       const type = AttributeType.tryFromX501(rawType).throw(t)
