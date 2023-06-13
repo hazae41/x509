@@ -5,17 +5,31 @@ export namespace PEM {
   export const header = `-----BEGIN CERTIFICATE-----`
   export const footer = `-----END CERTIFICATE-----`
 
-  export class ParseError extends Error {
-    readonly #class = ParseError
+  export class MissingHeaderError extends Error {
+    readonly #class = MissingHeaderError
+    readonly name = this.#class.name
+
+    constructor() {
+      super(`Missing PEM header`)
+    }
   }
 
-  export function tryParse(text: string): Result<Bytes, ParseError> {
+  export class MissingFooterError extends Error {
+    readonly #class = MissingFooterError
+    readonly name = this.#class.name
+
+    constructor() {
+      super(`Missing PEM footer`)
+    }
+  }
+
+  export function tryParse(text: string): Result<Bytes, MissingHeaderError | MissingFooterError> {
     text = text.replaceAll(`\n`, ``)
 
     if (!text.startsWith(header))
-      return new Err(new ParseError(`Missing PEM header`))
+      return new Err(new MissingHeaderError())
     if (!text.endsWith(footer))
-      return new Err(new ParseError(`Missing PEM footer`))
+      return new Err(new MissingFooterError())
 
     const body = text.slice(header.length, -footer.length)
 
