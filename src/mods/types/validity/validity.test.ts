@@ -1,5 +1,5 @@
 import { assert, test } from "@hazae41/phobos";
-import { Debug } from "@hazae41/result";
+import { Result } from "@hazae41/result";
 import { relative, resolve } from "path";
 import { Validity } from "./validity.js";
 
@@ -7,7 +7,7 @@ const directory = resolve("./dist/test/")
 const { pathname } = new URL(import.meta.url)
 console.log(relative(directory, pathname.replace(".mjs", ".ts")))
 
-Debug.debug = true
+Result.debug = true
 
 test("Validity generation", async () => {
   const inOneDay = Validity.generate(1)

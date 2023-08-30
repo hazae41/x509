@@ -3,7 +3,7 @@ export * from "./types/index.test.js";
 
 import { Bytes } from "@hazae41/bytes";
 import { assert, test } from "@hazae41/phobos";
-import { Debug } from "@hazae41/result";
+import { Result } from "@hazae41/result";
 import { readFile } from "fs/promises";
 import { PEM } from "mods/pem/pem.js";
 import { Certificate } from "mods/types/certificate/certificate.js";
@@ -14,7 +14,7 @@ const directory = resolve("./dist/test/")
 const { pathname } = new URL(import.meta.url)
 console.log(relative(directory, pathname.replace(".mjs", ".ts")))
 
-Debug.debug = true
+Result.debug = true
 
 await test("Cert Ed25519", async () => {
   const bytes = PEM.tryParse(await readFile("./certs/ed25519.pem", "utf8")).unwrap()
