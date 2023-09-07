@@ -17,14 +17,14 @@ console.log(relative(directory, pathname.replace(".mjs", ".ts")))
 Result.debug = true
 
 await test("Cert Ed25519", async () => {
-  const bytes = PEM.tryParse(await readFile("./certs/ed25519.pem", "utf8")).unwrap()
+  const bytes = PEM.tryDecode(await readFile("./certs/ed25519.pem", "utf8")).unwrap()
   const cert = tryReadFromBytes(Certificate, bytes).unwrap()
 
   assert(Bytes.equals(bytes, tryWriteToBytes(cert).unwrap()))
 })
 
 await test("Cert Let's Encrypt", async () => {
-  const bytes = PEM.tryParse(await readFile("./certs/letsencrypt.pem", "utf8")).unwrap()
+  const bytes = PEM.tryDecode(await readFile("./certs/letsencrypt.pem", "utf8")).unwrap()
   const cert = tryReadFromBytes(Certificate, bytes).unwrap()
 
   assert(Bytes.equals(bytes, tryWriteToBytes(cert).unwrap()))
@@ -45,21 +45,21 @@ await test("Cert frank4dd-dsa", async () => {
 })
 
 await test("Cert Tor", async () => {
-  const bytes = PEM.tryParse(await readFile("./certs/tor.pem", "utf8")).unwrap()
+  const bytes = PEM.tryDecode(await readFile("./certs/tor.pem", "utf8")).unwrap()
   const cert = tryReadFromBytes(Certificate, bytes).unwrap()
 
   assert(Bytes.equals(bytes, tryWriteToBytes(cert).unwrap()))
 })
 
 test("Cert Tor 2", async () => {
-  const bytes = PEM.tryParse(await readFile("./certs/tor2.pem", "utf8")).unwrap()
+  const bytes = PEM.tryDecode(await readFile("./certs/tor2.pem", "utf8")).unwrap()
   const cert = tryReadFromBytes(Certificate, bytes).unwrap()
 
   assert(Bytes.equals(bytes, tryWriteToBytes(cert).unwrap()))
 })
 
 test("Cert full", async () => {
-  const bytes = PEM.tryParse(await readFile("./certs/full.pem", "utf8")).unwrap()
+  const bytes = PEM.tryDecode(await readFile("./certs/full.pem", "utf8")).unwrap()
   const cert = tryReadFromBytes(Certificate, bytes).unwrap()
   assert(Bytes.equals(bytes, tryWriteToBytes(cert).unwrap()))
 })

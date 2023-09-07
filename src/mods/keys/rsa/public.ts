@@ -1,5 +1,4 @@
 import { ASN1Cursor, ASN1Error, Integer, Sequence, Triplet } from "@hazae41/asn1";
-import { Bytes } from "@hazae41/bytes";
 import { Ok, Result } from "@hazae41/result";
 import { OIDs } from "mods/oids/oids.js";
 
@@ -22,15 +21,15 @@ export class RsaPublicKey {
   }
 
   toJSON() {
-    const publicExponent = Bytes.toHex(Bytes.fromBigInt(this.publicExponent.value))
-    const modulus = Bytes.toHex(Bytes.fromBigInt(this.modulus.value))
+    const publicExponent = this.publicExponent.value.toString(16)
+    const modulus = this.modulus.value.toString(16)
 
     return { publicExponent, modulus } satisfies RsaPublicKeyJSON
   }
 
   static fromJSON(json: RsaPublicKeyJSON) {
-    const publicExponent = Integer.create(Bytes.toBigInt(Bytes.fromHexSafe(json.publicExponent)))
-    const modulus = Integer.create(Bytes.toBigInt(Bytes.fromHexSafe(json.modulus)))
+    const publicExponent = Integer.create(BigInt("0x" + json.publicExponent))
+    const modulus = Integer.create(BigInt("0x" + json.modulus))
 
     return new this(publicExponent, modulus)
   }

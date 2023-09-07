@@ -1,4 +1,4 @@
-import { Bytes } from "@hazae41/bytes"
+import { Base64 } from "@hazae41/base64"
 import { Err, Ok, Result } from "@hazae41/result"
 
 export namespace PEM {
@@ -23,7 +23,7 @@ export namespace PEM {
     }
   }
 
-  export function tryParse(text: string): Result<Bytes, MissingHeaderError | MissingFooterError> {
+  export function tryDecode(text: string): Result<Uint8Array, MissingHeaderError | MissingFooterError | Base64.DecodingError> {
     text = text.replaceAll(`\n`, ``)
 
     if (!text.startsWith(header))
@@ -33,19 +33,21 @@ export namespace PEM {
 
     const body = text.slice(header.length, -footer.length)
 
-    return new Ok(Bytes.fromBase64(body))
+    return Base64.get().tryDecode(body).mapSync(x => x.copy())
   }
 
-  export function stringify(bytes: Bytes) {
-    let result = `${header}\n`
-    let body = Bytes.toBase64(bytes)
+  export function tryEncode(bytes: Uint8Array): Result<string, Base64.EncodingError> {
+    return Result.unthrowSync(t => {
+      let result = `${header}\n`
+      let body = Base64.get().tryEncode(bytes).throw(t)
 
-    while (body) {
-      result += `${body.slice(0, 64)}\n`
-      body = body.slice(64)
-    }
+      while (body) {
+        result += `${body.slice(0, 64)}\n`
+        body = body.slice(64)
+      }
 
-    result += `${footer}\n`
-    return result
+      result += `${footer}\n`
+      return new Ok(result)
+    })
   }
 }

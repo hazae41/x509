@@ -1,17 +1,21 @@
 import { ASN1Error, DER, DERReadError, Triplet } from "@hazae41/asn1";
-import { Bytes } from "@hazae41/bytes";
+import { Base16 } from "@hazae41/base16";
+import { BinaryWriteError } from "@hazae41/binary";
 import { Err, Ok, Result } from "@hazae41/result";
+import { Utf8 } from "libs/utf8/utf8.js";
 import { InvalidFormatError } from "mods/errors.js";
 import { DirectoryString, DirectoryStringInner } from "mods/types/directory_string/directory_string.js";
 
 function escape(match: string) {
-  const hex = Bytes.toHex(Bytes.fromUtf8(match))
+  const bytes = Utf8.encoder.encode(match)
+  const hex = Base16.get().tryEncode(bytes).unwrap()
   return hex.replaceAll(/../g, m => "\\" + m)
 }
 
 function unescape(match: string) {
   const hex = match.replaceAll("\\", "")
-  return Bytes.toUtf8(Bytes.fromHex(hex))
+  const bytes = Base16.get().tryPadStartAndDecode(hex).unwrap().copy()
+  return Utf8.decoder.decode(bytes)
 }
 
 export interface StringCreator<T> {
@@ -90,8 +94,8 @@ export class UnknownAttributeValue<T extends Triplet = Triplet> {
     return new this(inner)
   }
 
-  tryToX501(): Result<string, unknown> {
-    return DER.tryWriteToBytes(this.inner).mapSync(bytes => `#${Bytes.toHex(bytes)}`)
+  tryToX501(): Result<string, BinaryWriteError> {
+    return DER.tryWriteToBytes(this.inner).mapSync(bytes => `#${Base16.get().tryEncode(bytes).unwrap()}`)
   }
 
   static tryFromX501(hex: string): Result<UnknownAttributeValue, ASN1Error | DERReadError | InvalidFormatError> {
@@ -99,7 +103,7 @@ export class UnknownAttributeValue<T extends Triplet = Triplet> {
       if (!hex.startsWith("#"))
         return new Err(new InvalidFormatError(`AttributeValue not preceded by hash`))
 
-      const bytes = Bytes.fromHex(hex.slice(1))
+      const bytes = Base16.get().tryPadStartAndDecode(hex.slice(1)).unwrap().copy()
       const triplet = DER.tryReadFromBytes(bytes).throw(t)
 
       return new Ok(new UnknownAttributeValue(triplet))
