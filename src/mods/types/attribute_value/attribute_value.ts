@@ -14,7 +14,7 @@ function escape(match: string) {
 
 function unescape(match: string) {
   const hex = match.replaceAll("\\", "")
-  const bytes = Base16.get().tryPadStartAndDecode(hex).unwrap().copy()
+  const bytes = Base16.get().tryPadStartAndDecode(hex).unwrap().copyAndDispose()
   return Utf8.decoder.decode(bytes)
 }
 
@@ -103,7 +103,7 @@ export class UnknownAttributeValue<T extends Triplet = Triplet> {
       if (!hex.startsWith("#"))
         return new Err(new InvalidFormatError(`AttributeValue not preceded by hash`))
 
-      const bytes = Base16.get().tryPadStartAndDecode(hex.slice(1)).unwrap().copy()
+      const bytes = Base16.get().tryPadStartAndDecode(hex.slice(1)).unwrap().copyAndDispose()
       const triplet = DER.tryReadFromBytes(bytes).throw(t)
 
       return new Ok(new UnknownAttributeValue(triplet))

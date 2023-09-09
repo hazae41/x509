@@ -33,7 +33,7 @@ export namespace PEM {
 
     const body = text.slice(header.length, -footer.length)
 
-    return Base64.get().tryDecode(body).mapSync(x => x.copy())
+    return Base64.get().tryDecode(body).mapSync(x => x.copyAndDispose())
   }
 
   export function tryEncode(bytes: Uint8Array): Result<string, Base64.EncodingError> {
