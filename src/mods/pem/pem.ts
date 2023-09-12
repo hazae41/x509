@@ -33,13 +33,13 @@ export namespace PEM {
 
     const body = text.slice(header.length, -footer.length)
 
-    return Base64.get().tryDecode(body).mapSync(x => x.copyAndDispose())
+    return Base64.get().tryDecodePadded(body).mapSync(x => x.copyAndDispose())
   }
 
   export function tryEncode(bytes: Uint8Array): Result<string, Base64.EncodeError> {
     return Result.unthrowSync(t => {
       let result = `${header}\n`
-      let body = Base64.get().tryEncode(bytes).throw(t)
+      let body = Base64.get().tryEncodePadded(bytes).throw(t)
 
       while (body) {
         result += `${body.slice(0, 64)}\n`
