@@ -23,7 +23,7 @@ export namespace PEM {
     }
   }
 
-  export function tryDecode(text: string): Result<Uint8Array, MissingHeaderError | MissingFooterError | Base64.DecodingError> {
+  export function tryDecode(text: string): Result<Uint8Array, MissingHeaderError | MissingFooterError | Base64.DecodeError> {
     text = text.replaceAll(`\n`, ``)
 
     if (!text.startsWith(header))
@@ -36,7 +36,7 @@ export namespace PEM {
     return Base64.get().tryDecode(body).mapSync(x => x.copyAndDispose())
   }
 
-  export function tryEncode(bytes: Uint8Array): Result<string, Base64.EncodingError> {
+  export function tryEncode(bytes: Uint8Array): Result<string, Base64.EncodeError> {
     return Result.unthrowSync(t => {
       let result = `${header}\n`
       let body = Base64.get().tryEncode(bytes).throw(t)
