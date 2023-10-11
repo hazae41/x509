@@ -1,20 +1,21 @@
 import { ASN1Error, DER, DERReadError, Triplet } from "@hazae41/asn1";
 import { Base16 } from "@hazae41/base16";
 import { BinaryWriteError } from "@hazae41/binary";
+import { Box, Copied } from "@hazae41/box";
 import { Err, Ok, Result } from "@hazae41/result";
 import { Utf8 } from "libs/utf8/utf8.js";
 import { InvalidFormatError } from "mods/errors.js";
 import { DirectoryString, DirectoryStringInner } from "mods/types/directory_string/directory_string.js";
 
 function escape(match: string) {
-  const bytes = Utf8.encoder.encode(match)
+  const bytes = new Box(new Copied(Utf8.encoder.encode(match)))
   const hex = Base16.get().tryEncode(bytes).unwrap()
   return hex.replaceAll(/../g, m => "\\" + m)
 }
 
 function unescape(match: string) {
   const hex = match.replaceAll("\\", "")
-  const bytes = Base16.get().tryPadStartAndDecode(hex).unwrap().copyAndDispose()
+  const bytes = Base16.get().tryPadStartAndDecode(hex).unwrap().copyAndDispose().bytes
   return Utf8.decoder.decode(bytes)
 }
 
@@ -95,7 +96,7 @@ export class UnknownAttributeValue<T extends Triplet = Triplet> {
   }
 
   tryToX501(): Result<string, BinaryWriteError> {
-    return DER.tryWriteToBytes(this.inner).mapSync(bytes => `#${Base16.get().tryEncode(bytes).unwrap()}`)
+    return DER.tryWriteToBytes(this.inner).mapSync(bytes => `#${Base16.get().tryEncode(new Box(new Copied(bytes))).unwrap()}`)
   }
 
   static tryFromX501(hex: string): Result<UnknownAttributeValue, ASN1Error | DERReadError | InvalidFormatError> {
@@ -103,7 +104,7 @@ export class UnknownAttributeValue<T extends Triplet = Triplet> {
       if (!hex.startsWith("#"))
         return new Err(new InvalidFormatError(`AttributeValue not preceded by hash`))
 
-      const bytes = Base16.get().tryPadStartAndDecode(hex.slice(1)).unwrap().copyAndDispose()
+      const bytes = Base16.get().tryPadStartAndDecode(hex.slice(1)).unwrap().copyAndDispose().bytes
       const triplet = DER.tryReadFromBytes(bytes).throw(t)
 
       return new Ok(new UnknownAttributeValue(triplet))

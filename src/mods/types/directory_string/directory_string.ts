@@ -29,7 +29,7 @@ export class DirectoryString<T extends DirectoryStringInner = DirectoryStringInn
     if (triplet instanceof PrintableString)
       return new Ok(DirectoryString.fromASN1(triplet))
 
-    return new Err(new Unimplemented(`DirectoryString for ${triplet.type}`))
+    return new Err(new Unimplemented({ cause: `DirectoryString for ${triplet.type}` }))
   }
 
 }

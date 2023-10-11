@@ -1,4 +1,5 @@
 import { Base64 } from "@hazae41/base64"
+import { Box, Copied } from "@hazae41/box"
 import { Err, Ok, Result } from "@hazae41/result"
 
 export namespace PEM {
@@ -33,13 +34,13 @@ export namespace PEM {
 
     const body = text.slice(header.length, -footer.length)
 
-    return Base64.get().tryDecodePadded(body).mapSync(x => x.copyAndDispose())
+    return Base64.get().tryDecodePadded(body).mapSync(x => x.copyAndDispose().bytes)
   }
 
   export function tryEncode(bytes: Uint8Array): Result<string, Base64.EncodeError> {
     return Result.unthrowSync(t => {
       let result = `${header}\n`
-      let body = Base64.get().tryEncodePadded(bytes).throw(t)
+      let body = Base64.get().tryEncodePadded(new Box(new Copied(bytes))).throw(t)
 
       while (body) {
         result += `${body.slice(0, 64)}\n`

@@ -23,21 +23,22 @@
   },
   "dependencies": {
     "@hazae41/asn1": "^1.2.30",
-    "@hazae41/base16": "^1.0.9",
-    "@hazae41/base64": "^1.0.6",
+    "@hazae41/base16": "^1.0.12",
+    "@hazae41/base64": "^1.0.8",
     "@hazae41/binary": "^1.3.1",
+    "@hazae41/box": "^1.0.8",
     "@hazae41/cursor": "^1.1.26",
-    "@hazae41/result": "^1.1.4"
+    "@hazae41/result": "^1.1.8"
   },
   "devDependencies": {
     "@hazae41/bytes": "^1.2.2",
     "@hazae41/phobos": "^1.0.10",
-    "@rollup/plugin-typescript": "^11.1.3",
-    "@types/node": "^20.6.0",
-    "rimraf": "^5.0.1",
-    "rollup": "^3.29.1",
-    "rollup-plugin-dts": "^6.0.2",
-    "rollup-plugin-node-externals": "^6.1.1",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/node": "^20.8.4",
+    "rimraf": "^5.0.5",
+    "rollup": "^4.0.2",
+    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-node-externals": "^6.1.2",
     "typescript": "^5.2.2"
   },
   "exports": {

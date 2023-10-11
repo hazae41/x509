@@ -27,7 +27,7 @@ export class SubjectPublicKeyInfo {
     if (this.algorithm.algorithm.value.inner === RsaPublicKey.oid)
       return tryReadFromBytes(RsaPublicKey, this.subjectPublicKey.bytes)
 
-    return new Err(new Unimplemented(`AlgorithmIdentifier`))
+    return new Err(new Unimplemented({ cause: `AlgorithmIdentifier` }))
   }
 
   static tryResolve(triplet: Triplet): Result<SubjectPublicKeyInfo, ASN1Error> {
