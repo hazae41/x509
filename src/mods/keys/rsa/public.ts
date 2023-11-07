@@ -22,11 +22,11 @@ export class RsaPublicKey {
     ] as const).toDER()
   }
 
-  toJSON() {
+  toJSON(): RsaPublicKeyJSON {
     const publicExponent = this.publicExponent.value.toString(16)
     const modulus = this.modulus.value.toString(16)
 
-    return { publicExponent, modulus } satisfies RsaPublicKeyJSON
+    return { publicExponent, modulus }
   }
 
   static fromJSON(json: RsaPublicKeyJSON) {
