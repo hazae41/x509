@@ -81,7 +81,7 @@ export namespace AttributeTypeAndValue {
       return new KnownAttributeTypeAndValue(type, value)
     }
 
-    const inner = cursor.readAsOrThrow()
+    const inner = cursor.readOrThrow()
     const value = new UnknownAttributeValue(inner)
 
     return new UnknownAttributeTypeAndValue(type, value)
