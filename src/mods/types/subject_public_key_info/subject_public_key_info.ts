@@ -1,15 +1,13 @@
-import { ASN1Cursor, ASN1Error, BitString, DERTriplet, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Sequence } from "@hazae41/asn1";
-import { BinaryReadError } from "@hazae41/binary";
-import { Err, Ok, Result, Unimplemented } from "@hazae41/result";
+import { BitString, DER, DERCursor, DERTriplet, Sequence } from "@hazae41/asn1";
+import { Readable } from "@hazae41/binary";
+import { Unimplemented } from "@hazae41/result";
 import { RsaPublicKey } from "mods/keys/rsa/public.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
-import { tryReadFromBytes } from "../types.js";
 
 export type SubjectPublicKey =
   | RsaPublicKey
 
 export class SubjectPublicKeyInfo {
-  readonly #class = SubjectPublicKeyInfo
 
   constructor(
     readonly algorithm: AlgorithmIdentifier,
@@ -17,27 +15,27 @@ export class SubjectPublicKeyInfo {
   ) { }
 
   toASN1(): DERTriplet {
-    return Sequence.create([
+    return Sequence.create(undefined, [
       this.algorithm.toASN1(),
       this.subjectPublicKey
-    ] as const)
+    ] as const).toDER()
   }
 
-  tryReadPublicKey(): Result<SubjectPublicKey, ASN1Error | BinaryReadError | Unimplemented | InvalidTypeError | InvalidValueError | InvalidLengthError | NotAnOID> {
+  readPublicKeyOrThrow() {
+    const triplet = Readable.readFromBytesOrThrow(DER, this.subjectPublicKey.bytes)
+
     if (this.algorithm.algorithm.value.inner === RsaPublicKey.oid)
-      return tryReadFromBytes(RsaPublicKey, this.subjectPublicKey.bytes)
+      return RsaPublicKey.resolveOrThrow(new DERCursor([triplet]))
 
-    return new Err(new Unimplemented({ cause: `AlgorithmIdentifier` }))
+    throw new Unimplemented({ cause: `AlgorithmIdentifier` })
   }
 
-  static tryResolve(triplet: DERTriplet): Result<SubjectPublicKeyInfo, ASN1Error> {
-    return Result.unthrowSync(t => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
-      const algorithm = cursor.tryReadAndResolve(AlgorithmIdentifier).throw(t)
-      const subjectPublicKey = cursor.tryReadAndCast(BitString).throw(t)
+  static resolveOrThrow(parent: DERCursor) {
+    const cursor = parent.subAsOrThrow(Sequence.DER)
+    const algorithm = AlgorithmIdentifier.resolveOrThrow(cursor)
+    const subjectPublicKey = cursor.readAsOrThrow(BitString.DER)
 
-      return new Ok(new this(algorithm, subjectPublicKey))
-    })
+    return new SubjectPublicKeyInfo(algorithm, subjectPublicKey)
   }
 
 }

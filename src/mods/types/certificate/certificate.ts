@@ -1,5 +1,4 @@
-import { ASN1Cursor, ASN1Error, BitString, DERTriplet, Sequence } from "@hazae41/asn1";
-import { Ok, Result, Unimplemented } from "@hazae41/result";
+import { BitString, DERCursor, DERTriplet, Sequence } from "@hazae41/asn1";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { TBSCertificate } from "mods/types/tbs_certificate/tbs_certificate.js";
 
@@ -12,22 +11,20 @@ export class Certificate {
   ) { }
 
   toASN1(): DERTriplet {
-    return Sequence.create([
+    return Sequence.create(undefined, [
       this.tbsCertificate.toASN1(),
       this.algorithmIdentifier.toASN1(),
       this.signatureValue
-    ] as const)
+    ] as const).toDER()
   }
 
-  static tryResolve(triplet: DERTriplet): Result<Certificate, ASN1Error | Unimplemented> {
-    return Result.unthrowSync(t => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
-      const tbsCertificate = cursor.tryReadAndResolve(TBSCertificate).throw(t)
-      const algorithmIdentifier = cursor.tryReadAndResolve(AlgorithmIdentifier).throw(t)
-      const signatureValue = cursor.tryReadAndCast(BitString).throw(t)
+  static resolveOrThrow(parent: DERCursor) {
+    const cursor = parent.subAsOrThrow(Sequence.DER)
+    const tbsCertificate = TBSCertificate.resolveOrThrow(cursor)
+    const algorithmIdentifier = AlgorithmIdentifier.resolveOrThrow(cursor)
+    const signatureValue = cursor.readAsOrThrow(BitString.DER)
 
-      return new Ok(new this(tbsCertificate, algorithmIdentifier, signatureValue))
-    })
+    return new Certificate(tbsCertificate, algorithmIdentifier, signatureValue)
   }
 
 }

@@ -1,5 +1,4 @@
 import { DERCursor, DERTriplet, ObjectIdentifier, Sequence, UTF8String } from "@hazae41/asn1";
-import { Ok, Result } from "@hazae41/result";
 import { AttributeType, KnownAttributeType, UnknownAttributeType } from "mods/types/attribute_type/attribute_type.js";
 import { KnownAttributeValue, UnknownAttributeValue } from "mods/types/attribute_value/attribute_value.js";
 import { DirectoryString } from "mods/types/directory_string/directory_string.js";
@@ -11,8 +10,11 @@ export class KnownAttributeTypeAndValue {
     readonly value: KnownAttributeValue
   ) { }
 
-  tryToX501(): Result<string, never> {
-    return new Ok(`${this.type.toX501()}=${this.value.toX501()}`)
+  toX501OrThrow() {
+    const type = this.type.toX501()
+    const value = this.value.toX501()
+
+    return `${type}=${value}`
   }
 
   toASN1(): DERTriplet {
@@ -92,7 +94,7 @@ export namespace AttributeTypeAndValue {
 
     if (type.isKnown()) {
       const value = KnownAttributeValue.fromX501(rawValue, UTF8String)
-      return new Ok(new KnownAttributeTypeAndValue(type, value))
+      return new KnownAttributeTypeAndValue(type, value)
     }
 
     const value = UnknownAttributeValue.fromX501OrThrow(rawValue)

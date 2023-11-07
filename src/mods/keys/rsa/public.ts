@@ -16,7 +16,10 @@ export class RsaPublicKey {
   ) { }
 
   toASN1(): DERTriplet {
-    return Sequence.create([this.publicExponent, this.modulus] as const)
+    return Sequence.create(undefined, [
+      this.publicExponent,
+      this.modulus
+    ] as const).toDER()
   }
 
   toJSON() {
@@ -27,16 +30,16 @@ export class RsaPublicKey {
   }
 
   static fromJSON(json: RsaPublicKeyJSON) {
-    const publicExponent = Integer.create(BigInt("0x" + json.publicExponent))
-    const modulus = Integer.create(BigInt("0x" + json.modulus))
+    const publicExponent = Integer.create(undefined, BigInt("0x" + json.publicExponent))
+    const modulus = Integer.create(undefined, BigInt("0x" + json.modulus))
 
     return new this(publicExponent, modulus)
   }
 
   static resolveOrThrow(parent: DERCursor) {
-    const cursor = parent.subAsOrThrow(Sequence)
-    const publicExponent = cursor.readAsOrThrow(Integer)
-    const modulus = cursor.readAsOrThrow(Integer)
+    const cursor = parent.subAsOrThrow(Sequence.DER)
+    const publicExponent = cursor.readAsOrThrow(Integer.DER)
+    const modulus = cursor.readAsOrThrow(Integer.DER)
 
     return new RsaPublicKey(publicExponent, modulus)
   }

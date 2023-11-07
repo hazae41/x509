@@ -1,5 +1,4 @@
 import { DERCursor, DERTriplet, ObjectIdentifier, Sequence } from "@hazae41/asn1"
-import { Ok } from "@hazae41/result"
 
 export class AlgorithmIdentifier {
 
@@ -20,6 +19,6 @@ export class AlgorithmIdentifier {
     const algorithm = cursor.readAsOrThrow(ObjectIdentifier.DER)
     const parameters = cursor.read()
 
-    return new Ok(new AlgorithmIdentifier(algorithm, parameters))
+    return new AlgorithmIdentifier(algorithm, parameters)
   }
 }

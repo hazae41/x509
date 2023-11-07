@@ -1,5 +1,4 @@
-import { DERTriplet, Integer, Sequence } from "@hazae41/asn1";
-import { Ok, Result, Unimplemented } from "@hazae41/result";
+import { DERCursor, DERTriplet, Integer, Sequence } from "@hazae41/asn1";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { Name } from "mods/types/name/name.js";
 import { SubjectPublicKeyInfo } from "mods/types/subject_public_key_info/subject_public_key_info.js";
@@ -32,20 +31,18 @@ export class TBSCertificate {
     ] as const).toDER()
   }
 
-  static tryResolve(triplet: DERTriplet): Result<TBSCertificate, ASN1Error | Unimplemented> {
-    return Result.unthrowSync(t => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
-      const version = cursor.tryReadAndResolve(TBSCertificateVersion).ok().get()
-      const serialNumber = cursor.tryReadAndCast(Integer).throw(t)
-      const signature = cursor.tryReadAndResolve(AlgorithmIdentifier).throw(t)
-      const issuer = cursor.tryReadAndResolve(Name).throw(t)
-      const validity = cursor.tryReadAndResolve(Validity).throw(t)
-      const subject = cursor.tryReadAndResolve(Name).throw(t)
-      const subjectPublicKeyInfo = cursor.tryReadAndResolve(SubjectPublicKeyInfo).throw(t)
-      const rest = cursor.after
+  static resolveOrThrow(parent: DERCursor) {
+    const cursor = parent.subAsOrThrow(Sequence.DER)
+    const version = TBSCertificateVersion.resolve(cursor)
+    const serialNumber = cursor.readAsOrThrow(Integer.DER)
+    const signature = AlgorithmIdentifier.resolveOrThrow(cursor)
+    const issuer = Name.resolveOrThrow(cursor)
+    const validity = Validity.resolveOrThrow(cursor)
+    const subject = Name.resolveOrThrow(cursor)
+    const subjectPublicKeyInfo = SubjectPublicKeyInfo.resolveOrThrow(cursor)
+    const rest = cursor.after
 
-      return new Ok(new this(version, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, rest))
-    })
+    return new TBSCertificate(version, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, rest)
   }
 
 }

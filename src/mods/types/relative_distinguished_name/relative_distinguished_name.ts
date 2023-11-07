@@ -1,6 +1,4 @@
-import { DERTriplet, Set } from "@hazae41/asn1";
-import { Ok, Result, Unimplemented } from "@hazae41/result";
-import { InvalidFormatError } from "mods/errors.js";
+import { DERCursor, DERTriplet, Set } from "@hazae41/asn1";
 import { AttributeTypeAndValue } from "mods/types/attribute_type_and_value/attribute_type_and_value.js";
 
 const UNESCAPED_PLUS_REGEX = /[^\\]\+/g
@@ -12,36 +10,31 @@ export class RelativeDistinguishedName {
   ) { }
 
   toASN1(): DERTriplet {
-    return Set.create(this.triplets.map(it => it.toASN1()))
+    return Set.create(undefined, this.triplets.map(it => it.toASN1())).toDER()
   }
 
-  tryToX501(): Result<string, unknown> {
-    return Result.unthrowSync(t => {
-      return new Ok(this.triplets.map(it => it.tryToX501().throw(t)).join("+"))
-    })
+  toX501OrThrow() {
+    return this.triplets.map(it => it.toX501OrThrow()).join("+")
   }
 
-  static tryFromX501(x501: string): Result<RelativeDistinguishedName, ASN1Error | InvalidFormatError | DERReadError> {
-    return Result.unthrowSync(t => {
-      const triplets = x501
-        .replaceAll(UNESCAPED_PLUS_REGEX, ([c]) => `${c}++`)
-        .split("++")
-        .map(it => AttributeTypeAndValue.tryFromX501(it).throw(t))
-      return new Ok(new this(triplets))
-    })
+  static fromX501OrThrow(x501: string) {
+    const triplets = x501
+      .replaceAll(UNESCAPED_PLUS_REGEX, ([c]) => `${c}++`)
+      .split("++")
+      .map(it => AttributeTypeAndValue.fromX501OrThrow(it))
+
+    return new RelativeDistinguishedName(triplets)
   }
 
-  static tryResolve(triplet: DERTriplet): Result<RelativeDistinguishedName, ASN1Error | Unimplemented> {
-    return Result.unthrowSync(t => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Set).throw(t)
+  static resolveOrThrow(parent: DERCursor) {
+    const cursor = parent.subAsOrThrow(Set.DER)
 
-      const triplets = new Array<AttributeTypeAndValue>(cursor.inner.triplets.length)
+    const triplets = new Array<AttributeTypeAndValue>(cursor.triplets.length)
 
-      for (let i = 0; i < triplets.length; i++)
-        triplets[i] = cursor.tryReadAndResolve(AttributeTypeAndValue).throw(t)
+    for (let i = 0; i < triplets.length; i++)
+      triplets[i] = AttributeTypeAndValue.resolveOrThrow(cursor)
 
-      return new Ok(new this(triplets))
-    })
+    return new RelativeDistinguishedName(triplets)
   }
 
 }
