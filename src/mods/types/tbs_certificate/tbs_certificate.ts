@@ -1,4 +1,4 @@
-import { ASN1Cursor, ASN1Error, Integer, Sequence, Triplet } from "@hazae41/asn1";
+import { DERTriplet, Integer, Sequence } from "@hazae41/asn1";
 import { Ok, Result, Unimplemented } from "@hazae41/result";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { Name } from "mods/types/name/name.js";
@@ -16,11 +16,11 @@ export class TBSCertificate {
     readonly validity: Validity,
     readonly subject: Name,
     readonly subjectPublicKeyInfo: SubjectPublicKeyInfo,
-    readonly rest: Triplet[]
+    readonly rest: DERTriplet[]
   ) { }
 
-  toASN1(): Triplet {
-    return Sequence.create([
+  toASN1(): DERTriplet {
+    return Sequence.create(undefined, [
       this.version.toASN1(),
       this.serialNumber,
       this.signature.toASN1(),
@@ -29,10 +29,10 @@ export class TBSCertificate {
       this.subject.toASN1(),
       this.subjectPublicKeyInfo.toASN1(),
       ...this.rest
-    ] as const)
+    ] as const).toDER()
   }
 
-  static tryResolve(triplet: Triplet): Result<TBSCertificate, ASN1Error | Unimplemented> {
+  static tryResolve(triplet: DERTriplet): Result<TBSCertificate, ASN1Error | Unimplemented> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
       const version = cursor.tryReadAndResolve(TBSCertificateVersion).ok().get()

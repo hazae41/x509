@@ -1,4 +1,4 @@
-import { ASN1Cursor, ASN1Error, DERReadError, Sequence, Triplet } from "@hazae41/asn1";
+import { ASN1Cursor, ASN1Error, DERReadError, DERTriplet, Sequence } from "@hazae41/asn1";
 import { Ok, Result, Unimplemented } from "@hazae41/result";
 import { InvalidFormatError } from "mods/errors.js";
 import { RelativeDistinguishedName } from "mods/types/relative_distinguished_name/relative_distinguished_name.js";
@@ -11,7 +11,7 @@ export class RDNSequence {
     readonly triplets: RelativeDistinguishedName[]
   ) { }
 
-  toASN1(): Triplet {
+  toASN1(): DERTriplet {
     return Sequence.create(this.triplets.map(it => it.toASN1()))
   }
 
@@ -32,7 +32,7 @@ export class RDNSequence {
     })
   }
 
-  static tryResolve(triplet: Triplet): Result<RDNSequence, ASN1Error | Unimplemented> {
+  static tryResolve(triplet: DERTriplet): Result<RDNSequence, ASN1Error | Unimplemented> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
 

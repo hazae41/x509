@@ -1,8 +1,8 @@
-import { ASN1Resolvable, DER, DERReadError, DERWriteError, Triplet } from "@hazae41/asn1"
+import { ASN1Resolvable, DER, DERReadError, DERTriplet, DERWriteError } from "@hazae41/asn1"
 import { Result } from "@hazae41/result"
 
 export interface X509Type {
-  toASN1(): Triplet
+  toASN1(): DERTriplet
 }
 
 export function tryWriteToBytes(type: X509Type): Result<Uint8Array, DERWriteError> {

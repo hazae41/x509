@@ -1,4 +1,4 @@
-import { ASN1Cursor, ASN1Error, DERReadError, Set, Triplet } from "@hazae41/asn1";
+import { DERTriplet, Set } from "@hazae41/asn1";
 import { Ok, Result, Unimplemented } from "@hazae41/result";
 import { InvalidFormatError } from "mods/errors.js";
 import { AttributeTypeAndValue } from "mods/types/attribute_type_and_value/attribute_type_and_value.js";
@@ -11,7 +11,7 @@ export class RelativeDistinguishedName {
     readonly triplets: AttributeTypeAndValue[]
   ) { }
 
-  toASN1(): Triplet {
+  toASN1(): DERTriplet {
     return Set.create(this.triplets.map(it => it.toASN1()))
   }
 
@@ -31,7 +31,7 @@ export class RelativeDistinguishedName {
     })
   }
 
-  static tryResolve(triplet: Triplet): Result<RelativeDistinguishedName, ASN1Error | Unimplemented> {
+  static tryResolve(triplet: DERTriplet): Result<RelativeDistinguishedName, ASN1Error | Unimplemented> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Set).throw(t)
 

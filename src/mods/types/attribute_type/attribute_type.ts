@@ -1,5 +1,4 @@
-import { ASN1Error, NotAnOID, OID, ObjectIdentifier, Triplet } from "@hazae41/asn1";
-import { Ok, Result } from "@hazae41/result";
+import { DERTriplet, OID, ObjectIdentifier } from "@hazae41/asn1";
 import { invert } from "libs/invert/invert.js";
 import { OIDs } from "mods/oids/oids.js";
 
@@ -33,18 +32,18 @@ export namespace KnownAttributeTypes {
 export class KnownAttributeType {
 
   constructor(
-    readonly inner: ObjectIdentifier<KnownAttributeTypes.Key>
+    readonly inner: ObjectIdentifier.DER<KnownAttributeTypes.Key>
   ) { }
 
   isKnown(): this is KnownAttributeType {
     return true
   }
 
-  toASN1(): Triplet {
+  toASN1(): DERTriplet {
     return this.inner
   }
 
-  static fromASN1(triplet: ObjectIdentifier<KnownAttributeTypes.Key>) {
+  static fromASN1(triplet: ObjectIdentifier.DER<KnownAttributeTypes.Key>) {
     return new KnownAttributeType(triplet)
   }
 
@@ -54,7 +53,8 @@ export class KnownAttributeType {
 
   static fromX501(name: KnownAttributeTypes.Value) {
     const key = KnownAttributeTypes.values[name]
-    const inner = ObjectIdentifier.create(OID.new(key))
+    const oid = OID.newWithoutCheck(key)
+    const inner = ObjectIdentifier.create(undefined, oid).toDER()
 
     return new KnownAttributeType(inner)
   }
@@ -64,18 +64,18 @@ export class KnownAttributeType {
 export class UnknownAttributeType {
 
   constructor(
-    readonly inner: ObjectIdentifier
+    readonly inner: ObjectIdentifier.DER
   ) { }
 
   isKnown(): false {
     return false
   }
 
-  toASN1(): Triplet {
+  toASN1(): DERTriplet {
     return this.inner
   }
 
-  static fromASN1(triplet: ObjectIdentifier) {
+  static fromASN1(triplet: ObjectIdentifier.DER) {
     return new UnknownAttributeType(triplet)
   }
 
@@ -95,23 +95,21 @@ function isKnownOID(triplet: ObjectIdentifier): triplet is ObjectIdentifier<Know
 
 export namespace AttributeType {
 
-  export function fromASN1(triplet: ObjectIdentifier) {
+  export function fromASN1(triplet: ObjectIdentifier.DER) {
     if (isKnownOID(triplet))
       return KnownAttributeType.fromASN1(triplet)
     else
       return UnknownAttributeType.fromASN1(triplet)
   }
 
-  export function tryFromX501(x501: string): Result<AttributeType, ASN1Error | NotAnOID> {
-    return Result.unthrowSync(t => {
-      if (KnownAttributeTypes.isValue(x501))
-        return new Ok(KnownAttributeType.fromX501(x501))
+  export function fromX501OrThrow(x501: string) {
+    if (KnownAttributeTypes.isValue(x501))
+      return KnownAttributeType.fromX501(x501)
 
-      const oid = OID.tryNew(x501).throw(t)
-      const inner = ObjectIdentifier.create(oid)
+    const oid = OID.newOrThrow(x501)
+    const inner = ObjectIdentifier.create(undefined, oid).toDER()
 
-      return new Ok(new UnknownAttributeType(inner))
-    })
+    return new UnknownAttributeType(inner)
   }
 
 }

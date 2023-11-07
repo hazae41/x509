@@ -1,4 +1,4 @@
-import { ASN1Cursor, ASN1Error, BitString, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Sequence, Triplet } from "@hazae41/asn1";
+import { ASN1Cursor, ASN1Error, BitString, DERTriplet, InvalidLengthError, InvalidTypeError, InvalidValueError, NotAnOID, Sequence } from "@hazae41/asn1";
 import { BinaryReadError } from "@hazae41/binary";
 import { Err, Ok, Result, Unimplemented } from "@hazae41/result";
 import { RsaPublicKey } from "mods/keys/rsa/public.js";
@@ -13,10 +13,10 @@ export class SubjectPublicKeyInfo {
 
   constructor(
     readonly algorithm: AlgorithmIdentifier,
-    readonly subjectPublicKey: BitString
+    readonly subjectPublicKey: BitString.DER
   ) { }
 
-  toASN1(): Triplet {
+  toASN1(): DERTriplet {
     return Sequence.create([
       this.algorithm.toASN1(),
       this.subjectPublicKey
@@ -30,7 +30,7 @@ export class SubjectPublicKeyInfo {
     return new Err(new Unimplemented({ cause: `AlgorithmIdentifier` }))
   }
 
-  static tryResolve(triplet: Triplet): Result<SubjectPublicKeyInfo, ASN1Error> {
+  static tryResolve(triplet: DERTriplet): Result<SubjectPublicKeyInfo, ASN1Error> {
     return Result.unthrowSync(t => {
       const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
       const algorithm = cursor.tryReadAndResolve(AlgorithmIdentifier).throw(t)

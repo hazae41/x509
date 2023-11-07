@@ -1,9 +1,8 @@
-import { ASN1Cursor, ASN1Error, DERReadError, ObjectIdentifier, Sequence, Triplet, UTF8String } from "@hazae41/asn1";
-import { Ok, Result, Unimplemented } from "@hazae41/result";
-import { InvalidFormatError } from "mods/errors.js";
+import { DERCursor, DERTriplet, ObjectIdentifier, Sequence, UTF8String } from "@hazae41/asn1";
+import { Ok, Result } from "@hazae41/result";
 import { AttributeType, KnownAttributeType, UnknownAttributeType } from "mods/types/attribute_type/attribute_type.js";
 import { KnownAttributeValue, UnknownAttributeValue } from "mods/types/attribute_value/attribute_value.js";
-import { DirectoryString, DirectoryStringInner } from "mods/types/directory_string/directory_string.js";
+import { DirectoryString } from "mods/types/directory_string/directory_string.js";
 
 export class KnownAttributeTypeAndValue {
 
@@ -16,30 +15,33 @@ export class KnownAttributeTypeAndValue {
     return new Ok(`${this.type.toX501()}=${this.value.toX501()}`)
   }
 
-  toASN1(): Triplet {
-    return Sequence.create([
+  toASN1(): DERTriplet {
+    return Sequence.create(undefined, [
       this.type.inner,
       this.value.inner.toASN1()
-    ] as const)
+    ] as const).toDER()
   }
 }
 
-export class UnknownAttributeTypeAndValue<T extends Triplet = Triplet> {
+export class UnknownAttributeTypeAndValue<T extends DERTriplet = DERTriplet> {
 
   constructor(
     readonly type: UnknownAttributeType,
     readonly value: UnknownAttributeValue<T>
   ) { }
 
-  tryToX501(): Result<string, unknown> {
-    return this.value.tryToX501().mapSync(value => `${this.type.toX501()}=${value}`)
+  toX501OrThrow() {
+    const type = this.type.toX501()
+    const value = this.value.toX501OrThrow()
+
+    return `${type}=${value}`
   }
 
-  toASN1(): Sequence<readonly [ObjectIdentifier, Triplet]> {
-    return Sequence.create([
+  toASN1(): Sequence.DER<readonly [ObjectIdentifier.DER, DERTriplet]> {
+    return Sequence.create(undefined, [
       this.type.inner,
       this.value.inner
-    ] as const)
+    ] as const).toDER()
   }
 
 }
@@ -50,7 +52,7 @@ export type AttributeTypeAndValue =
 
 export namespace AttributeTypeAndValue {
 
-  export function fromASN1(triplet: Sequence<readonly [ObjectIdentifier, DirectoryStringInner]>) {
+  export function fromASN1(triplet: Sequence<readonly [ObjectIdentifier.DER, DirectoryString.Inner]>) {
     const [type, value] = triplet.triplets
 
     const type2 = AttributeType.fromASN1(type)
@@ -64,41 +66,37 @@ export namespace AttributeTypeAndValue {
     return new UnknownAttributeTypeAndValue(type2, value2)
   }
 
-  export function tryResolve(triplet: Triplet): Result<AttributeTypeAndValue, ASN1Error | Unimplemented> {
-    return Result.unthrowSync(t => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
+  export function resolveOrThrow(parent: DERCursor) {
+    const cursor = parent.subAsOrThrow(Sequence.DER)
 
-      const oid = cursor.tryReadAndCast(ObjectIdentifier).throw(t)
-      const type = AttributeType.fromASN1(oid)
+    const oid = cursor.readAsOrThrow(ObjectIdentifier.DER)
+    const type = AttributeType.fromASN1(oid)
 
-      if (type.isKnown()) {
-        const string = cursor.tryReadAndResolve(DirectoryString).throw(t)
-        const value = new KnownAttributeValue(string)
+    if (type.isKnown()) {
+      const string = DirectoryString.resolveOrThrow(cursor)
+      const value = new KnownAttributeValue(string)
 
-        return new Ok(new KnownAttributeTypeAndValue(type, value))
-      }
+      return new KnownAttributeTypeAndValue(type, value)
+    }
 
-      const inner = cursor.tryRead().throw(t)
-      const value = new UnknownAttributeValue(inner)
+    const inner = cursor.readAsOrThrow()
+    const value = new UnknownAttributeValue(inner)
 
-      return new Ok(new UnknownAttributeTypeAndValue(type, value))
-    })
+    return new UnknownAttributeTypeAndValue(type, value)
   }
 
-  export function tryFromX501(x501: string): Result<AttributeTypeAndValue, ASN1Error | InvalidFormatError | DERReadError> {
-    return Result.unthrowSync(t => {
-      const [rawType, rawValue] = x501.split("=")
+  export function fromX501OrThrow(x501: string) {
+    const [rawType, rawValue] = x501.split("=")
 
-      const type = AttributeType.tryFromX501(rawType).throw(t)
+    const type = AttributeType.fromX501OrThrow(rawType)
 
-      if (type.isKnown()) {
-        const value = KnownAttributeValue.fromX501(rawValue, UTF8String)
-        return new Ok(new KnownAttributeTypeAndValue(type, value))
-      }
+    if (type.isKnown()) {
+      const value = KnownAttributeValue.fromX501(rawValue, UTF8String)
+      return new Ok(new KnownAttributeTypeAndValue(type, value))
+    }
 
-      const value = UnknownAttributeValue.tryFromX501(rawValue).throw(t)
-      return new Ok(new UnknownAttributeTypeAndValue(type, value))
-    })
+    const value = UnknownAttributeValue.fromX501OrThrow(rawValue)
+    return new UnknownAttributeTypeAndValue(type, value)
   }
 
 }

@@ -1,10 +1,9 @@
-import { ASN1Cursor, ASN1Error, Integer, Sequence, Triplet } from "@hazae41/asn1";
-import { Ok, Result } from "@hazae41/result";
+import { DERCursor, DERTriplet, Integer, Sequence } from "@hazae41/asn1";
 import { OIDs } from "mods/oids/oids.js";
 
 export interface RsaPublicKeyJSON {
-  publicExponent: string,
-  modulus: string
+  readonly publicExponent: string,
+  readonly modulus: string
 }
 
 export class RsaPublicKey {
@@ -16,7 +15,7 @@ export class RsaPublicKey {
     readonly modulus: Integer
   ) { }
 
-  toASN1(): Triplet {
+  toASN1(): DERTriplet {
     return Sequence.create([this.publicExponent, this.modulus] as const)
   }
 
@@ -34,14 +33,12 @@ export class RsaPublicKey {
     return new this(publicExponent, modulus)
   }
 
-  static tryResolve(triplet: Triplet): Result<RsaPublicKey, ASN1Error> {
-    return Result.unthrowSync(t => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
-      const publicExponent = cursor.tryReadAndCast(Integer).throw(t)
-      const modulus = cursor.tryReadAndCast(Integer).throw(t)
+  static resolveOrThrow(parent: DERCursor) {
+    const cursor = parent.subAsOrThrow(Sequence)
+    const publicExponent = cursor.readAsOrThrow(Integer)
+    const modulus = cursor.readAsOrThrow(Integer)
 
-      return new Ok(new RsaPublicKey(publicExponent, modulus))
-    })
+    return new RsaPublicKey(publicExponent, modulus)
   }
 
 }

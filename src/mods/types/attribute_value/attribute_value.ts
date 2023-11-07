@@ -1,10 +1,9 @@
-import { ASN1Error, DER, DERReadError, Triplet } from "@hazae41/asn1";
+import { DER, DERTriplet, DERable } from "@hazae41/asn1";
 import { Base16 } from "@hazae41/base16";
-import { BinaryWriteError } from "@hazae41/binary";
-import { Err, Ok, Result } from "@hazae41/result";
+import { Readable, Writable } from "@hazae41/binary";
 import { Utf8 } from "libs/utf8/utf8.js";
 import { InvalidFormatError } from "mods/errors.js";
-import { DirectoryString, DirectoryStringInner } from "mods/types/directory_string/directory_string.js";
+import { DirectoryString } from "mods/types/directory_string/directory_string.js";
 
 function escape(match: string) {
   const bytes = Utf8.encoder.encode(match)
@@ -19,7 +18,7 @@ function unescape(match: string) {
 }
 
 export interface StringCreator<T> {
-  create(value: string): T
+  create(type: undefined, value: string): DERable<T>
 }
 
 export class KnownAttributeValue {
@@ -28,11 +27,11 @@ export class KnownAttributeValue {
     readonly inner: DirectoryString
   ) { }
 
-  toASN1(): Triplet {
+  toASN1(): DERTriplet {
     return this.inner.inner
   }
 
-  static fromASN1(inner: DirectoryStringInner) {
+  static fromASN1(inner: DirectoryString.Inner) {
     return new KnownAttributeValue(DirectoryString.fromASN1(inner))
   }
 
@@ -58,7 +57,7 @@ export class KnownAttributeValue {
     return x501
   }
 
-  static fromX501<T extends DirectoryStringInner>(x501: string, creator: StringCreator<T>) {
+  static fromX501<T extends DirectoryString.Inner>(x501: string, creator: StringCreator<T>) {
     const value = x501
       .replaceAll("\\ ", " ")
       .replaceAll("\\\"", "\"")
@@ -72,7 +71,7 @@ export class KnownAttributeValue {
       .replaceAll("\\\\", "\\")
       .replaceAll(/(\\[0-9A-Fa-f]{2})+/g, unescape)
 
-    const inner = creator.create(value)
+    const inner = creator.create(undefined, value).toDER()
     const string = new DirectoryString(inner)
 
     return new KnownAttributeValue(string)
@@ -80,34 +79,35 @@ export class KnownAttributeValue {
 
 }
 
-export class UnknownAttributeValue<T extends Triplet = Triplet> {
+export class UnknownAttributeValue<T extends DERTriplet = DERTriplet> {
 
   constructor(
     readonly inner: T
   ) { }
 
-  toASN1(): Triplet {
+  toASN1(): DERTriplet {
     return this.inner
   }
 
-  static fromASN1<T extends Triplet>(inner: T) {
+  static fromASN1<T extends DERTriplet>(inner: T) {
     return new this(inner)
   }
 
-  tryToX501(): Result<string, BinaryWriteError> {
-    return DER.tryWriteToBytes(this.inner).mapSync(bytes => `#${Base16.get().tryEncode(bytes).unwrap()}`)
+  toX501OrThrow() {
+    const bytes = Writable.writeToBytesOrThrow(this.inner)
+    const hex = Base16.get().encodeOrThrow(bytes)
+
+    return `#${hex}`
   }
 
-  static tryFromX501(hex: string): Result<UnknownAttributeValue, ASN1Error | DERReadError | InvalidFormatError> {
-    return Result.unthrowSync(t => {
-      if (!hex.startsWith("#"))
-        return new Err(new InvalidFormatError(`AttributeValue not preceded by hash`))
+  static fromX501OrThrow(hex: string) {
+    if (!hex.startsWith("#"))
+      throw new InvalidFormatError(`AttributeValue not preceded by hash`)
 
-      const bytes = Base16.get().tryPadStartAndDecode(hex.slice(1)).unwrap().copyAndDispose()
-      const triplet = DER.tryReadFromBytes(bytes).throw(t)
+    const bytes = Base16.get().tryPadStartAndDecode(hex.slice(1)).unwrap().copyAndDispose()
+    const triplet = Readable.readFromBytesOrThrow(DER, bytes)
 
-      return new Ok(new UnknownAttributeValue(triplet))
-    })
+    return new UnknownAttributeValue(triplet)
   }
 
 }

@@ -1,14 +1,16 @@
-import { ASN1Error, PrintableString, Triplet, UTF8String } from "@hazae41/asn1"
-import { Err, Ok, Result, Unimplemented } from "@hazae41/result"
+import { DERCursor, PrintableString, UTF8String } from "@hazae41/asn1"
+import { Unimplemented } from "@hazae41/result"
 
-export type DirectoryStringInner =
-  | UTF8String
-  | PrintableString
-// | BMPString
-// | TeletexString
-// | UniversalString
+export namespace DirectoryString {
+  export type Inner =
+    | UTF8String.DER
+    | PrintableString.DER
+  // | BMPString
+  // | TeletexString
+  // | UniversalString
+}
 
-export class DirectoryString<T extends DirectoryStringInner = DirectoryStringInner> {
+export class DirectoryString<T extends DirectoryString.Inner = DirectoryString.Inner> {
 
   constructor(
     readonly inner: T
@@ -18,18 +20,20 @@ export class DirectoryString<T extends DirectoryStringInner = DirectoryStringInn
     return this.inner
   }
 
-  static fromASN1<T extends DirectoryStringInner>(inner: T) {
+  static fromASN1<T extends DirectoryString.Inner>(inner: T) {
     return new DirectoryString(inner)
   }
 
-  static tryResolve(triplet: Triplet): Result<DirectoryString, ASN1Error | Unimplemented> {
-    if (triplet instanceof UTF8String)
-      return new Ok(DirectoryString.fromASN1(triplet))
+  static resolveOrThrow(parent: DERCursor) {
+    const triplet = parent.readOrThrow()
 
-    if (triplet instanceof PrintableString)
-      return new Ok(DirectoryString.fromASN1(triplet))
+    if (triplet instanceof UTF8String.DER)
+      return DirectoryString.fromASN1(triplet)
 
-    return new Err(new Unimplemented({ cause: `DirectoryString for ${triplet.type}` }))
+    if (triplet instanceof PrintableString.DER)
+      return DirectoryString.fromASN1(triplet)
+
+    throw new Unimplemented({ cause: `DirectoryString for ${triplet.type}` })
   }
 
 }

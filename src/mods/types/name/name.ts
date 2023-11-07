@@ -1,4 +1,4 @@
-import { ASN1Error, DERReadError, Triplet } from "@hazae41/asn1";
+import { DERTriplet } from "@hazae41/asn1";
 import { Result, Unimplemented } from "@hazae41/result";
 import { InvalidFormatError } from "mods/errors.js";
 import { RDNSequence } from "mods/types/rdn_sequence/rdn_sequence.js";
@@ -9,7 +9,7 @@ export class Name {
     readonly inner: RDNSequence
   ) { }
 
-  toASN1(): Triplet {
+  toASN1(): DERTriplet {
     return this.inner.toASN1()
   }
 
@@ -21,7 +21,7 @@ export class Name {
     return RDNSequence.tryFromX501(x501).mapSync(inner => new this(inner))
   }
 
-  static tryResolve(triplet: Triplet): Result<Name, ASN1Error | Unimplemented> {
+  static tryResolve(triplet: DERTriplet): Result<Name, ASN1Error | Unimplemented> {
     return RDNSequence.tryResolve(triplet).mapSync(inner => new this(inner))
   }
 

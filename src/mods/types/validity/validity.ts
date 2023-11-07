@@ -1,9 +1,8 @@
-import { ASN1Cursor, ASN1Error, Sequence, Triplet, UTCTime } from "@hazae41/asn1";
-import { Ok, Result } from "@hazae41/result";
+import { DERCursor, DERTriplet, Sequence, UTCTime } from "@hazae41/asn1";
 
 export type Time =
-  | UTCTime
-// | GeneralizedTime
+  | UTCTime.DER
+// | GeneralizedTime.DER
 
 export interface ValidityJSON {
   notBefore: string,
@@ -23,14 +22,17 @@ export class Validity {
 
     notAfter.setDate(notAfter.getDate() + days)
 
-    const notBefore2 = UTCTime.create(notBefore)
-    const notAfter2 = UTCTime.create(notAfter)
+    const notBefore2 = UTCTime.create(undefined, notBefore).toDER()
+    const notAfter2 = UTCTime.create(undefined, notAfter).toDER()
 
     return new this(notBefore2, notAfter2)
   }
 
-  toASN1(): Triplet {
-    return Sequence.create([this.notBefore, this.notAfter] as const)
+  toASN1(): DERTriplet {
+    return Sequence.create(undefined, [
+      this.notBefore,
+      this.notAfter
+    ] as const).toDER()
   }
 
   toJSON() {
@@ -41,20 +43,18 @@ export class Validity {
   }
 
   static fromJSON(json: ValidityJSON) {
-    const notBefore = UTCTime.create(new Date(json.notBefore))
-    const notAfter = UTCTime.create(new Date(json.notAfter))
+    const notBefore = UTCTime.create(undefined, new Date(json.notBefore)).toDER()
+    const notAfter = UTCTime.create(undefined, new Date(json.notAfter)).toDER()
 
     return new Validity(notBefore, notAfter)
   }
 
-  static tryResolve(triplet: Triplet): Result<Validity, ASN1Error> {
-    return Result.unthrowSync(t => {
-      const cursor = ASN1Cursor.tryCastAndFrom(triplet, Sequence).throw(t)
-      const notBefore = cursor.tryReadAndCast(UTCTime).throw(t)
-      const notAfter = cursor.tryReadAndCast(UTCTime).throw(t)
+  static resolveOrThrow(parent: DERCursor) {
+    const cursor = parent.subAsOrThrow(Sequence.DER)
+    const notBefore = cursor.readAsOrThrow(UTCTime.DER)
+    const notAfter = cursor.readAsOrThrow(UTCTime.DER)
 
-      return new Ok(new Validity(notBefore, notAfter))
-    })
+    return new Validity(notBefore, notAfter)
   }
 
 }
