@@ -15,7 +15,7 @@ export class RsaPublicKey {
     readonly modulus: Integer
   ) { }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return Sequence.create(undefined, [
       this.publicExponent,
       this.modulus

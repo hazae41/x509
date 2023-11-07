@@ -16,7 +16,7 @@ export class DirectoryString<T extends DirectoryString.Inner = DirectoryString.I
     readonly inner: T
   ) { }
 
-  toASN1(): T {
+  toDER(): T {
     return this.inner
   }
 

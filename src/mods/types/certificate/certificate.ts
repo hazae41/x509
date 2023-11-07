@@ -10,10 +10,10 @@ export class Certificate {
     readonly signatureValue: BitString
   ) { }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return Sequence.create(undefined, [
-      this.tbsCertificate.toASN1(),
-      this.algorithmIdentifier.toASN1(),
+      this.tbsCertificate.toDER(),
+      this.algorithmIdentifier.toDER(),
       this.signatureValue
     ] as const).toDER()
   }

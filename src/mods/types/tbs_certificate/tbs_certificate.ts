@@ -18,15 +18,15 @@ export class TBSCertificate {
     readonly rest: DERTriplet[]
   ) { }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return Sequence.create(undefined, [
-      this.version.toASN1(),
+      this.version.toDER(),
       this.serialNumber,
-      this.signature.toASN1(),
-      this.issuer.toASN1(),
-      this.validity.toASN1(),
-      this.subject.toASN1(),
-      this.subjectPublicKeyInfo.toASN1(),
+      this.signature.toDER(),
+      this.issuer.toDER(),
+      this.validity.toDER(),
+      this.subject.toDER(),
+      this.subjectPublicKeyInfo.toDER(),
       ...this.rest
     ] as const).toDER()
   }

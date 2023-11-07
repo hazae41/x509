@@ -39,7 +39,7 @@ export class KnownAttributeType {
     return true
   }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return this.inner
   }
 
@@ -71,7 +71,7 @@ export class UnknownAttributeType {
     return false
   }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return this.inner
   }
 

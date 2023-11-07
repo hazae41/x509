@@ -7,8 +7,8 @@ export class Name {
     readonly inner: RDNSequence
   ) { }
 
-  toASN1(): DERTriplet {
-    return this.inner.toASN1()
+  toDER(): DERTriplet {
+    return this.inner.toDER()
   }
 
   toX501OrThrow() {

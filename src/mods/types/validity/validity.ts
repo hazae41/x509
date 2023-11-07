@@ -28,7 +28,7 @@ export class Validity {
     return new this(notBefore2, notAfter2)
   }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return Sequence.create(undefined, [
       this.notBefore,
       this.notAfter

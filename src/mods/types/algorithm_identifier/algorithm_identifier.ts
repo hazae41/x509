@@ -7,7 +7,7 @@ export class AlgorithmIdentifier {
     readonly parameters?: DERTriplet
   ) { }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     if (this.parameters)
       return Sequence.create(undefined, [this.algorithm, this.parameters] as const).toDER()
     else

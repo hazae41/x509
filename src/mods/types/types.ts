@@ -1,4 +1,4 @@
-import { DER, DERCursor, DERTriplet } from "@hazae41/asn1"
+import { DER, DERCursor, DERable } from "@hazae41/asn1"
 import { ReadError, Readable, Writable, WriteError } from "@hazae41/binary"
 import { Result } from "@hazae41/result"
 
@@ -20,19 +20,21 @@ export class ResolveError extends Error {
 
 }
 
+export function resolveOrThrow<T>(resolvable: Resolvable<T>, cursor: DERCursor): T {
+  return resolvable.resolveOrThrow(cursor)
+}
+
 export function tryResolve<T>(resolvable: Resolvable<T>, cursor: DERCursor): Result<T, ResolveError> {
   return Result.runAndWrapSync(() => {
     return resolvable.resolveOrThrow(cursor)
   }).mapErrSync(ResolveError.from)
 }
 
+export function readFromBytesOrThrow<T>(resolvable: Resolvable<T>, bytes: Uint8Array): T {
+  const triplet = Readable.readFromBytesOrThrow(DER, bytes)
+  const cursor = new DERCursor([triplet])
 
-export interface ASN1able {
-  toASN1(): DERTriplet
-}
-
-export function tryWriteToBytes(type: ASN1able): Result<Uint8Array, WriteError> {
-  return Writable.tryWriteToBytes(type.toASN1())
+  return resolvable.resolveOrThrow(cursor)
 }
 
 export function tryReadFromBytes<T>(resolvable: Resolvable<T>, bytes: Uint8Array): Result<T, ReadError | ResolveError> {
@@ -42,4 +44,12 @@ export function tryReadFromBytes<T>(resolvable: Resolvable<T>, bytes: Uint8Array
 
     return tryResolve(resolvable, cursor)
   })
+}
+
+export function writeToBytesOrThrow(type: DERable<Writable>): Uint8Array {
+  return Writable.writeToBytesOrThrow(type.toDER())
+}
+
+export function tryWriteToBytes(type: DERable<Writable>): Result<Uint8Array, WriteError> {
+  return Writable.tryWriteToBytes(type.toDER())
 }

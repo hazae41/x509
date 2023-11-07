@@ -17,10 +17,10 @@ export class KnownAttributeTypeAndValue {
     return `${type}=${value}`
   }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return Sequence.create(undefined, [
       this.type.inner,
-      this.value.inner.toASN1()
+      this.value.inner.toDER()
     ] as const).toDER()
   }
 }
@@ -39,7 +39,7 @@ export class UnknownAttributeTypeAndValue<T extends DERTriplet = DERTriplet> {
     return `${type}=${value}`
   }
 
-  toASN1(): Sequence.DER<readonly [ObjectIdentifier.DER, DERTriplet]> {
+  toDER(): Sequence.DER<readonly [ObjectIdentifier.DER, DERTriplet]> {
     return Sequence.create(undefined, [
       this.type.inner,
       this.value.inner

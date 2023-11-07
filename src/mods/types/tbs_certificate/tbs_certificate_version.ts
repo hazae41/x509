@@ -12,7 +12,7 @@ export class TBSCertificateVersion {
     readonly value = Integer.create(undefined, BigInt(1)).toDER()
   ) { }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return new Constructed(this.#class.type, [this.value] as const).toDER()
   }
 

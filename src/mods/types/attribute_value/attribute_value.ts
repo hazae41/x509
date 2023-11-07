@@ -27,7 +27,7 @@ export class KnownAttributeValue {
     readonly inner: DirectoryString
   ) { }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return this.inner.inner
   }
 
@@ -85,7 +85,7 @@ export class UnknownAttributeValue<T extends DERTriplet = DERTriplet> {
     readonly inner: T
   ) { }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return this.inner
   }
 

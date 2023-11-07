@@ -9,8 +9,8 @@ export class RelativeDistinguishedName {
     readonly triplets: AttributeTypeAndValue[]
   ) { }
 
-  toASN1(): DERTriplet {
-    return Set.create(undefined, this.triplets.map(it => it.toASN1())).toDER()
+  toDER(): DERTriplet {
+    return Set.create(undefined, this.triplets.map(it => it.toDER())).toDER()
   }
 
   toX501OrThrow() {

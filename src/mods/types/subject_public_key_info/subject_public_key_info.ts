@@ -14,9 +14,9 @@ export class SubjectPublicKeyInfo {
     readonly subjectPublicKey: BitString.DER
   ) { }
 
-  toASN1(): DERTriplet {
+  toDER(): DERTriplet {
     return Sequence.create(undefined, [
-      this.algorithm.toASN1(),
+      this.algorithm.toDER(),
       this.subjectPublicKey
     ] as const).toDER()
   }

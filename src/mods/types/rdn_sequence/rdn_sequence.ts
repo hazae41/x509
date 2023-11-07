@@ -9,8 +9,8 @@ export class RDNSequence {
     readonly triplets: RelativeDistinguishedName[]
   ) { }
 
-  toASN1(): DERTriplet {
-    return Sequence.create(undefined, this.triplets.map(it => it.toASN1())).toDER()
+  toDER(): DERTriplet {
+    return Sequence.create(undefined, this.triplets.map(it => it.toDER())).toDER()
   }
 
   toX501OrThrow() {
