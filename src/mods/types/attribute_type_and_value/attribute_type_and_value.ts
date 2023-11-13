@@ -10,6 +10,10 @@ export class KnownAttributeTypeAndValue {
     readonly value: KnownAttributeValue
   ) { }
 
+  isKnown(): this is KnownAttributeTypeAndValue {
+    return true
+  }
+
   toX501OrThrow() {
     const type = this.type.toX501()
     const value = this.value.toX501()
@@ -31,6 +35,10 @@ export class UnknownAttributeTypeAndValue<T extends DERTriplet = DERTriplet> {
     readonly type: UnknownAttributeType,
     readonly value: UnknownAttributeValue<T>
   ) { }
+
+  isKnown(): false {
+    return false
+  }
 
   toX501OrThrow() {
     const type = this.type.toX501()
