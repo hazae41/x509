@@ -4,12 +4,6 @@ import { Nullable } from "@hazae41/option";
 import { OIDs } from "mods/oids/oids.js";
 import { SubjectAltName } from "./subject_alt_name/subject_alt_name.js";
 
-declare global {
-  interface Array<T> {
-    filter(filter: typeof Boolean): NonNullable<T>[]
-  }
-}
-
 export class Extensions {
 
   static readonly type = new Type(
