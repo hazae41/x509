@@ -33,7 +33,6 @@ export class Extensions {
     if (sequence.triplets.length === 0)
       throw new Error("Extensions must be non-empty")
 
-    console.log("---")
     return new Extensions(sequence.triplets.map(() => Extension.resolveOrThrow(sequence)))
   }
 
