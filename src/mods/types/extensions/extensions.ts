@@ -1,5 +1,8 @@
-import { Boolean, Constructed, DERCursor, ObjectIdentifier, OctetString, Sequence, Type } from "@hazae41/asn1";
+import { Boolean, Constructed, DER, DERCursor, DERable, ObjectIdentifier, OctetString, Sequence, Type } from "@hazae41/asn1";
+import { Readable, Writable } from "@hazae41/binary";
 import { Nullable } from "@hazae41/option";
+import { OIDs } from "mods/oids/oids.js";
+import { SubjectAltName } from "./subject_alt_name/subject_alt_name.js";
 
 declare global {
   interface Array<T> {
@@ -19,7 +22,7 @@ export class Extensions {
     readonly extensions: Extension[]
   ) { }
 
-  toDER() {
+  toDER(): Constructed.DER<any> {
     return Constructed.create(Extensions.type, [
       Sequence.create(undefined, this.extensions.map(ext => ext.toDER())).toDER()
     ]).toDER()
@@ -36,35 +39,46 @@ export class Extensions {
     if (sequence.triplets.length === 0)
       throw new Error("Extensions must be non-empty")
 
+    console.log("---")
     return new Extensions(sequence.triplets.map(() => Extension.resolveOrThrow(sequence)))
   }
 
 }
 
-export class Extension {
+export class Extension<T extends DERable = DERable> {
 
   constructor(
-    readonly extnID: ObjectIdentifier,
-    readonly critical: Nullable<Boolean>,
-    readonly extnValue: OctetString
+    readonly extnID: ObjectIdentifier.DER,
+    readonly critical: Nullable<Boolean.DER>,
+    readonly extnValue: T
   ) { }
 
-  toDER() {
+  toDER(): Sequence.DER<any> {
+    const bytes = Writable.writeToBytesOrThrow(this.extnValue.toDER())
+    const extnValue = OctetString.create(undefined, bytes)
+
     return Sequence.create(undefined, [
-      this.extnID.toDER(),
-      this.critical?.toDER(),
-      this.extnValue.toDER()
+      this.extnID,
+      this.critical,
+      extnValue
     ] as const).toDER()
   }
 
-  static resolveOrThrow(parent: DERCursor) {
+  static resolveOrThrow(parent: DERCursor): Extension<DERable> {
     const cursor = parent.subAsOrThrow(Sequence.DER)
 
     const identifier = cursor.readAsOrThrow(ObjectIdentifier.DER)
     const critical = cursor.readAs(Boolean.DER)
-    const content = cursor.readAsOrThrow(OctetString.DER)
+    const string = cursor.readAsOrThrow(OctetString.DER)
+    const asn1 = Readable.readFromBytesOrThrow(DER, string.bytes)
 
-    return new Extension(identifier, critical, content)
+    if (identifier.value?.inner === OIDs.keys.subjectAltName) {
+      const inner = SubjectAltName.resolveOrThrow(new DERCursor([asn1]))
+
+      return new Extension(identifier, critical, inner)
+    }
+
+    return new Extension(identifier, critical, asn1)
   }
 
 }

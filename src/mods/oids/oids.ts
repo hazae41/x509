@@ -17,7 +17,8 @@ export namespace OIDs {
     sha256WithRSAEncryption: "1.2.840.113549.1.1.11",
     rsaEncryption: "1.2.840.113549.1.1.1",
     domainComponent: "0.9.2342.19200300.100.1.25",
-    userId: "0.9.2342.19200300.100.1.1"
+    userId: "0.9.2342.19200300.100.1.1",
+    subjectAltName: "2.5.29.17"
   } as const
 
   export const values = invert(keys)

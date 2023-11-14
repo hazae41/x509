@@ -7,7 +7,7 @@ export class Certificate {
   constructor(
     readonly tbsCertificate: TBSCertificate,
     readonly algorithmIdentifier: AlgorithmIdentifier,
-    readonly signatureValue: BitString
+    readonly signatureValue: BitString.DER
   ) { }
 
   toDER(): DERTriplet {

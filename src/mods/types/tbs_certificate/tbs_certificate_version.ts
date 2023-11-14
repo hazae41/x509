@@ -11,9 +11,9 @@ export class TBSCertificateVersion {
   ).toDER()
 
   static readonly values = {
-    v1: Integer.create(undefined, 0n).toDER(),
-    v2: Integer.create(undefined, 1n).toDER(),
-    v3: Integer.create(undefined, 2n).toDER(),
+    v1: 0n,
+    v2: 1n,
+    v3: 2n
   } as const
 
   constructor(
@@ -22,7 +22,7 @@ export class TBSCertificateVersion {
 
   toDER(): DERTriplet {
     return new Constructed(this.#class.type, [
-      this.value?.toDER()
+      this.value
     ] as const).toDER()
   }
 

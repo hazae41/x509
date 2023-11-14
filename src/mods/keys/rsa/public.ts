@@ -16,7 +16,7 @@ export class RsaPublicKey {
   ) { }
 
   toDER(): DERTriplet {
-    return Sequence.create(undefined, [
+    return Sequence.DER.create(undefined, [
       this.publicExponent,
       this.modulus
     ] as const).toDER()

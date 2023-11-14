@@ -17,7 +17,7 @@ function unescape(match: string) {
   return Utf8.decoder.decode(bytes)
 }
 
-export interface StringCreator<T> {
+export interface StringCreator<T extends DERTriplet> {
   create(type: undefined, value: string): DERable<T>
 }
 

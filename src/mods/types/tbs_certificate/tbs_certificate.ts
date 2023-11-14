@@ -1,4 +1,4 @@
-import { BitString, DERCursor, DERTriplet, Integer, Sequence } from "@hazae41/asn1";
+import { BitString, DERCursor, DERTriplet, Integer, Sequence, Type } from "@hazae41/asn1";
 import { Nullable } from "@hazae41/option";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { Name } from "mods/types/name/name.js";
@@ -31,8 +31,8 @@ export class TBSCertificate {
       this.validity.toDER(),
       this.subject.toDER(),
       this.subjectPublicKeyInfo.toDER(),
-      this.issuerUniqueID?.toDER(),
-      this.subjectUniqueID?.toDER(),
+      this.issuerUniqueID,
+      this.subjectUniqueID,
       this.extensions?.toDER()
     ] as const).toDER()
   }
@@ -47,19 +47,19 @@ export class TBSCertificate {
     const subject = Name.resolveOrThrow(cursor)
     const subjectPublicKeyInfo = SubjectPublicKeyInfo.resolveOrThrow(cursor)
 
-    const issuerUniqueID = cursor.readAsType(BitString.DER.type.retag(1), BitString.DER)
+    const issuerUniqueID = cursor.readAsType(Type.DER.context(false, 1), BitString.DER)
 
-    if (issuerUniqueID != null && version?.value?.value !== TBSCertificateVersion.values.v2.value && version?.value?.value !== TBSCertificateVersion.values.v3.value)
+    if (issuerUniqueID != null && version?.value?.value !== TBSCertificateVersion.values.v2 && version?.value?.value !== TBSCertificateVersion.values.v3)
       throw new Error("Issuer unique ID must not be present unless version is 2 or 3")
 
-    const subjectUniqueID = cursor.readAsType(BitString.DER.type.retag(2), BitString.DER)
+    const subjectUniqueID = cursor.readAsType(Type.DER.context(false, 2), BitString.DER)
 
-    if (subjectUniqueID != null && version?.value?.value !== TBSCertificateVersion.values.v2.value && version?.value?.value !== TBSCertificateVersion.values.v3.value)
+    if (subjectUniqueID != null && version?.value?.value !== TBSCertificateVersion.values.v2 && version?.value?.value !== TBSCertificateVersion.values.v3)
       throw new Error("Subject unique ID must not be present unless version is 2 or 3")
 
     const extensions = Extensions.resolveOrThrow(cursor)
 
-    if (extensions != null && version?.value?.value !== TBSCertificateVersion.values.v3.value)
+    if (extensions != null && version?.value?.value !== TBSCertificateVersion.values.v3)
       throw new Error("Extensions must not be present unless version is 3")
 
     return new TBSCertificate(version, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, issuerUniqueID, subjectUniqueID, extensions)

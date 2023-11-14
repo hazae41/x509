@@ -1,17 +1,18 @@
 import { DERCursor, DERTriplet, ObjectIdentifier, Sequence } from "@hazae41/asn1"
+import { Nullable } from "@hazae41/option"
 
 export class AlgorithmIdentifier {
 
   constructor(
     readonly algorithm: ObjectIdentifier.DER,
-    readonly parameters?: DERTriplet
+    readonly parameters: Nullable<DERTriplet>
   ) { }
 
   toDER(): DERTriplet {
-    if (this.parameters)
-      return Sequence.create(undefined, [this.algorithm, this.parameters] as const).toDER()
-    else
-      return Sequence.create(undefined, [this.algorithm] as const).toDER()
+    return Sequence.create(undefined, [
+      this.algorithm,
+      this.parameters
+    ] as const).toDER()
   }
 
   static resolveOrThrow(parent: DERCursor) {
