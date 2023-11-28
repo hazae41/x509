@@ -63,3 +63,11 @@ test("Cert full", async () => {
   const cert = readAndResolveFromBytesOrThrow(Certificate, bytes)
   assert(Bytes.equals(bytes, writeToBytesOrThrow(cert)))
 })
+
+test("ISRG Root X1", async () => {
+  const bytes = PEM.tryDecode(await readFile("./certs/isrg-root-x1.pem", "utf8")).unwrap()
+  const cert = readAndResolveFromBytesOrThrow(Certificate, bytes)
+  console.log(cert.tbsCertificate.issuer.toX501OrThrow())
+  console.log(cert.tbsCertificate.subject.toX501OrThrow())
+  assert(Bytes.equals(bytes, writeToBytesOrThrow(cert)))
+})
