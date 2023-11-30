@@ -1,4 +1,4 @@
-import { DERTriplet, OID, ObjectIdentifier } from "@hazae41/asn1";
+import { DERTriplet, ObjectIdentifier } from "@hazae41/asn1";
 import { invert } from "libs/invert/invert.js";
 import { OIDs } from "mods/oids/oids.js";
 
@@ -48,13 +48,12 @@ export class KnownAttributeType {
   }
 
   toX501(): string {
-    return KnownAttributeTypes.keys[this.inner.value.inner]
+    return KnownAttributeTypes.keys[this.inner.value]
   }
 
   static fromX501(name: KnownAttributeTypes.Value) {
     const key = KnownAttributeTypes.values[name]
-    const oid = OID.newWithoutCheck(key)
-    const inner = ObjectIdentifier.create(undefined, oid).toDER()
+    const inner = ObjectIdentifier.create(undefined, key).toDER()
 
     return new KnownAttributeType(inner)
   }
@@ -80,7 +79,7 @@ export class UnknownAttributeType {
   }
 
   toX501(): string {
-    return this.inner.value.inner
+    return this.inner.value
   }
 
 }
@@ -90,7 +89,7 @@ export type AttributeType =
   | UnknownAttributeType
 
 function isKnownOID(triplet: ObjectIdentifier): triplet is ObjectIdentifier<KnownAttributeTypes.Key> {
-  return KnownAttributeTypes.isKey(triplet.value.inner)
+  return KnownAttributeTypes.isKey(triplet.value)
 }
 
 export namespace AttributeType {
@@ -106,8 +105,7 @@ export namespace AttributeType {
     if (KnownAttributeTypes.isValue(x501))
       return KnownAttributeType.fromX501(x501)
 
-    const oid = OID.newOrThrow(x501)
-    const inner = ObjectIdentifier.create(undefined, oid).toDER()
+    const inner = ObjectIdentifier.create(undefined, x501).toDER()
 
     return new UnknownAttributeType(inner)
   }

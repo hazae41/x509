@@ -24,7 +24,7 @@ export class SubjectPublicKeyInfo {
   readPublicKeyOrThrow() {
     const triplet = Readable.readFromBytesOrThrow(DER, this.subjectPublicKey.bytes)
 
-    if (this.algorithm.algorithm.value.inner === RsaPublicKey.oid)
+    if (this.algorithm.algorithm.value === RsaPublicKey.oid)
       return RsaPublicKey.resolveOrThrow(new DERCursor([triplet]))
 
     throw new Unimplemented({ cause: `AlgorithmIdentifier` })

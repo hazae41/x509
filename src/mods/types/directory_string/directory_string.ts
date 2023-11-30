@@ -1,12 +1,12 @@
-import { DERCursor, PrintableString, UTF8String } from "@hazae41/asn1"
+import { DERCursor, PrintableString, TeletexString, UTF8String } from "@hazae41/asn1"
 import { Unimplemented } from "@hazae41/result"
 
 export namespace DirectoryString {
   export type Inner =
     | UTF8String.DER
     | PrintableString.DER
-  // | BMPString
-  // | TeletexString
+    // | BMPString
+    | TeletexString.DER
   // | UniversalString
 }
 
@@ -31,6 +31,9 @@ export class DirectoryString<T extends DirectoryString.Inner = DirectoryString.I
       return DirectoryString.fromASN1(triplet)
 
     if (triplet instanceof PrintableString.DER)
+      return DirectoryString.fromASN1(triplet)
+
+    if (triplet instanceof TeletexString.DER)
       return DirectoryString.fromASN1(triplet)
 
     throw new Unimplemented({ cause: `DirectoryString for ${triplet.type}` })

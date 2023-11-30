@@ -1,8 +1,8 @@
-import { DERCursor, DERTriplet, Sequence, UTCTime } from "@hazae41/asn1";
+import { DERCursor, DERTriplet, GeneralizedTime, Sequence, UTCTime } from "@hazae41/asn1";
 
 export type Time =
   | UTCTime.DER
-// | GeneralizedTime.DER
+  | GeneralizedTime.DER
 
 export interface ValidityJSON {
   notBefore: string,
@@ -22,8 +22,8 @@ export class Validity {
 
     notAfter.setDate(notAfter.getDate() + days)
 
-    const notBefore2 = UTCTime.create(undefined, notBefore).toDER()
-    const notAfter2 = UTCTime.create(undefined, notAfter).toDER()
+    const notBefore2 = GeneralizedTime.create(undefined, notBefore).toDER()
+    const notAfter2 = GeneralizedTime.create(undefined, notAfter).toDER()
 
     return new this(notBefore2, notAfter2)
   }
@@ -43,16 +43,42 @@ export class Validity {
   }
 
   static fromJSON(json: ValidityJSON) {
-    const notBefore = UTCTime.create(undefined, new Date(json.notBefore)).toDER()
-    const notAfter = UTCTime.create(undefined, new Date(json.notAfter)).toDER()
+    const notBefore = GeneralizedTime.create(undefined, new Date(json.notBefore)).toDER()
+    const notAfter = GeneralizedTime.create(undefined, new Date(json.notAfter)).toDER()
 
     return new Validity(notBefore, notAfter)
   }
 
   static resolveOrThrow(parent: DERCursor) {
     const cursor = parent.subAsOrThrow(Sequence.DER)
-    const notBefore = cursor.readAsOrThrow(UTCTime.DER)
-    const notAfter = cursor.readAsOrThrow(UTCTime.DER)
+
+    const notBefore = (() => {
+      const utc = cursor.readAs(UTCTime.DER)
+
+      if (utc != null)
+        return utc
+
+      const gen = cursor.readAs(GeneralizedTime.DER)
+
+      if (gen != null)
+        return gen
+
+      throw new Error(`Expected UTCTime or GeneralizedTime`)
+    })()
+
+    const notAfter = (() => {
+      const utc = cursor.readAs(UTCTime.DER)
+
+      if (utc != null)
+        return utc
+
+      const gen = cursor.readAs(GeneralizedTime.DER)
+
+      if (gen != null)
+        return gen
+
+      throw new Error(`Expected UTCTime or GeneralizedTime`)
+    })()
 
     return new Validity(notBefore, notAfter)
   }

@@ -65,7 +65,7 @@ export class Extension<T extends DERable = DERable> {
     const string = cursor.readAsOrThrow(OctetString.DER)
     const asn1 = Readable.readFromBytesOrThrow(DER, string.bytes)
 
-    if (identifier.value?.inner === OIDs.keys.subjectAltName) {
+    if (identifier.value === OIDs.keys.subjectAltName) {
       const inner = SubjectAltName.resolveOrThrow(new DERCursor([asn1]))
 
       return new Extension(identifier, critical, inner)
