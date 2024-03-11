@@ -1,5 +1,5 @@
 import { DERCursor, PrintableString, TeletexString, UTF8String } from "@hazae41/asn1"
-import { Unimplemented } from "@hazae41/result"
+import { Unimplemented } from "mods/errors.js"
 
 export namespace DirectoryString {
   export type Inner =
@@ -36,7 +36,7 @@ export class DirectoryString<T extends DirectoryString.Inner = DirectoryString.I
     if (triplet instanceof TeletexString.DER)
       return DirectoryString.fromASN1(triplet)
 
-    throw new Unimplemented({ cause: `DirectoryString for ${triplet.type}` })
+    throw new Unimplemented()
   }
 
 }
