@@ -1,5 +1,4 @@
 import { Base64 } from "@hazae41/base64"
-import { Err, Ok, Result } from "@hazae41/result"
 
 export namespace PEM {
   export const header = `-----BEGIN CERTIFICATE-----`
@@ -23,31 +22,33 @@ export namespace PEM {
     }
   }
 
-  export function tryDecode(text: string): Result<Uint8Array, MissingHeaderError | MissingFooterError | Base64.DecodeError> {
+  export function decodeOrThrow(text: string): Uint8Array {
     text = text.replaceAll(`\n`, ``)
 
     if (!text.startsWith(header))
-      return new Err(new MissingHeaderError())
+      throw new MissingHeaderError()
     if (!text.endsWith(footer))
-      return new Err(new MissingFooterError())
+      throw new MissingFooterError()
 
     const body = text.slice(header.length, -footer.length)
 
-    return Base64.get().tryDecodePadded(body).mapSync(x => x.copyAndDispose())
+    using copiable = Base64.get().getOrThrow().decodePaddedOrThrow(body)
+
+    return copiable.bytes.slice()
   }
 
-  export function tryEncode(bytes: Uint8Array): Result<string, Base64.EncodeError> {
-    return Result.unthrowSync(t => {
-      let result = `${header}\n`
-      let body = Base64.get().tryEncodePadded(bytes).throw(t)
+  export function encodeOrThrow(bytes: Uint8Array): string {
+    let result = `${header}\n`
 
-      while (body) {
-        result += `${body.slice(0, 64)}\n`
-        body = body.slice(64)
-      }
+    let body = Base64.get().getOrThrow().encodePaddedOrThrow(bytes)
 
-      result += `${footer}\n`
-      return new Ok(result)
-    })
+    while (body) {
+      result += `${body.slice(0, 64)}\n`
+      body = body.slice(64)
+    }
+
+    result += `${footer}\n`
+
+    return result
   }
 }

@@ -1,5 +1,4 @@
 import { assert, test } from "@hazae41/phobos";
-import { Result } from "@hazae41/result";
 import { PEM } from "mods/pem/pem.js";
 import { readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
@@ -8,7 +7,7 @@ const directory = resolve("./dist/test/")
 const { pathname } = new URL(import.meta.url)
 console.log(relative(directory, pathname.replace(".mjs", ".ts")))
 
-Result.debug = true
+
 
 function ignoreLastNewline(text: string) {
   if (text.endsWith("\n"))
@@ -18,8 +17,8 @@ function ignoreLastNewline(text: string) {
 
 test("Parse and stringify", async () => {
   const text = await readFile("./certs/ed25519.pem", "utf8")
-  const buffer = PEM.tryDecode(text).unwrap()
-  const text2 = PEM.tryEncode(buffer).unwrap()
+  const buffer = PEM.decodeOrThrow(text)
+  const text2 = PEM.encodeOrThrow(buffer)
 
   assert(ignoreLastNewline(text) === ignoreLastNewline(text2))
 })

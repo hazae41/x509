@@ -7,14 +7,14 @@ import { DirectoryString } from "mods/types/directory_string/directory_string.js
 
 function escape(match: string) {
   const bytes = Utf8.encoder.encode(match)
-  const hex = Base16.get().tryEncode(bytes).unwrap()
+  const hex = Base16.get().getOrThrow().encodeOrThrow(bytes)
   return hex.replaceAll(/../g, m => "\\" + m)
 }
 
 function unescape(match: string) {
   const hex = match.replaceAll("\\", "")
-  const bytes = Base16.get().tryPadStartAndDecode(hex).unwrap().copyAndDispose()
-  return Utf8.decoder.decode(bytes)
+  using copiable = Base16.get().getOrThrow().padStartAndDecodeOrThrow(hex)
+  return Utf8.decoder.decode(copiable.bytes.slice())
 }
 
 export interface StringCreator<T extends DERTriplet> {
@@ -95,7 +95,7 @@ export class UnknownAttributeValue<T extends DERTriplet = DERTriplet> {
 
   toX501OrThrow() {
     const bytes = Writable.writeToBytesOrThrow(this.inner)
-    const hex = Base16.get().encodeOrThrow(bytes)
+    const hex = Base16.get().getOrThrow().encodeOrThrow(bytes)
 
     return `#${hex}`
   }
@@ -104,8 +104,8 @@ export class UnknownAttributeValue<T extends DERTriplet = DERTriplet> {
     if (!hex.startsWith("#"))
       throw new InvalidFormatError(`AttributeValue not preceded by hash`)
 
-    const bytes = Base16.get().tryPadStartAndDecode(hex.slice(1)).unwrap().copyAndDispose()
-    const triplet = Readable.readFromBytesOrThrow(DER, bytes)
+    using copiable = Base16.get().getOrThrow().padStartAndDecodeOrThrow(hex.slice(1))
+    const triplet = Readable.readFromBytesOrThrow(DER, copiable.bytes.slice())
 
     return new UnknownAttributeValue(triplet)
   }
