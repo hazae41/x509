@@ -13,7 +13,9 @@ function escape(match: string) {
 
 function unescape(match: string) {
   const hex = match.replaceAll("\\", "")
+
   using copiable = Base16.get().getOrThrow().padStartAndDecodeOrThrow(hex)
+
   return Utf8.decoder.decode(copiable.bytes.slice())
 }
 

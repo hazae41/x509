@@ -1,5 +1,5 @@
 import { Constructed, DERCursor, DERTriplet, Integer, Type } from "@hazae41/asn1";
-import { Nullable } from "@hazae41/option";
+import { Nullable } from "libs/nullable/index.js";
 
 export class TBSCertificateVersion {
   readonly #class = TBSCertificateVersion

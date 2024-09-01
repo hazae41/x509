@@ -1,5 +1,4 @@
 import { DERCursor } from "@hazae41/asn1";
-import { Result } from "@hazae41/result";
 
 export interface Resolvable<T> {
   resolveOrThrow(cursor: DERCursor): T
@@ -21,10 +20,4 @@ export class ResolveError extends Error {
 
 export function resolveOrThrow<T>(resolvable: Resolvable<T>, cursor: DERCursor): T {
   return resolvable.resolveOrThrow(cursor)
-}
-
-export function tryResolve<T>(resolvable: Resolvable<T>, cursor: DERCursor): Result<T, ResolveError> {
-  return Result.runAndWrapSync(() => {
-    return resolvable.resolveOrThrow(cursor)
-  }).mapErrSync(ResolveError.from)
 }

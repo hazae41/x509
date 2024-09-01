@@ -1,5 +1,5 @@
 import { DERCursor, DERTriplet, ObjectIdentifier, Sequence } from "@hazae41/asn1"
-import { Nullable } from "@hazae41/option"
+import { Nullable } from "libs/nullable/index.js"
 
 export class AlgorithmIdentifier {
 

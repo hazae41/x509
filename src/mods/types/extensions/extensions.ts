@@ -1,6 +1,6 @@
 import { Boolean, Constructed, DER, DERCursor, DERable, ObjectIdentifier, OctetString, Sequence, Type } from "@hazae41/asn1";
 import { Readable, Writable } from "@hazae41/binary";
-import { Nullable } from "@hazae41/option";
+import { Nullable } from "libs/nullable/index.js";
 import { OIDs } from "mods/oids/oids.js";
 import { SubjectAltName } from "./subject_alt_name/subject_alt_name.js";
 

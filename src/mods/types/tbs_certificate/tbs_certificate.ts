@@ -1,5 +1,5 @@
 import { BitString, DERCursor, DERTriplet, Integer, Sequence, Type } from "@hazae41/asn1";
-import { Nullable } from "@hazae41/option";
+import { Nullable } from "libs/nullable/index.js";
 import { AlgorithmIdentifier } from "mods/types/algorithm_identifier/algorithm_identifier.js";
 import { Name } from "mods/types/name/name.js";
 import { SubjectPublicKeyInfo } from "mods/types/subject_public_key_info/subject_public_key_info.js";
