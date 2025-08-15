@@ -22,7 +22,7 @@ export namespace PEM {
     }
   }
 
-  export function decodeOrThrow(text: string): Uint8Array {
+  export function decodeOrThrow(text: string): Uint8Array<ArrayBuffer> {
     text = text.replaceAll(`\n`, ``)
 
     if (!text.startsWith(header))
@@ -32,15 +32,13 @@ export namespace PEM {
 
     const body = text.slice(header.length, -footer.length)
 
-    using copiable = Base64.get().getOrThrow().decodePaddedOrThrow(body)
-
-    return copiable.bytes.slice()
+    return Base64.decodePaddedOrThrow(body)
   }
 
   export function encodeOrThrow(bytes: Uint8Array): string {
     let result = `${header}\n`
 
-    let body = Base64.get().getOrThrow().encodePaddedOrThrow(bytes)
+    let body = Base64.encodePaddedOrThrow(bytes)
 
     while (body) {
       result += `${body.slice(0, 64)}\n`

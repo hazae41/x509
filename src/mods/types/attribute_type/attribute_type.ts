@@ -1,5 +1,5 @@
 import { DERTriplet, ObjectIdentifier } from "@hazae41/asn1";
-import { invert } from "libs/invert/invert.js";
+import { invert } from "libs/invert/index.js";
 import { OIDs } from "mods/oids/oids.js";
 
 export namespace KnownAttributeTypes {

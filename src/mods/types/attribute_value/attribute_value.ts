@@ -1,22 +1,21 @@
 import { DER, DERTriplet, DERable } from "@hazae41/asn1";
 import { Base16 } from "@hazae41/base16";
 import { Readable, Writable } from "@hazae41/binary";
-import { Utf8 } from "libs/utf8/utf8.js";
 import { InvalidFormatError } from "mods/errors.js";
 import { DirectoryString } from "mods/types/directory_string/directory_string.js";
 
 function escape(match: string) {
-  const bytes = Utf8.encoder.encode(match)
-  const hex = Base16.get().getOrThrow().encodeOrThrow(bytes)
+  const bytes = new TextEncoder().encode(match)
+  const hex = Base16.encodeOrThrow(bytes)
   return hex.replaceAll(/../g, m => "\\" + m)
 }
 
 function unescape(match: string) {
   const hex = match.replaceAll("\\", "")
 
-  using copiable = Base16.get().getOrThrow().padStartAndDecodeOrThrow(hex)
+  const decoded = Base16.padStartAndDecodeOrThrow(hex)
 
-  return Utf8.decoder.decode(copiable.bytes.slice())
+  return new TextDecoder().decode(decoded)
 }
 
 export interface StringCreator<T extends DERTriplet> {
@@ -97,7 +96,7 @@ export class UnknownAttributeValue<T extends DERTriplet = DERTriplet> {
 
   toX501OrThrow() {
     const bytes = Writable.writeToBytesOrThrow(this.inner)
-    const hex = Base16.get().getOrThrow().encodeOrThrow(bytes)
+    const hex = Base16.encodeOrThrow(bytes)
 
     return `#${hex}`
   }
@@ -106,8 +105,8 @@ export class UnknownAttributeValue<T extends DERTriplet = DERTriplet> {
     if (!hex.startsWith("#"))
       throw new InvalidFormatError(`AttributeValue not preceded by hash`)
 
-    using copiable = Base16.get().getOrThrow().padStartAndDecodeOrThrow(hex.slice(1))
-    const triplet = Readable.readFromBytesOrThrow(DER, copiable.bytes.slice())
+    const decoded = Base16.padStartAndDecodeOrThrow(hex.slice(1))
+    const triplet = Readable.readFromBytesOrThrow(DER, decoded)
 
     return new UnknownAttributeValue(triplet)
   }

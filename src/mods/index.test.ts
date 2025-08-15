@@ -1,9 +1,9 @@
 export * from "./pem/pem.test.js";
 export * from "./types/index.test.js";
 
-import { Bytes } from "@hazae41/bytes";
 import { assert, test } from "@hazae41/phobos";
 import { readFile } from "fs/promises";
+import { Bytes } from "libs/bytes/index.js";
 import { PEM } from "mods/pem/pem.js";
 import { Certificate } from "mods/types/certificate/certificate.js";
 import { relative, resolve } from "path";
@@ -30,14 +30,14 @@ await test("Cert Let's Encrypt", async () => {
 })
 
 await test("Cert frank4dd-rsa", async () => {
-  const bytes = await readFile("./certs/frank4dd-rsa.der")
+  const bytes = new Uint8Array(await readFile("./certs/frank4dd-rsa.der"))
   const cert = readAndResolveFromBytesOrThrow(Certificate, bytes)
 
   assert(Bytes.equals(bytes, writeToBytesOrThrow(cert)))
 })
 
 await test("Cert frank4dd-dsa", async () => {
-  const bytes = await readFile("./certs/frank4dd-dsa.der")
+  const bytes = new Uint8Array(await readFile("./certs/frank4dd-dsa.der"))
   const cert = readAndResolveFromBytesOrThrow(Certificate, bytes)
 
   assert(Bytes.equals(bytes, writeToBytesOrThrow(cert)))
