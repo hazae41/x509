@@ -21,10 +21,10 @@
     "test": "node ./dist/test/index.test.mjs"
   },
   "dependencies": {
-    "@hazae41/asn1": "^1.3.33",
+    "@hazae41/asn1": "^1.3.34",
     "@hazae41/base16": "^2.0.2",
     "@hazae41/base64": "^2.0.2",
-    "@hazae41/binary": "^1.3.9"
+    "@hazae41/binary": "^1.3.10"
   },
   "devDependencies": {
     "@hazae41/phobos": "^1.0.10",

@@ -1,4 +1,5 @@
 import { Base64 } from "@hazae41/base64"
+import { Bytes, BytesLike } from "libs/bytes/index.js"
 
 export namespace PEM {
   export const header = `-----BEGIN CERTIFICATE-----`
@@ -22,7 +23,7 @@ export namespace PEM {
     }
   }
 
-  export function decodeOrThrow(text: string): Uint8Array<ArrayBuffer> {
+  export function decodeOrThrow(text: string): Bytes {
     text = text.replaceAll(`\n`, ``)
 
     if (!text.startsWith(header))
@@ -35,7 +36,7 @@ export namespace PEM {
     return Base64.decodePaddedOrThrow(body)
   }
 
-  export function encodeOrThrow(bytes: Uint8Array): string {
+  export function encodeOrThrow(bytes: BytesLike): string {
     let result = `${header}\n`
 
     let body = Base64.encodePaddedOrThrow(bytes)

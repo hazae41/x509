@@ -1,8 +1,13 @@
-import { Buffers } from "libs/buffers/index.js"
+import { Lengthed } from "@hazae41/lengthed";
+import { Buffers } from "libs/buffers/index.js";
+
+export type Bytes<N extends number = number> = Uint8Array<ArrayBuffer> & Lengthed<N>
+
+export type BytesLike<N extends number = number> = Uint8Array<ArrayBufferLike> & Lengthed<N>
 
 export namespace Bytes {
 
-  export function equals(a: Uint8Array, b: Uint8Array): boolean {
+  export function equals(a: BytesLike, b: BytesLike): boolean {
     if ("indexedDB" in globalThis)
       return indexedDB.cmp(a, b) === 0
     if ("process" in globalThis)
